@@ -842,6 +842,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .devices-stage{height:380px}
   .device-iphone{left:55%}
   .device-iphone .device-frame{width:190px}
+  .device-iphone .device-screen,
+  .device-iphone .screen-content{border-radius:40px}
   .device-macbook{left:20%;top:58%;transform:translate(-50%,-50%) rotateY(8deg) scale(0.65)}
   .device-macbook .device-frame{width:300px}
   .device-swift{right:10%}
@@ -883,7 +885,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     transform:translate(-50%,-50%) rotateY(-4deg) rotateX(2deg);
   }
   .device-iphone .device-frame{width:150px}
-  .device-iphone .device-screen{border-radius:22px}
+  .device-iphone .device-screen,
+  .device-iphone .screen-content{border-radius:31px}
   .phone-app-icon{width:32px;height:32px;border-radius:8px}
   .phone-app span{font-size:7px}
   .phone-dock-icon{width:32px;height:32px;border-radius:8px}
@@ -967,6 +970,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .showcase-title{font-size:20px}
   .devices-stage{height:240px}
   .device-iphone .device-frame{width:120px}
+  .device-iphone .device-screen,
+  .device-iphone .screen-content{border-radius:25px}
   .device-macbook .device-frame{width:200px}
   .swift-float-icon{width:32px;height:32px}
   .app-store-img{width:75px}
