@@ -510,9 +510,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .screen-content{
   width:100%;height:100%;
-  background:linear-gradient(160deg,#0f0c29,#1a1a3e,#302b63);
+  position:relative;overflow:hidden;
+}
+.phone-wallpaper{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;
+}
+.phone-overlay{
+  position:absolute;inset:0;
   display:flex;flex-direction:column;
-  overflow:hidden;
+  background:rgba(0,0,0,0.15);
 }
 
 /* iPhone Status Bar */
@@ -520,6 +527,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   display:flex;align-items:center;justify-content:space-between;
   padding:8px 14px 4px;
   font-size:10px;font-weight:600;color:#fff;
+  position:relative;z-index:2;
 }
 .phone-notch{
   width:80px;height:22px;background:#000;border-radius:0 0 16px 16px;
@@ -536,49 +544,44 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .phone-battery-fill{width:70%;height:100%;background:#34c759;border-radius:1px}
 
-/* iPhone App Body */
-.phone-app-body{
-  flex:1;display:flex;flex-direction:column;
-  padding:16px 14px 8px;
+/* iPhone App Grid */
+.phone-app-grid{
+  flex:1;display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px 2px;
+  padding:24px 10px 10px;
+  align-content:start;
 }
-.phone-greeting{font-size:11px;color:rgba(255,255,255,0.5);font-weight:400}
-.phone-user-name{font-size:20px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:-.02em}
-
-/* iPhone Weather Card */
-.phone-weather-card{
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(12px);
-  border-radius:14px;padding:12px;
-  border:1px solid rgba(255,255,255,0.08);
-  margin-bottom:12px;
+.phone-app{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
 }
-.phone-weather-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.phone-weather-temp{font-size:28px;font-weight:700;color:#fff;line-height:1}
-.phone-weather-loc{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
-.phone-weather-icon{margin-top:-4px}
-.phone-weather-details{display:flex;gap:8px}
-.phone-weather-detail{
-  display:flex;align-items:center;gap:3px;
-  font-size:9px;color:rgba(255,255,255,0.6);
-}
-
-/* iPhone Quick Row */
-.phone-quick-row{display:flex;gap:8px;margin-top:auto;padding-bottom:4px}
-.phone-quick-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
-}
-.phone-quick-icon{
-  width:36px;height:36px;border-radius:10px;
+.phone-app-icon{
+  width:40px;height:40px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
 }
-.phone-quick-item span{font-size:8px;color:rgba(255,255,255,0.5);font-weight:500}
+.phone-app span{font-size:8px;color:#fff;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+
+/* iPhone Dock */
+.phone-dock{
+  display:flex;justify-content:center;gap:14px;
+  padding:8px 20px 4px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.phone-dock-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
 
 /* iPhone Home Indicator */
 .phone-home-indicator{
   width:100px;height:4px;
-  background:rgba(255,255,255,0.3);border-radius:2px;
-  margin:4px auto 8px;
+  background:rgba(255,255,255,0.4);border-radius:2px;
+  margin:4px auto 6px;
 }
 
 /* MacBook — left side, below iPhone */
@@ -751,11 +754,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   }
   .device-iphone .device-frame{width:150px}
   .device-iphone .device-screen{border-radius:22px}
-  .phone-user-name{font-size:16px}
-  .phone-weather-card{padding:8px}
-  .phone-weather-temp{font-size:22px}
-  .phone-quick-icon{width:30px;height:30px;border-radius:8px}
-  .phone-quick-item span{font-size:7px}
+  .phone-app-icon{width:32px;height:32px;border-radius:8px}
+  .phone-app span{font-size:7px}
+  .phone-dock-icon{width:32px;height:32px;border-radius:8px}
+  .phone-app-grid{padding:18px 6px 6px;gap:4px 1px}
 
   /* MacBook — bottom left */
   .device-macbook{
