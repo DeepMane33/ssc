@@ -133,6 +133,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     0 0 20px rgba(0,0,0,0.1);
 }
 
+/* ---- SVG Filters ---- */
+.svg-filters{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:100;
@@ -580,27 +583,154 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE — Mobile-First Breakpoints
    ============================================ */
-@media(max-width:640px){
-  .hero-inner{padding:44px 24px}
-  .hero-title{font-size:30px}
-  .glass-card{padding:32px 22px}
-  .step-title{font-size:19px}
-  .radio-group,.checkbox-group{flex-direction:column}
-  .custom-radio,.custom-checkbox{width:100%}
-  .form-nav{flex-direction:column}
-  .prev-btn,.next-btn,.submit-btn{width:100%;justify-content:center}
-  .toast-container{right:12px;left:12px}
 
-  /* Showcase mobile */
-  .devices-stage{height:320px}
-  .device-iphone .device-frame{width:160px}
-  .device-macbook{transform:translate(-50%,-50%) translateX(0) translateY(80px) rotateY(8deg) scale(0.5)}
-  .device-swift{transform:translate(-50%,-50%) translateX(100px) translateY(-40px)}
-  .swift-float-icon{width:48px;height:48px}
-  .device-badge{transform:translate(-50%,-50%) translateX(-110px) translateY(-30px)}
-  .app-store-img{width:100px}
-  .device-macbook .device-frame{width:260px}
-  .screen-code{font-size:8px}
+/* Tablet (768px and below) */
+@media(max-width:768px){
+  .showcase-section{padding:60px 20px 80px}
+  .devices-stage{height:380px}
+  .device-macbook .device-frame{width:320px}
+  .device-macbook{transform:translate(-50%,-50%) translateX(-60px) translateY(50px) rotateY(10deg) scale(0.65)}
+  .device-swift{transform:translate(-50%,-50%) translateX(160px) translateY(-60px)}
+  .device-badge{transform:translate(-50%,-50%) translateX(-180px) translateY(-50px)}
+}
+
+/* Mobile (640px and below) */
+@media(max-width:640px){
+  /* Header */
+  .site-header{padding:12px 16px}
+  .brand-name{font-size:14px}
+  .brand-sub{font-size:9px}
+  .swift-logo{width:28px;height:34px}
+
+  /* Hero */
+  .hero-section{min-height:calc(100vh - 60px);padding:24px 16px}
+  .hero-inner{padding:36px 20px}
+  .hero-title{font-size:28px;letter-spacing:-.02em}
+  .hero-desc{font-size:14px;margin-bottom:32px}
+  .hero-eyebrow{font-size:10px;margin-bottom:16px}
+  .hero-inner .swift-logo{width:56px;margin-bottom:1.5rem}
+  .cta-btn{padding:14px 32px;font-size:13px}
+
+  /* Showcase */
+  .showcase-section{padding:48px 16px 64px}
+  .showcase-title{font-size:22px}
+  .showcase-desc{font-size:14px;margin-bottom:40px}
+  .devices-stage{
+    height:280px;
+    perspective:800px;
+    overflow:visible;
+  }
+
+  /* iPhone — centered, smaller */
+  .device-iphone{
+    transform:translate(-50%,-50%) rotateY(-5deg) rotateX(2deg);
+  }
+  .device-iphone .device-frame{width:140px}
+  .device-iphone .device-screen{border-radius:22px}
+  .screen-app-icon{width:36px;height:36px;border-radius:10px}
+  .screen-text{font-size:9px}
+  .screen-sub{font-size:7px}
+
+  /* MacBook — pushed down and scaled */
+  .device-macbook{
+    transform:translate(-50%,-50%) translateX(0) translateY(90px) rotateY(6deg) scale(0.45);
+  }
+  .device-macbook .device-frame{width:240px}
+  .screen-code{font-size:7px;line-height:1.4}
+
+  /* Swift icon — right side, smaller */
+  .device-swift{
+    transform:translate(-50%,-50%) translateX(90px) translateY(-30px);
+    animation:swiftFloatMobile 4s ease-in-out infinite;
+  }
+  @keyframes swiftFloatMobile{
+    0%,100%{transform:translate(-50%,-50%) translateX(90px) translateY(-30px)}
+    50%{transform:translate(-50%,-50%) translateX(92px) translateY(-38px)}
+  }
+  .swift-float-icon{width:40px;height:40px}
+
+  /* Badge — left side, smaller */
+  .device-badge{
+    transform:translate(-50%,-50%) translateX(-90px) translateY(-25px);
+    animation:badgeFloatMobile 5s ease-in-out infinite;
+  }
+  @keyframes badgeFloatMobile{
+    0%,100%{transform:translate(-50%,-50%) translateX(-90px) translateY(-25px)}
+    50%{transform:translate(-50%,-50%) translateX(-88px) translateY(-32px)}
+  }
+  .app-store-img{width:90px}
+
+  .device-label{font-size:9px;margin-top:8px}
+
+  /* Form */
+  .form-section{padding:16px 16px 80px}
+  .glass-card{padding:28px 20px}
+  .step-title{font-size:18px;margin-bottom:4px}
+  .step-desc{font-size:13px;margin-bottom:24px}
+  .field-group{margin-bottom:20px}
+  .field-input,.field-textarea{padding:12px 14px;font-size:13px}
+  .radio-group,.checkbox-group{flex-direction:column;gap:6px}
+  .custom-radio,.custom-checkbox{width:100%;padding:12px 14px}
+  .custom-radio span:last-child,.custom-checkbox span:last-child{font-size:12px}
+
+  /* Nav buttons */
+  .form-nav{flex-direction:column;gap:10px;margin-top:28px}
+  .prev-btn,.next-btn,.submit-btn{width:100%;justify-content:center;padding:14px 24px;font-size:13px}
+  .progress-bar{height:4px}
+  .progress-info{margin-top:8px}
+
+  /* Toast */
+  .toast-container{right:12px;left:12px;top:72px}
+  .toast{padding:12px 16px;font-size:12px}
+
+  /* Success */
+  .success-card{padding:44px 20px}
+  .success-title{font-size:22px}
+  .success-desc{font-size:14px}
+
+  /* Scrollbar — hide on mobile */
+  ::-webkit-scrollbar{width:0}
+
+  /* Grain — reduce on mobile for perf */
+  .grain{opacity:.025}
+
+  /* Blobs — smaller on mobile */
+  .blob{filter:blur(60px);opacity:.35}
+  .b1{width:40vmax;height:40vmax}
+  .b2{width:35vmax;height:35vmax}
+  .b3{width:30vmax;height:30vmax}
+}
+
+/* Small phones (400px and below) */
+@media(max-width:400px){
+  .hero-title{font-size:24px}
+  .showcase-title{font-size:20px}
+  .devices-stage{height:240px}
+  .device-iphone .device-frame{width:120px}
+  .device-macbook .device-frame{width:200px}
+  .swift-float-icon{width:32px;height:32px}
+  .app-store-img{width:75px}
+}
+
+/* Safe area for notch devices */
+@supports(padding:env(safe-area-inset-top)){
+  .site-header{padding-top:calc(12px + env(safe-area-inset-top))}
+  .form-section{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+}
+
+/* Touch device optimizations */
+@media(hover:none)and(pointer:coarse){
+  .liquid-glass::after{display:none}
+  .cta-btn:hover{transform:none;box-shadow:none}
+  .nav-btn:hover{transform:none}
+  .custom-radio:hover,.custom-checkbox:hover{transform:none;box-shadow:none}
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .grain,.blob,.device-swift,.device-badge,.screen-app-icon{animation:none!important}
+  .liquid-glass::after{animation:none!important}
+  *{transition-duration:0.01ms!important}
 }
