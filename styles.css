@@ -439,6 +439,25 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes toastOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(40px) scale(0.95)}}
 
 /* ============================================
+   FOOTER
+   ============================================ */
+.site-footer{
+  padding:60px 24px 40px;
+  text-align:center;
+}
+.footer-inner{max-width:500px;margin:0 auto}
+.footer-mew{
+  width:120px;height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  margin:0 auto 20px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.1);
+  border:3px solid rgba(255,255,255,0.8);
+}
+.footer-text{font-size:14px;color:var(--ink);font-weight:500;margin-bottom:4px}
+.footer-sub{font-size:12px;color:var(--fuji)}
+
+/* ============================================
    SUCCESS SCREEN
    ============================================ */
 .success-message{padding:40px 0}
@@ -505,18 +524,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:3%;left:3%;right:3%;bottom:3%;
-  border-radius:36px;
+  top:5%;left:4.5%;right:4.5%;bottom:4%;
+  border-radius:32px;
   overflow:hidden;
 }
 .device-iphone .screen-content{
   width:100%;height:100%;
   position:relative;overflow:hidden;
-  border-radius:36px;
+  border-radius:32px;
 }
 .phone-wallpaper{
   width:100%;height:100%;object-fit:cover;
-  border-radius:36px;
+  border-radius:32px;
 }
 .phone-overlay{
   position:absolute;inset:0;
