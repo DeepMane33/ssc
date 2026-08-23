@@ -162,6 +162,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   box-shadow:0 2px 8px rgba(240,81,35,0.25);
   flex-shrink:0;
 }
+.nav-swift-icon{width:22px;height:27px;flex-shrink:0;opacity:.35;transition:opacity .3s ease}
+.nav-swift-icon:hover{opacity:.7}
 
 /* ---- Hero ---- */
 .main-content{position:relative;z-index:1;padding-top:80px;min-height:100vh}
@@ -508,20 +510,76 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .screen-content{
   width:100%;height:100%;
-  background:linear-gradient(160deg,#1a1a2e,#16213e,#0f3460);
+  background:linear-gradient(160deg,#0f0c29,#1a1a3e,#302b63);
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:8px;
+  overflow:hidden;
 }
-.screen-app-icon{
-  width:48px;height:48px;border-radius:14px;
-  background:linear-gradient(135deg,var(--swift),#e04010);
-  box-shadow:0 4px 20px rgba(240,81,35,0.4);
-  animation:iconPulse 3s ease-in-out infinite;
+
+/* iPhone Status Bar */
+.phone-status-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px 4px;
+  font-size:10px;font-weight:600;color:#fff;
 }
-@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.screen-text{color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em}
-.screen-sub{color:rgba(255,255,255,0.5);font-size:9px;font-weight:400}
+.phone-notch{
+  width:80px;height:22px;background:#000;border-radius:0 0 16px 16px;
+  position:absolute;left:50%;transform:translateX(-50%);top:0;
+}
+.phone-icons{display:flex;align-items:center;gap:4px}
+.phone-battery{
+  width:20px;height:9px;border:1.5px solid rgba(255,255,255,0.5);border-radius:2px;
+  position:relative;padding:1px;
+}
+.phone-battery::after{
+  content:'';position:absolute;right:-3px;top:2px;
+  width:2px;height:3px;background:rgba(255,255,255,0.5);border-radius:0 1px 1px 0;
+}
+.phone-battery-fill{width:70%;height:100%;background:#34c759;border-radius:1px}
+
+/* iPhone App Body */
+.phone-app-body{
+  flex:1;display:flex;flex-direction:column;
+  padding:16px 14px 8px;
+}
+.phone-greeting{font-size:11px;color:rgba(255,255,255,0.5);font-weight:400}
+.phone-user-name{font-size:20px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:-.02em}
+
+/* iPhone Weather Card */
+.phone-weather-card{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(12px);
+  border-radius:14px;padding:12px;
+  border:1px solid rgba(255,255,255,0.08);
+  margin-bottom:12px;
+}
+.phone-weather-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.phone-weather-temp{font-size:28px;font-weight:700;color:#fff;line-height:1}
+.phone-weather-loc{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
+.phone-weather-icon{margin-top:-4px}
+.phone-weather-details{display:flex;gap:8px}
+.phone-weather-detail{
+  display:flex;align-items:center;gap:3px;
+  font-size:9px;color:rgba(255,255,255,0.6);
+}
+
+/* iPhone Quick Row */
+.phone-quick-row{display:flex;gap:8px;margin-top:auto;padding-bottom:4px}
+.phone-quick-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.phone-quick-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+.phone-quick-item span{font-size:8px;color:rgba(255,255,255,0.5);font-weight:500}
+
+/* iPhone Home Indicator */
+.phone-home-indicator{
+  width:100px;height:4px;
+  background:rgba(255,255,255,0.3);border-radius:2px;
+  margin:4px auto 8px;
+}
 
 /* MacBook — left side, below iPhone */
 .device-macbook{
@@ -539,20 +597,65 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   top:4%;left:8%;right:8%;bottom:14%;
   border-radius:8px;overflow:hidden;
 }
+
+/* Mac Screen */
 .screen-mac{
   background:#1e1e2e;
-  display:flex;align-items:flex-start;justify-content:flex-start;
-  padding:12px;
+  display:flex;flex-direction:column;
+  height:100%;
 }
-.screen-code{
+
+/* Mac Title Bar */
+.mac-titlebar{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 10px;
+  background:#181825;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.mac-dots{display:flex;gap:4px}
+.mac-dots span{width:8px;height:8px;border-radius:50%}
+.mac-dots span:nth-child(1){background:#f38ba8}
+.mac-dots span:nth-child(2){background:#f9e2af}
+.mac-dots span:nth-child(3){background:#a6e3a1}
+.mac-title{font-size:9px;color:#6c7086;font-family:'SF Mono',monospace;flex:1;text-align:center}
+.mac-dots-placeholder{width:36px}
+
+/* Mac Editor */
+.mac-editor{display:flex;flex:1;overflow:hidden}
+
+.mac-sidebar{
+  width:110px;background:#181825;
+  border-right:1px solid rgba(255,255,255,0.06);
+  padding:6px 0;
+  flex-shrink:0;
+}
+.mac-sidebar-item{
+  display:flex;align-items:center;gap:5px;
+  padding:3px 8px;font-size:8px;color:#6c7086;
+  cursor:default;white-space:nowrap;
+}
+.mac-sidebar-item.active{background:rgba(255,255,255,0.06);color:#cdd6f4}
+
+.mac-code-area{
+  flex:1;padding:6px 8px;overflow:hidden;
   font-family:'SF Mono',Monaco,Consolas,monospace;
-  font-size:10px;line-height:1.6;color:#cdd6f4;
-  text-align:left;
+  font-size:8px;line-height:1.7;
+}
+.mac-line{display:flex;gap:8px;white-space:nowrap}
+.mac-ln{
+  color:#45475a;min-width:14px;text-align:right;
+  user-select:none;flex-shrink:0;
 }
 .code-kw{color:#cba6f7}
 .code-mod{color:#89b4fa}
 .code-type{color:#f9e2af}
 .code-str{color:#a6e3a1}
+.mac-cursor-line{
+  display:inline-block;width:1px;height:10px;
+  background:#f5e0dc;animation:macBlink 1s step-end infinite;
+  margin-left:-1px;vertical-align:middle;
+}
+@keyframes macBlink{0%,100%{opacity:1}50%{opacity:0}}
 
 /* Swift Logo — top right */
 .device-swift{
@@ -648,9 +751,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   }
   .device-iphone .device-frame{width:150px}
   .device-iphone .device-screen{border-radius:22px}
-  .screen-app-icon{width:36px;height:36px;border-radius:10px}
-  .screen-text{font-size:9px}
-  .screen-sub{font-size:7px}
+  .phone-user-name{font-size:16px}
+  .phone-weather-card{padding:8px}
+  .phone-weather-temp{font-size:22px}
+  .phone-quick-icon{width:30px;height:30px;border-radius:8px}
+  .phone-quick-item span{font-size:7px}
 
   /* MacBook — bottom left */
   .device-macbook{
@@ -658,7 +763,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     transform:translate(-50%,-50%) rotateY(6deg) scale(0.45);
   }
   .device-macbook .device-frame{width:240px}
-  .screen-code{font-size:7px;line-height:1.4}
+  .mac-code-area{font-size:6px}
+  .mac-sidebar{width:80px}
 
   /* Swift icon — top right */
   .device-swift{
@@ -753,7 +859,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .grain{animation-duration:20s!important}
   .blob{animation-duration:40s!important}
   .device-swift,.device-badge{animation-duration:8s!important}
-  .screen-app-icon{animation-duration:6s!important}
   .liquid-glass::after{animation-duration:4s!important}
   *{transition-duration:.15s!important}
   .form-page.active{animation-duration:.2s!important}
