@@ -900,18 +900,18 @@
   (function(){
     var canvas=document.getElementById("ribbonCanvas");
     if(!canvas)return;
-    var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+    var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-    renderer.setClearColor(0x000000,0);
+    renderer.setClearColor(0x0A0A0A,1);
     var scene=new THREE.Scene();
     var camera=new THREE.OrthographicCamera(-1,1,1,-1,0.1,10);
 
-    var W,H;
     function resize(){
-      W=window.innerWidth;H=window.innerHeight;
-      renderer.setSize(W,H,false);
+      var w=Math.max(1,window.innerWidth);
+      var h=Math.max(1,window.innerHeight);
+      renderer.setSize(w,h,false);
       canvas.style.width="100%";canvas.style.height="100%";
-      var aspect=W/H;
+      var aspect=w/h;
       camera.left=-aspect;camera.right=aspect;
       camera.bottom=-1;camera.top=1;
       camera.updateProjectionMatrix();
@@ -920,61 +920,50 @@
     window.addEventListener("resize",resize);
     camera.position.z=1;
 
-    var gridSize=40;
+    var gridSize=20;
     var geometry=new THREE.BufferGeometry();
     var positions=[];
-    var seeds=[];
+    var scales=[];
 
     for(var x=-gridSize;x<=gridSize;x++){
       for(var y=-gridSize;y<=gridSize;y++){
-        positions.push(x*0.08,y*0.08,0);
-        seeds.push(Math.random()*100);
+        positions.push(x*0.15,y*0.15,0);
+        scales.push(1);
       }
     }
 
     geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
-    geometry.setAttribute("seed",new THREE.Float32BufferAttribute(seeds,1));
+    geometry.setAttribute("scale",new THREE.Float32BufferAttribute(scales,1));
 
     var material=new THREE.ShaderMaterial({
       uniforms:{
         time:{value:0},
         color1:{value:new THREE.Color(0xF05135)},
-        color2:{value:new THREE.Color(0xFFC7D9)},
-        color3:{value:new THREE.Color(0xC4D5EA)},
-        mouse:{value:new THREE.Vector2(0,0)}
+        color2:{value:new THREE.Color(0xFFFFFF)}
       },
       vertexShader:"\n"+
-        "attribute float seed;\n"+
+        "attribute float scale;\n"+
         "varying vec2 vUv;\n"+
         "varying float vScale;\n"+
-        "varying float vSeed;\n"+
         "uniform float time;\n"+
-        "uniform vec2 mouse;\n"+
         "void main(){\n"+
         "  vUv=position.xy;\n"+
-        "  vSeed=seed;\n"+
         "  float dist=length(position.xy);\n"+
-        "  float wave=sin(dist*4.0-time*1.5+seed)*0.5+0.5;\n"+
-        "  float mouseDist=length(position.xy-mouse);\n"+
-        "  float mouseGlow=smoothstep(2.0,0.0,mouseDist)*0.4;\n"+
-        "  float s=wave*0.7+mouseGlow+0.15;\n"+
-        "  vScale=s;\n"+
-        "  gl_PointSize=s*5.0;\n"+
+        "  float animatedScale=scale*(sin(dist*6.0-time*2.5)*0.5+0.5);\n"+
+        "  vScale=animatedScale;\n"+
+        "  gl_PointSize=animatedScale*5.0;\n"+
         "  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);\n"+
         "}",
       fragmentShader:"\n"+
         "uniform vec3 color1;\n"+
         "uniform vec3 color2;\n"+
-        "uniform vec3 color3;\n"+
         "varying vec2 vUv;\n"+
         "varying float vScale;\n"+
-        "varying float vSeed;\n"+
         "void main(){\n"+
-        "  vec2 c=gl_PointCoord-vec2(0.5);\n"+
-        "  if(length(c)>0.5) discard;\n"+
-        "  float t=(vUv.y+1.0)*0.5;\n"+
-        "  vec3 col=mix(mix(color2,color1,t),color3,sin(vSeed)*0.5+0.5);\n"+
-        "  gl_FragColor=vec4(col,vScale*0.8);\n"+
+        "  vec2 coord=gl_PointCoord-vec2(0.5);\n"+
+        "  if(length(coord)>0.5) discard;\n"+
+        "  vec3 finalColor=mix(color2,color1,(vUv.y+1.0)*0.5);\n"+
+        "  gl_FragColor=vec4(finalColor,vScale*0.9);\n"+
         "}",
       transparent:true
     });
@@ -982,17 +971,10 @@
     var points=new THREE.Points(geometry,material);
     scene.add(points);
 
-    var mouseX=0,mouseY=0;
-    document.addEventListener("mousemove",function(e){
-      mouseX=(e.clientX/window.innerWidth)*2-1;
-      mouseY=-(e.clientY/window.innerHeight)*2+1;
-    });
-
     var clock=new THREE.Clock();
     function animate(){
       requestAnimationFrame(animate);
       material.uniforms.time.value=clock.getElapsedTime();
-      material.uniforms.mouse.value.set(mouseX*3,mouseY*2);
       renderer.render(scene,camera);
     }
     animate();
