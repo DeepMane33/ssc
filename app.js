@@ -80,7 +80,7 @@ function initTilt(){
       var rect=card.getBoundingClientRect();
       var x=(e.clientX-rect.left)/rect.width-0.5;
       var y=(e.clientY-rect.top)/rect.height-0.5;
-      card.style.transform="perspective(800px) rotateX("+(-y*5)+"deg) rotateY("+(x*5)+"deg) scale(1.01)";
+      card.style.transform="perspective(800px) rotateX("+(-y*2.5)+"deg) rotateY("+(x*2.5)+"deg) scale(1.005)";
     });
     card.addEventListener("mouseleave",function(){
       card.style.transform="perspective(800px) rotateX(0) rotateY(0) scale(1)";
