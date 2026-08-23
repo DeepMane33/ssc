@@ -881,9 +881,7 @@
     </div>
   </section>
 
-  <div class="swift-orb-decor">
-    <canvas id="swiftOrbCanvas" width="160" height="160"></canvas>
-  </div>
+  <canvas id="swiftOrbsBg" class="swift-orbs-bg"></canvas>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -897,16 +895,7 @@
   (() => {
     const TAU = Math.PI * 2;
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const smooth = v => { v = clamp01(v); return v * v * (3 - 2 * v); };
-    const lerp = (a, b, m) => a + (b - a) * m;
     const hash = (x, y) => { const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return n - Math.floor(n); };
-    const fib = (i, n) => {
-      const ga = Math.PI * (3 - Math.sqrt(5));
-      const y = 1 - 2 * (i + .5) / n;
-      const r = Math.sqrt(Math.max(0, 1 - y * y));
-      const th = i * ga;
-      return [r * Math.cos(th), y, r * Math.sin(th)];
-    };
     const proj = (yaw, tilt, cx, cy, s) => {
       const st = Math.sin(tilt), ct = Math.cos(tilt);
       const sy = Math.sin(yaw), cyw = Math.cos(yaw);
@@ -969,34 +958,55 @@
 
     const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
 
-    const canvas = document.getElementById("swiftOrbCanvas");
+    const canvas = document.getElementById("swiftOrbsBg");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const S = 160;
-    canvas.width = S; canvas.height = S;
-    const accent = [240, 81, 56];
+    let W, H;
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener("resize", resize);
 
-    function draw() {
-      const t = performance.now() / 1000;
-      ctx.clearRect(0, 0, S, S);
-      const cx = S / 2, cy = S / 2, R = S / 2 * .88;
+    const accent = [240, 81, 56];
+    const orbs = [];
+    const orbCount = 7;
+    for (let i = 0; i < orbCount; i++) {
+      orbs.push({
+        x: hash(i, 1.1) * 0.8 + 0.1,
+        y: hash(i, 2.7) * 0.8 + 0.1,
+        size: 60 + hash(i, 3.3) * 80,
+        speed: 0.3 + hash(i, 4.9) * 0.4,
+        phase: hash(i, 5.5) * Math.PI * 2,
+        opacity: 0.15 + hash(i, 6.2) * 0.25
+      });
+    }
+
+    function drawOrb(orb, t) {
+      const S = orb.size;
+      const cx = orb.x * W, cy = orb.y * H;
+      const R = S / 2 * .88;
       const rs = rscale(S);
-      const p = proj(.2 * Math.sin(t * .43), .18 * Math.sin(t * .31) - .04, cx, cy, R);
-      const pts = pathDots("swift", SWIFT_PATH, 27);
-      const bob = .035 * Math.sin(t * .95);
-      const wave = (((t * .4) % 1 + 1) % 1) * 2.4 - 1.2;
+      const p = proj(.2 * Math.sin(t * .43 + orb.phase), .18 * Math.sin(t * .31 + orb.phase) - .04, cx, cy, R);
+      const pts = pathDots("swift", SWIFT_PATH, S > 100 ? 27 : 18);
+      const bob = .035 * Math.sin(t * .95 + orb.phase);
+      const wave = (((t * .4 + orb.phase) % 1 + 1) % 1) * 2.4 - 1.2;
       const dots = [];
       for (const [gx, gy] of pts) {
         const u = (gx - gy) * .5;
         const crest = Math.exp(-Math.pow(u - wave, 2) / .05);
         const [x, y, z] = p(gx, -gy + bob, 0);
         const dep = (z + 1) / 2;
-        dots.push({ x, y, z, r: (.75 + .8 * dep + .45 * crest) * rs, v: .6 + .16 * dep + .26 * crest });
+        dots.push({ x, y, z, r: (.75 + .8 * dep + .45 * crest) * rs, v: .6 + .16 * dep + .26 * crest, a: orb.opacity });
       }
       paint(ctx, dots, accent, .92, .3);
-      requestAnimationFrame(draw);
     }
-    draw();
+
+    function animate() {
+      const t = performance.now() / 1000;
+      ctx.clearRect(0, 0, W, H);
+      for (const orb of orbs) drawOrb(orb, t);
+      requestAnimationFrame(animate);
+    }
+    animate();
   })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
