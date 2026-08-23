@@ -597,7 +597,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-macbook .device-screen{
   position:absolute;
-  top:4%;left:8%;right:8%;bottom:14%;
+  top:4%;left:8%;right:8%;bottom:6%;
   border-radius:8px;overflow:hidden;
 }
 
@@ -624,13 +624,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mac-dots-placeholder{width:36px}
 
 /* Mac Editor */
-.mac-editor{display:flex;flex:1;overflow:hidden}
+.mac-editor{display:flex;flex:1;overflow:hidden;height:100%}
 
 .mac-sidebar{
   width:110px;background:#181825;
   border-right:1px solid rgba(255,255,255,0.06);
   padding:6px 0;
   flex-shrink:0;
+  overflow-y:auto;height:100%;
 }
 .mac-sidebar-item{
   display:flex;align-items:center;gap:5px;
