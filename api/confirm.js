@@ -60,9 +60,11 @@ module.exports = async function handler(req, res) {
         html: html
       })
     });
-    const data = await r.json();
+    const text = await r.text();
+    let data;
+    try { data = JSON.parse(text); } catch (e) { data = text; }
     if (!r.ok) {
-      res.status(r.status).json(data);
+      res.status(r.status).json({ resendStatus: r.status, resend: data });
       return;
     }
     res.status(200).json(data);
