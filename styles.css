@@ -505,17 +505,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:6%;left:5%;right:5%;bottom:6%;
-  border-radius:28px;
+  top:3%;left:3%;right:3%;bottom:3%;
+  border-radius:36px;
   overflow:hidden;
 }
 .device-iphone .screen-content{
   width:100%;height:100%;
   position:relative;overflow:hidden;
+  border-radius:36px;
 }
 .phone-wallpaper{
-  position:absolute;inset:0;
   width:100%;height:100%;object-fit:cover;
+  border-radius:36px;
 }
 .phone-overlay{
   position:absolute;inset:0;
