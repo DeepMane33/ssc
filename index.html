@@ -881,32 +881,23 @@
     </div>
   </section>
 
-  <canvas id="swiftOrbsBg" class="swift-orbs-bg"></canvas>
+  <div class="swift-orb-decor" style="top:15%;left:5%"><canvas class="swift-orb-canvas" data-size="90"></canvas></div>
+  <div class="swift-orb-decor" style="top:45%;right:3%"><canvas class="swift-orb-canvas" data-size="70"></canvas></div>
+  <div class="swift-orb-decor" style="bottom:20%;left:8%"><canvas class="swift-orb-canvas" data-size="80"></canvas></div>
+  <div class="swift-orb-decor" style="top:70%;right:10%"><canvas class="swift-orb-canvas" data-size="60"></canvas></div>
 
   <script>
   (() => {
     const TAU = Math.PI * 2;
-    const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const hash = (x, y) => { const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return n - Math.floor(n); };
-    const proj = (yaw, tilt, cx, cy, s) => {
-      const st = Math.sin(tilt), ct = Math.cos(tilt);
-      const sy = Math.sin(yaw), cyw = Math.cos(yaw);
-      return (x, y, z) => {
-        const px = x * cyw + z * sy, pz = -x * sy + z * cyw;
-        const py = y * ct - pz * st, z2 = y * st + pz * ct;
-        return [cx + px * s, cy - py * s, z2];
-      };
-    };
-    const rscale = S => Math.pow(S / 300, .6);
+    const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
     const maskCache = new Map();
-
-    function pathDots(key, d, N, vb) {
+    function pathDots(key, d, N) {
       const ck = key + "-" + N;
       if (maskCache.has(ck)) return maskCache.get(ck);
       const px = 200, c = document.createElement("canvas");
       c.width = c.height = px;
       const g = c.getContext("2d");
-      g.setTransform(px / (vb || 24), 0, 0, px / (vb || 24), 0, 0);
+      g.setTransform(px / 24, 0, 0, px / 24, 0, 0);
       g.fillStyle = "#fff";
       g.fill(new Path2D(d));
       const img = g.getImageData(0, 0, px, px).data;
@@ -926,79 +917,74 @@
       return pts;
     }
 
-    function paint(ctx, dots, accent, sat, rMin) {
-      dots.sort((a, b) => a.z - b.z);
-      for (const d of dots) {
-        const al = d.a ?? 1;
-        if (al < .02) continue;
-        const v = clamp01(d.v);
-        const g = v * 255;
-        let r = g, gg = g, b = g;
-        if (accent && sat) {
-          const lift = Math.min(1, v * 1.12);
-          r = g * (1 - sat) + accent[0] * lift * sat;
-          gg = g * (1 - sat) + accent[1] * lift * sat;
-          b = g * (1 - sat) + accent[2] * lift * sat;
-        }
-        if (v > .85) { const w = (v - .85) / .15 * .45; r += (255 - r) * w; gg += (255 - gg) * w; b += (255 - b) * w; }
-        ctx.fillStyle = `rgba(${r | 0},${gg | 0},${b | 0},${al})`;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, Math.max(rMin, d.r), 0, TAU);
-        ctx.fill();
-      }
-    }
-
-    const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
-
-    const canvas = document.getElementById("swiftOrbsBg");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let W, H;
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener("resize", resize);
-
+    const canvases = document.querySelectorAll(".swift-orb-canvas");
     const accent = [240, 81, 56];
-    const orbs = [];
-    const orbCount = 7;
-    for (let i = 0; i < orbCount; i++) {
-      orbs.push({
-        x: hash(i, 1.1) * 0.8 + 0.1,
-        y: hash(i, 2.7) * 0.8 + 0.1,
-        size: 60 + hash(i, 3.3) * 80,
-        speed: 0.3 + hash(i, 4.9) * 0.4,
-        phase: hash(i, 5.5) * Math.PI * 2,
-        opacity: 0.15 + hash(i, 6.2) * 0.25
-      });
-    }
 
-    function drawOrb(orb, t) {
-      const S = orb.size;
-      const cx = orb.x * W, cy = orb.y * H;
+    canvases.forEach(canvas => {
+      const S = parseInt(canvas.dataset.size) || 90;
+      const cW = S, cH = S;
+      canvas.width = cW; canvas.height = cH;
+      const ctx = canvas.getContext("2d");
       const R = S / 2 * .88;
-      const rs = rscale(S);
-      const p = proj(.2 * Math.sin(t * .43 + orb.phase), .18 * Math.sin(t * .31 + orb.phase) - .04, cx, cy, R);
-      const pts = pathDots("swift", SWIFT_PATH, S > 100 ? 27 : 18);
-      const bob = .035 * Math.sin(t * .95 + orb.phase);
-      const wave = (((t * .4 + orb.phase) % 1 + 1) % 1) * 2.4 - 1.2;
-      const dots = [];
-      for (const [gx, gy] of pts) {
-        const u = (gx - gy) * .5;
-        const crest = Math.exp(-Math.pow(u - wave, 2) / .05);
-        const [x, y, z] = p(gx, -gy + bob, 0);
-        const dep = (z + 1) / 2;
-        dots.push({ x, y, z, r: (.75 + .8 * dep + .45 * crest) * rs, v: .6 + .16 * dep + .26 * crest, a: orb.opacity });
-      }
-      paint(ctx, dots, accent, .92, .3);
-    }
+      const rs = Math.pow(S / 300, .6);
+      const phase = Math.random() * Math.PI * 2;
+      const pts = pathDots("swift", SWIFT_PATH, S > 80 ? 22 : 16);
 
-    function animate() {
-      const t = performance.now() / 1000;
-      ctx.clearRect(0, 0, W, H);
-      for (const orb of orbs) drawOrb(orb, t);
-      requestAnimationFrame(animate);
-    }
-    animate();
+      function frame() {
+        const t = performance.now() / 1000;
+        ctx.clearRect(0, 0, cW, cH);
+
+        // soft glow
+        const glow = ctx.createRadialGradient(cW/2, cH/2, 0, cW/2, cH/2, cW/2);
+        glow.addColorStop(0, "rgba(255,60,0,.15)");
+        glow.addColorStop(.7, "rgba(255,140,20,.05)");
+        glow.addColorStop(1, "rgba(255,210,60,0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, cW, cH);
+
+        // 3D projection
+        const yaw = .2 * Math.sin(t * .43 + phase);
+        const tilt = .18 * Math.sin(t * .31 + phase) - .04;
+        const st = Math.sin(tilt), ct = Math.cos(tilt), sy = Math.sin(yaw), cy = Math.cos(yaw);
+        const projFn = (x, y) => {
+          const px = x * cy, pz = -x * sy;
+          const py = y * ct - pz * st;
+          return [cW/2 + px * R, cH/2 - py * R];
+        };
+
+        const bob = .035 * Math.sin(t * .95 + phase);
+        const wave = (((t * .4 + phase) % 1 + 1) % 1) * 2.4 - 1.2;
+
+        const dots = [];
+        for (const [gx, gy] of pts) {
+          const u = (gx - gy) * .5;
+          const crest = Math.exp(-Math.pow(u - wave, 2) / .05);
+          const [x, y] = projFn(gx, -gy + bob);
+          const dep = (gx + 1) / 2;
+          dots.push({ x, y, r: (.75 + .8 * dep + .45 * crest) * rs, v: .6 + .16 * dep + .26 * crest, a: .35 });
+        }
+
+        dots.sort((a, b) => a.r - b.r);
+        for (const d of dots) {
+          if (d.a < .02) continue;
+          const v = d.v < 0 ? 0 : d.v > 1 ? 1 : d.v;
+          const g = v * 255;
+          let r = g, gg = g, b = g;
+          const lift = Math.min(1, v * 1.12);
+          r = g * (1 - .92) + accent[0] * lift * .92;
+          gg = g * (1 - .92) + accent[1] * lift * .92;
+          b = g * (1 - .92) + accent[2] * lift * .92;
+          if (v > .85) { const w = (v - .85) / .15 * .45; r += (255 - r) * w; gg += (255 - gg) * w; b += (255 - b) * w; }
+          ctx.fillStyle = `rgba(${r|0},${gg|0},${b|0},${d.a})`;
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, Math.max(.3, d.r), 0, TAU);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(frame);
+      }
+      frame();
+    });
   })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
