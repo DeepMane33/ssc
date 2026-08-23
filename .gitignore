@@ -1,0 +1,10 @@
+# Secrets / local config
+config.js
+
+# Dependencies / build
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

@@ -1,6 +1,80 @@
 ﻿/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
+
+/* ============================================
+   SUPABASE — insert-only anon client
+   ============================================ */
+var SUPABASE_URL=window.SUPABASE_URL||"";
+var SUPABASE_ANON_KEY=window.SUPABASE_ANON_KEY||"";
+var supabase=(typeof window!=="undefined"&&window.supabase&&SUPABASE_URL&&SUPABASE_ANON_KEY)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+
+/* Form field name -> registrations column */
+var FIELD_MAP={
+  email:"email",
+  fullName:"full_name",
+  contact:"contact_number",
+  faculty:"faculty_institute",
+  programme:"programme_course",
+  semester:"current_semester_year",
+  division:"division_batch",
+  github:"github_profile",
+  linkedin:"linkedin_profile",
+  github_profile:"github_profile",
+  linkedin_profile:"linkedin_profile",
+  portfolio:"portfolio_website",
+  hasUniEmail:"has_uni_email",
+  uniEmail:"uni_email",
+  enrollmentId:"uni_enrollment_id",
+  personalEmail:"personal_email",
+  studentStatus:"student_status",
+  enrollmentNumber:"enrollment_number",
+  macAccess:"mac_access",
+  deviceFrequency:"device_frequency",
+  needMacLab:"needs_mac_lab",
+  prepHours:"hours_per_week_prep",
+  appExperience:"app_experience",
+  appleExperience:"apple_experience",
+  independence:"independence_confidence",
+  interests:"interests_improving",
+  prevCompetitions:"previous_competitions",
+  competitionDetails:"competition_details",
+  commitmentLevel:"commitment_level",
+  programHours:"hours_per_week_program",
+  workSchedule:"work_schedule",
+  attendSessions:"willing_to_attend",
+  whyInterested:"why_interested",
+  hasIdea:"has_idea",
+  ideaDescription:"idea_description",
+  excitement:"excitement_level",
+  buildInterest:"build_interest",
+  confirmAccuracy:"confirm_accurate",
+  noGuarantee:"understand_no_guarantee",
+  agreeContact:"agree_contact",
+  anythingElse:"anything_else"
+};
+var BOOL_COLS=["has_uni_email","previous_competitions","confirm_accurate","understand_no_guarantee","agree_contact"];
+var ARRAY_COLS=["interests_improving","work_schedule","excitement_level","build_interest"];
+
+function buildRegistrationRow(){
+  var fd=new FormData(form),raw={};
+  fd.forEach(function(v,k){
+    if(raw[k]!==undefined){
+      if(Array.isArray(raw[k]))raw[k].push(v);
+      else raw[k]=[raw[k],v];
+    }else raw[k]=v;
+  });
+  var row={};
+  Object.keys(FIELD_MAP).forEach(function(f){
+    if(raw[f]===undefined)return;
+    var col=FIELD_MAP[f],val=raw[f];
+    if(ARRAY_COLS.indexOf(col)>=0)val=Array.isArray(val)?val:[val];
+    else if(BOOL_COLS.indexOf(col)>=0)val=(val==="Yes");
+    row[col]=val;
+  });
+  return row;
+}
+
 var TOTAL_PAGES=9,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
@@ -293,15 +367,26 @@ nextBtn.addEventListener("click",function(){
 form.addEventListener("submit",function(e){
   e.preventDefault();
   if(!validatePage(currentPage))return;
-  var fd=new FormData(form);
-  var data={};
-  fd.forEach(function(v,k){
-    if(data[k]){data[k]=(Array.isArray(data[k])?data[k]:[data[k]]).concat(v)}
-    else{data[k]=v}
+  if(!supabase){
+    showToast("Submission service is unavailable. Please try again later.","error");
+    return;
+  }
+  submitBtn.disabled=true;
+  var original=submitBtn.textContent;
+  submitBtn.textContent="Submitting…";
+  var row=buildRegistrationRow();
+  supabase.from("registrations").insert([row]).then(function(res){
+    if(res.error)throw res.error;
+    showSuccess();
+  }).catch(function(err){
+    console.error("Supabase insert failed:",err);
+    showToast("Submission failed: "+(err&&err.message?err.message:"please try again"),"error");
+    submitBtn.disabled=false;
+    submitBtn.textContent=original;
   });
-  console.log("Form submitted:",data);
+});
 
-  /* Success animation */
+function showSuccess(){
   form.classList.add("hidden");
   document.querySelector(".progress-wrapper").classList.add("hidden");
   successMessage.classList.remove("hidden");
@@ -313,7 +398,7 @@ form.addEventListener("submit",function(e){
     successTl.fromTo(".success-desc",{opacity:0,y:12},{opacity:1,y:0,duration:0.4,ease:"power2.out"},"-=0.15");
   }
   showToast("Application submitted successfully!","success");
-});
+}
 
 /* live validation on change */
 form.querySelectorAll("input,textarea").forEach(function(el){
