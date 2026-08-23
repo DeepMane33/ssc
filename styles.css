@@ -553,7 +553,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:3.8%;left:4.2%;right:4.2%;bottom:3.8%;
+  top:2%;left:2.5%;right:2.5%;bottom:2%;
   border-radius:44px;
   overflow:hidden;
 }
