@@ -377,7 +377,7 @@ form.addEventListener("submit",function(e){
   var row=buildRegistrationRow();
   supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
     if(res.error)throw res.error;
-    showSuccess();
+    showSuccess(row.email);
     sendConfirmation(row.email,row.full_name);
   }).catch(function(err){
     console.error("Supabase insert failed:",err);
@@ -387,7 +387,9 @@ form.addEventListener("submit",function(e){
   });
 });
 
-function showSuccess(){
+function showSuccess(email){
+  var emailEl=document.getElementById("successEmail");
+  if(emailEl)emailEl.textContent=email||"";
   form.classList.add("hidden");
   document.querySelector(".progress-wrapper").classList.add("hidden");
   successMessage.classList.remove("hidden");

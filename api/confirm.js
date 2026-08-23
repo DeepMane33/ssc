@@ -1,12 +1,6 @@
 /* Vercel serverless function — sends a confirmation email via Resend.
    The Resend API key stays server-side (process.env.RESEND_API_KEY). */
-const fs = require("fs");
-const path = require("path");
-
-function assetB64(file) {
-  const buf = fs.readFileSync(path.join(process.cwd(), "api", "assets", file));
-  return buf.toString("base64");
-}
+const assets = require("./assets");
 
 function buildHtml(name, parulB64, swiftB64) {
   const first = name && name.trim() ? name.trim().split(" ")[0] : "there";
@@ -54,7 +48,7 @@ module.exports = async function handler(req, res) {
     res.status(500).json({ error: "RESEND_API_KEY not configured" });
     return;
   }
-  const html = buildHtml(name, assetB64("parul-logo.jpg"), assetB64("swift-logo.png"));
+  const html = buildHtml(name, assets.parul, assets.swift);
   try {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
