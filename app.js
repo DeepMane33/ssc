@@ -327,6 +327,25 @@ form.querySelectorAll("input,textarea").forEach(function(el){
   });
 });
 
+/* "Other" write-in: reveal when Other is selected, sync typed value into the radio */
+form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(radio){
+  var group=radio.closest(".radio-group");
+  var writein=group?group.querySelector(".other-writein"):null;
+  if(!writein)return;
+  radio.addEventListener("change",function(){
+    if(radio.checked){
+      writein.classList.remove("hidden");
+      if(writein.value.trim())radio.value=writein.value.trim();
+    }else{
+      writein.classList.add("hidden");
+      radio.value="Other";
+    }
+  });
+  writein.addEventListener("input",function(){
+    radio.value=writein.value.trim()?writein.value.trim():"Other";
+  });
+});
+
 /* ============================================
    3D PARALLAX DEVICE SHOWCASE
    Mouse-tracked perspective on device stage
