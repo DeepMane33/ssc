@@ -83,49 +83,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    Three layers: highlight, shadow, illumination
    Inspired by Apple's WWDC 2025 Liquid Glass
    ============================================ */
-.liquid-glass{
-  position:relative;
-  background:rgba(18,18,18,0.45);
-  backdrop-filter:blur(40px) saturate(1.8);
-  -webkit-backdrop-filter:blur(40px) saturate(1.8);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:var(--radius);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.06),
-    inset 0 -1px 0 0 rgba(255,255,255,0.03),
-    0 8px 32px rgba(0,0,0,0.25),
-    0 0 0 0.5px rgba(255,255,255,0.05);
-  overflow:hidden;
-  transition:box-shadow .4s ease,transform .4s ease;
-}
 
-/* Liquid glass top specular */
-.liquid-glass::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.12) 30%,rgba(255,255,255,0.18) 50%,rgba(255,255,255,0.12) 70%,transparent 95%);
-  z-index:3;pointer-events:none;
-}
-
-/* Liquid glass shimmer sweep */
-.liquid-glass::after{
-  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.06) 42%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.06) 58%,transparent 65%);
-  background-size:250% 100%;background-position:200% 0;
-  opacity:0;transition:opacity .4s ease;
-}
-.liquid-glass:hover::after{opacity:1;animation:shimmerSweep 2s ease-in-out}
-@keyframes shimmerSweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-.liquid-glass:hover{
-  box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.1),
-    inset 0 -1px 0 0 rgba(255,255,255,0.05),
-    0 12px 40px rgba(0,0,0,0.35),
-    0 0 0 0.5px rgba(255,255,255,0.08);
-  background:rgba(18,18,18,0.55);
-}
-
-/* Glass Button — matches g.txt GlassButton component */
+/* Glass Button — direct port from g.txt GlassButton component */
 .glass-button-wrap{
   position:relative;
   border-radius:9999px;
@@ -138,26 +97,25 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   justify-content:center;
   border:none;
   border-radius:9999px;
-  background:rgba(18,18,18,0.5);
-  backdrop-filter:blur(40px) saturate(2);
-  -webkit-backdrop-filter:blur(40px) saturate(2);
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
   color:#fff;
   font-family:var(--font-body);
   font-weight:600;
   cursor:pointer;
   transition:all .3s ease;
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 0 rgba(255,255,255,0.04),
-    0 4px 16px rgba(0,0,0,0.2);
-  border:1px solid rgba(255,255,255,0.08);
+    0 4px 30px rgba(0,0,0,0.15),
+    inset 0 0 20px rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.18);
 }
 .glass-button:hover{
-  background:rgba(30,30,30,0.6);
+  background:rgba(255,255,255,0.18);
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 0 rgba(255,255,255,0.06),
-    0 8px 24px rgba(0,0,0,0.3);
+    0 8px 40px rgba(0,0,0,0.2),
+    inset 0 0 30px rgba(255,255,255,0.08);
+  border-color:rgba(255,255,255,0.25);
 }
 .glass-button-text{
   position:relative;
@@ -173,6 +131,46 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   pointer-events:none;
 }
 
+/* Liquid Glass Panel — same system for cards */
+.liquid-glass{
+  position:relative;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.2),
+    inset 0 0 20px rgba(255,255,255,0.03);
+  overflow:hidden;
+  transition:all .4s ease;
+}
+
+/* Liquid glass top specular */
+.liquid-glass::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.15) 30%,rgba(255,255,255,0.25) 50%,rgba(255,255,255,0.15) 70%,transparent 95%);
+  z-index:3;pointer-events:none;
+}
+
+/* Liquid glass shimmer sweep */
+.liquid-glass::after{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.08) 42%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.08) 58%,transparent 65%);
+  background-size:250% 100%;background-position:200% 0;
+  opacity:0;transition:opacity .4s ease;
+}
+.liquid-glass:hover::after{opacity:1;animation:shimmerSweep 2s ease-in-out}
+@keyframes shimmerSweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.liquid-glass:hover{
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.18);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.25),
+    inset 0 0 30px rgba(255,255,255,0.05);
+}
+
 /* ---- SVG Filters ---- */
 .svg-filters{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 
@@ -180,16 +178,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .site-header{
   position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
   padding:16px 32px;
-  background:rgba(18,18,18,0.5);
-  backdrop-filter:blur(40px) saturate(2);
-  -webkit-backdrop-filter:blur(40px) saturate(2);
-  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,0.15);
   border-radius:100px;
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 0 rgba(255,255,255,0.04),
-    0 8px 32px rgba(0,0,0,0.3),
-    0 0 0 0.5px rgba(255,255,255,0.06);
+    0 8px 32px rgba(0,0,0,0.2),
+    inset 0 0 20px rgba(255,255,255,0.03);
 }
 .header-inner{display:flex;align-items:center;justify-content:center}
 .brand{display:flex;align-items:center;gap:14px}
