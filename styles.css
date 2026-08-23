@@ -602,19 +602,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:2%;left:2.5%;right:2.5%;bottom:2%;
-  border-radius:44px;
+  top:1.1%;left:1.3%;right:1.3%;bottom:1.1%;
+  border-radius:46px;
   overflow:hidden;
 }
 .device-iphone .screen-content{
   width:100%;height:100%;
   position:relative;overflow:hidden;
-  border-radius:44px;
+  border-radius:46px;
   background:#000;
 }
 .phone-wallpaper{
   width:100%;height:100%;object-fit:cover;
-  border-radius:44px;
 }
 .phone-overlay{
   position:absolute;inset:0;

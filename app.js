@@ -63,7 +63,7 @@ function initSpecularTracking(){
       var rect=card.getBoundingClientRect();
       var x=e.clientX-rect.left,y=e.clientY-rect.top;
       if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
-        card.style.background="radial-gradient(circle 350px at "+x+"px "+y+"px,rgba(255,255,255,0.18),rgba(255,255,255,0.42) 60%,rgba(255,255,255,0.42))";
+        card.style.background="radial-gradient(circle 300px at "+x+"px "+y+"px,rgba(255,255,255,0.14),transparent 65%),linear-gradient(155deg,rgba(28,28,36,0.62) 0%,rgba(18,18,26,0.48) 48%,rgba(12,12,18,0.38) 100%)";
       }else{
         card.style.background="";
       }
