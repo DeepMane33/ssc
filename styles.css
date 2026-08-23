@@ -37,7 +37,7 @@ html.lenis,html.lenis body{height:auto}
 
 
 body{
-  background:var(--cream);
+  background:#0a0a0a;
   color:#fff;
   font-family:var(--font-body);
   font-size:clamp(1rem,.9rem + .3vw,1.125rem);
@@ -46,14 +46,14 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
-::selection{background:var(--hot);color:var(--cream)}
+::selection{background:var(--hot);color:#fff}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 ::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--cream)}
-::-webkit-scrollbar-thumb{background:var(--pink);border-radius:99px;border:2px solid var(--cream)}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:var(--pink);border-radius:99px;border:2px solid #0a0a0a}
 ::-webkit-scrollbar-thumb:hover{background:var(--hot)}
 
 /* ---- Grain ---- */
@@ -85,33 +85,31 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    ============================================ */
 .liquid-glass{
   position:relative;
-  background:var(--glass-bg);
-  backdrop-filter:blur(24px) saturate(1.8);
-  -webkit-backdrop-filter:blur(24px) saturate(1.8);
-  border:1px solid var(--glass-border);
+  background:rgba(18,18,18,0.45);
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border:1px solid rgba(255,255,255,0.08);
   border-radius:var(--radius);
   box-shadow:
-    0 0 6px rgba(0,0,0,0.1),
-    0 2px 6px rgba(0,0,0,0.2),
-    inset 1px 1px 1px -0.5px rgba(255,255,255,0.1),
-    inset -1px -1px 1px -0.5px rgba(255,255,255,0.05),
-    inset 0 0 6px 6px rgba(255,255,255,0.03),
-    0 0 12px rgba(0,0,0,0.15);
+    inset 0 1px 0 0 rgba(255,255,255,0.06),
+    inset 0 -1px 0 0 rgba(255,255,255,0.03),
+    0 8px 32px rgba(0,0,0,0.25),
+    0 0 0 0.5px rgba(255,255,255,0.05);
   overflow:hidden;
   transition:box-shadow .4s ease,transform .4s ease;
 }
 
-/* Layer 1: Specular highlight — top edge light casting */
+/* Layer 1: Top specular edge */
 .liquid-glass::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent 10%,rgba(255,255,255,0.85) 30%,rgba(255,255,255,0.95) 50%,rgba(255,255,255,0.85) 70%,transparent 90%);
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.12) 30%,rgba(255,255,255,0.18) 50%,rgba(255,255,255,0.12) 70%,transparent 95%);
   z-index:3;pointer-events:none;
 }
 
-/* Layer 2: Refraction shimmer sweep on hover */
+/* Layer 2: Shimmer sweep on hover */
 .liquid-glass::after{
   content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.15) 42%,rgba(255,255,255,0.25) 50%,rgba(255,255,255,0.15) 58%,transparent 65%);
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.06) 42%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.06) 58%,transparent 65%);
   background-size:250% 100%;background-position:200% 0;
   opacity:0;transition:opacity .4s ease;
 }
@@ -120,15 +118,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 .liquid-glass:hover{
   box-shadow:
-    0 0 8px rgba(0,0,0,0.04),
-    0 4px 12px rgba(0,0,0,0.1),
-    inset 3px 3px 0.5px -3px rgba(255,255,255,0.95),
-    inset -3px -3px 0.5px -3px rgba(255,255,255,0.9),
-    inset 1px 1px 1px -0.5px rgba(255,255,255,0.7),
-    inset -1px -1px 1px -0.5px rgba(255,255,255,0.7),
-    inset 0 0 8px 8px rgba(255,255,255,0.15),
-    inset 0 0 3px 3px rgba(255,255,255,0.08),
-    0 0 20px rgba(0,0,0,0.1);
+    inset 0 1px 0 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 0 rgba(255,255,255,0.05),
+    0 12px 40px rgba(0,0,0,0.35),
+    0 0 0 0.5px rgba(255,255,255,0.08);
 }
 
 /* ---- SVG Filters ---- */
@@ -137,29 +130,33 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
-  padding:14px 28px;
-  background:rgba(20,20,20,0.55);
+  padding:16px 32px;
+  background:rgba(18,18,18,0.5);
   backdrop-filter:blur(40px) saturate(2);
   -webkit-backdrop-filter:blur(40px) saturate(2);
-  border:1px solid rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.1);
   border-radius:100px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 0 rgba(255,255,255,0.04),
+    0 8px 32px rgba(0,0,0,0.3),
+    0 0 0 0.5px rgba(255,255,255,0.06);
 }
 .header-inner{display:flex;align-items:center;justify-content:center}
-.brand{display:flex;align-items:center;gap:12px}
-.swift-logo{width:32px;height:32px;flex-shrink:0;border-radius:50%}
-.brand-text{display:flex;flex-direction:column;gap:0}
-.brand-name{font-family:var(--font-body);font-size:15px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap}
-.brand-sub{font-size:10px;font-weight:500;color:rgba(255,255,255,0.6);letter-spacing:.03em;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:14px}
+.swift-logo{width:34px;height:34px;flex-shrink:0;border-radius:50%}
+.brand-text{display:flex;flex-direction:column;gap:1px}
+.brand-name{font-family:var(--font-body);font-size:16px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap}
+.brand-sub{font-size:10.5px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:.03em;white-space:nowrap}
 
 .parul-logo-badge{
-  width:32px;height:32px;
+  width:34px;height:34px;
   border-radius:50%;
   overflow:hidden;
   flex-shrink:0;
   box-shadow:0 2px 8px rgba(0,0,0,0.3);
-  background:rgba(255,255,255,0.1);
-  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
 }
 .parul-logo-img{
   width:100%;height:100%;object-fit:contain;
@@ -253,7 +250,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---- Glass Card ---- */
 .glass-card{padding:44px 40px}
-.step-title{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.step-title{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:6px}
 .step-desc{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:32px;line-height:1.5}
 
 /* ============================================
@@ -262,7 +259,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    ============================================ */
 .field-group{margin-bottom:24px;position:relative}
 .field-group:last-child{margin-bottom:0}
-.field-label{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;letter-spacing:.01em;opacity:.7}
+.field-label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);margin-bottom:8px;letter-spacing:.01em;opacity:1}
 .req{color:var(--swift)}
 
 .field-input,.field-textarea{
@@ -428,7 +425,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   -webkit-backdrop-filter:blur(16px) saturate(1.4);
   border:1px solid rgba(255,255,255,0.5);
   box-shadow:0 8px 32px rgba(38,32,27,0.12);
-  font-size:13px;font-weight:500;color:var(--ink);
+  font-size:13px;font-weight:500;color:#fff;
   pointer-events:auto;
   animation:toastIn .4s var(--spring);
 }
@@ -455,7 +452,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   box-shadow:0 8px 32px rgba(0,0,0,0.1);
   border:3px solid rgba(255,255,255,0.8);
 }
-.footer-text{font-size:14px;color:var(--ink);font-weight:500;margin-bottom:4px}
+.footer-text{font-size:14px;color:#fff;font-weight:500;margin-bottom:4px}
 .footer-sub{font-size:12px;color:rgba(255,255,255,0.6)}
 
 .swift-orbs-bg{display:none;}
@@ -472,7 +469,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .success-message{padding:40px 0}
 .success-card{text-align:center;padding:64px 40px}
 .success-icon{margin-bottom:24px}
-.success-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.success-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:#fff;margin-bottom:12px}
 .success-desc{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;max-width:400px;margin:0 auto}
 
 .site-footer{
@@ -551,8 +548,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .device-iphone .device-frame{
   position:relative;width:220px;
   background:#000;
-  border-radius:48px;
-  overflow:hidden;
 }
 .device-iphone .device-img{
   width:100%;height:auto;
