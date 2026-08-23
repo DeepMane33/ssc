@@ -378,6 +378,7 @@ form.addEventListener("submit",function(e){
   supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
     if(res.error)throw res.error;
     showSuccess();
+    sendConfirmation(row.email,row.full_name);
   }).catch(function(err){
     console.error("Supabase insert failed:",err);
     showToast("Submission failed: "+(err&&err.message?err.message:"please try again"),"error");
@@ -398,6 +399,18 @@ function showSuccess(){
     successTl.fromTo(".success-desc",{opacity:0,y:12},{opacity:1,y:0,duration:0.4,ease:"power2.out"},"-=0.15");
   }
   showToast("Application submitted successfully!","success");
+}
+
+/* Fire-and-forget confirmation email (serverless /api/confirm) */
+function sendConfirmation(email,name){
+  if(!email)return;
+  fetch("/api/confirm",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email,name:name||""})
+  }).catch(function(e){
+    console.warn("Confirmation email was not sent:",e);
+  });
 }
 
 /* live validation on change */
