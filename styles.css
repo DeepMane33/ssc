@@ -460,7 +460,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 .swift-orbs-bg{display:none;}
 .swift-orb-decor{position:fixed;z-index:0;pointer-events:none;}
-.swift-orb-canvas{display:block;opacity:.55;}
+.swift-orb-canvas{display:block;opacity:.75;}
 
 /* ============================================
    SUCCESS SCREEN
@@ -529,7 +529,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:2.5%;left:3%;right:3%;bottom:2.5%;
+  top:3.2%;left:3.8%;right:3.8%;bottom:3.2%;
   border-radius:44px;
   overflow:hidden;
 }
