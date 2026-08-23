@@ -4,14 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swift Student Challenge 2027 | Parul University</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="description" content="Register for the Swift Student Challenge 2027 at Parul University. Build with Swift and represent Parul University on the global stage.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Swift Student Challenge 2027 | Parul University">
+  <meta property="og:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <meta property="og:url" content="https://ssc-pu.vercel.app">
+  <meta property="og:site_name" content="Swift Student Challenge 2027">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Swift Student Challenge 2027 | Parul University">
+  <meta name="twitter:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <link rel="icon" href="assets/swift-nav.png">
+  <link rel="apple-touch-icon" href="assets/swift-nav.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <div id="boot" class="boot" aria-hidden="true">
+    <img src="assets/swift-nav.png" alt="Swift" class="boot-logo">
+    <p class="boot-text">Swift Student Challenge</p>
+    <p class="boot-sub">AATC Parul University</p>
+  </div>
 
   <div class="grain"></div>
 
@@ -873,7 +888,7 @@
 
   </section>
 
-  <section id="successMessage" class="success-message hidden">
+  <section id="successMessage" class="success-message hidden" data-nosnippet>
     <div class="success-card glass-card liquid-glass guideline-card">
       <svg class="success-swift" viewBox="0 0 256 310" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 1.5rem;width:72px;height:auto;">
         <defs>
@@ -1144,6 +1159,20 @@ void main(){
     requestAnimationFrame(render);
   })();
 
+  </script>
+  <script>
+    (() => {
+      const boot = document.getElementById('boot');
+      const logo = boot?.querySelector('.boot-logo');
+      if (!boot || !logo) return;
+      logo.addEventListener('animationend', () => {
+        // keep boot screen a bit longer so text stays visible ~2s
+        setTimeout(() => {
+          boot.classList.add('hidden');
+          setTimeout(() => boot.remove(), 900);
+        }, 4000);
+      });
+    })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
