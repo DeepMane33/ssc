@@ -946,9 +946,9 @@
 
         // soft glow
         const glow = ctx.createRadialGradient(cW/2, cH/2, 0, cW/2, cH/2, cW/2);
-        glow.addColorStop(0, "rgba(255,60,0,.15)");
-        glow.addColorStop(.7, "rgba(255,140,20,.05)");
-        glow.addColorStop(1, "rgba(255,210,60,0)");
+        glow.addColorStop(0, "rgba(255,255,255,.04)");
+        glow.addColorStop(.7, "rgba(255,255,255,.01)");
+        glow.addColorStop(1, "rgba(255,255,255,0)");
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, cW, cH);
 
