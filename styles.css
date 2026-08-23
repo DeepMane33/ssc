@@ -722,6 +722,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   filter:drop-shadow(0 6px 20px rgba(0,0,0,0.15));
 }
 
+/* Swift Logo Float — bottom right */
+.device-swift-float{
+  bottom:10%;right:-3%;
+}
+.swift-float-logo{
+  width:80px;height:80px;
+  border-radius:18px;
+  filter:drop-shadow(0 8px 24px rgba(240,81,35,0.3));
+}
+
 /* Device labels */
 .device-label{
   font-size:11px;font-weight:600;color:var(--fuji);
