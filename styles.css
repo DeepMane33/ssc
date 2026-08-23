@@ -471,6 +471,30 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .success-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:12px}
 .success-desc{font-size:15px;color:var(--fuji);line-height:1.6;max-width:400px;margin:0 auto}
 
+.site-footer{
+  position:relative;z-index:1;
+  padding:48px 24px 40px;
+  text-align:center;
+}
+.footer-inner{
+  max-width:400px;margin:0 auto;
+}
+.footer-img{
+  width:80px;height:80px;
+  border-radius:20px;object-fit:cover;
+  margin-bottom:16px;
+  filter:drop-shadow(0 4px 20px rgba(0,0,0,.1));
+}
+.footer-title{
+  font-family:var(--font-display);
+  font-size:16px;font-weight:700;
+  color:var(--ink);margin-bottom:4px;
+}
+.footer-sub{
+  font-size:13px;color:var(--fuji);
+  letter-spacing:.3px;
+}
+
 /* ============================================
    DEVICE SHOWCASE — 3D Floating Devices
    ============================================ */
@@ -529,7 +553,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .device-iphone .device-screen{
   position:absolute;
-  top:3.2%;left:3.8%;right:3.8%;bottom:3.2%;
+  top:3.8%;left:4.2%;right:4.2%;bottom:3.8%;
   border-radius:44px;
   overflow:hidden;
 }
