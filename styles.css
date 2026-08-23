@@ -986,6 +986,47 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .custom-radio:hover,.custom-checkbox:hover{transform:none;box-shadow:none}
 }
 
+/* ============================================
+   GUIDELINES / BEFORE YOU APPLY PAGE
+   ============================================ */
+.guidelines-section{position:relative;z-index:1;padding:140px 24px 100px;max-width:840px;margin:0 auto}
+.guidelines-head{text-align:center;margin-bottom:52px}
+.guidelines-kicker{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:16px}
+.guidelines-title{font-family:var(--font-display);font-size:clamp(30px,6vw,48px);font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:14px;line-height:1.05}
+.guidelines-title .accent{color:var(--swift)}
+.guidelines-sub{font-size:15px;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto;line-height:1.6}
+.guidelines-list{display:flex;flex-direction:column;gap:20px}
+.guideline-card{padding:34px 34px}
+.guideline-card h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:16px;display:flex;align-items:center}
+.guideline-card h2::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--swift);transform:rotate(45deg);flex:none;margin-right:12px}
+.guideline-card.important h2{color:var(--hot)}
+.guideline-card.important h2::before{background:var(--hot)}
+.guideline-card p{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.75;margin-bottom:14px}
+.guideline-card p:last-child{margin-bottom:0}
+.guideline-card ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin:4px 0 14px}
+.guideline-card li{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.6;padding-left:22px;position:relative}
+.guideline-card li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:var(--swift);transform:rotate(45deg)}
+.guideline-card.important li::before{background:var(--hot)}
+
+.confirm-wrap{display:flex;justify-content:center;margin-top:40px}
+.confirm-box{max-width:600px;width:100%;padding:22px 26px}
+.confirm-box .custom-checkbox{background:transparent;border:0;padding:0;width:100%;align-items:flex-start}
+.confirm-box .custom-checkbox .check-mark{margin-top:2px}
+.confirm-text{font-size:14.5px;color:rgba(255,255,255,0.85);line-height:1.55;text-align:left}
+.confirm-note{text-align:center;font-size:13px;color:rgba(255,255,255,0.5);margin-top:14px;transition:opacity .3s ease}
+.guideline-cta{text-align:center;margin-top:26px}
+
+.cta-btn.is-disabled{opacity:.4;pointer-events:none;filter:grayscale(.25)}
+
+.hero-cta-row{display:flex;justify-content:center;margin-top:34px}
+
+@media(max-width:640px){
+  .guidelines-section{padding:120px 16px 80px}
+  .guideline-card{padding:26px 20px}
+  .guideline-card h2{font-size:18px}
+  .guideline-card p,.guideline-card li{font-size:14px}
+}
+
 /* Reduced motion — keep animations but lighter */
 @media(prefers-reduced-motion:reduce){
   .grain{animation-duration:20s!important}
