@@ -337,6 +337,93 @@ form.querySelectorAll("input,textarea").forEach(function(el){
 });
 
 /* ============================================
+   3D PARALLAX DEVICE SHOWCASE
+   Mouse-tracked perspective on device stage
+   ============================================ */
+function initDeviceParallax(){
+  var stage=document.getElementById("devicesStage");
+  if(!stage)return;
+  var devices=stage.querySelectorAll(".device-float");
+
+  stage.addEventListener("mousemove",function(e){
+    var rect=stage.getBoundingClientRect();
+    var x=(e.clientX-rect.left)/rect.width-0.5;
+    var y=(e.clientY-rect.top)/rect.height-0.5;
+
+    devices.forEach(function(dev){
+      var speed=parseFloat(dev.dataset.speed)||1;
+      var rotateY=x*15*speed;
+      var rotateX=-y*10*speed;
+      var translateX=x*20*speed;
+      var translateY=y*15*speed;
+
+      if(dev.classList.contains("device-iphone")){
+        dev.style.transform="translate(-50%,-50%) rotateY("+(rotateY-8)+"deg) rotateX("+(rotateX+4)+"deg) translateX("+translateX+"px) translateY("+translateY+"px)";
+      }else if(dev.classList.contains("device-macbook")){
+        dev.style.transform="translate(-50%,-50%) translateX("+(-200+translateX)+"px) translateY("+(40+translateY)+"px) rotateY("+(rotateY+12)+"deg) rotateX("+(rotateX-3)+"deg) scale(0.75)";
+      }else if(dev.classList.contains("device-swift")){
+        dev.style.animationPlayState="paused";
+        dev.style.transform="translate(-50%,-50%) translateX("+(220+translateX)+"px) translateY("+(-80+translateY)+"px) rotate("+(rotateY*0.5)+"deg)";
+      }else if(dev.classList.contains("device-badge")){
+        dev.style.animationPlayState="paused";
+        dev.style.transform="translate(-50%,-50%) translateX("+(-240+translateX)+"px) translateY("+(-60+translateY)+"px)";
+      }
+    });
+  });
+
+  stage.addEventListener("mouseleave",function(){
+    devices.forEach(function(dev){
+      dev.style.transition="transform .6s cubic-bezier(.22,1,.36,1)";
+      if(dev.classList.contains("device-iphone")){
+        dev.style.transform="translate(-50%,-50%) rotateY(-8deg) rotateX(4deg)";
+      }else if(dev.classList.contains("device-macbook")){
+        dev.style.transform="translate(-50%,-50%) translateX(-200px) translateY(40px) rotateY(12deg) rotateX(-3deg) scale(0.75)";
+      }else if(dev.classList.contains("device-swift")){
+        dev.style.transform="translate(-50%,-50%) translateX(220px) translateY(-80px)";
+        dev.style.animationPlayState="running";
+      }else if(dev.classList.contains("device-badge")){
+        dev.style.transform="translate(-50%,-50%) translateX(-240px) translateY(-60px)";
+        dev.style.animationPlayState="running";
+      }
+      setTimeout(function(){dev.style.transition=""},600);
+    });
+  });
+
+  /* Scroll-triggered reveal */
+  if(typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined"){
+    gsap.registerPlugin(ScrollTrigger);
+    var tl=gsap.timeline({scrollTrigger:{trigger:stage,start:"top 80%",once:true}});
+    tl.fromTo(".showcase-eyebrow",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"});
+    tl.fromTo(".showcase-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.3");
+    tl.fromTo(".showcase-desc",{opacity:0,y:18},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+    tl.fromTo(".device-iphone",{opacity:0,y:60,rotateY:-20},{opacity:1,y:0,rotateY:-8,duration:0.8,ease:"power3.out"},"-=0.3");
+    tl.fromTo(".device-macbook",{opacity:0,y:50,rotateY:25},{opacity:1,y:0,rotateY:12,duration:0.8,ease:"power3.out"},"-=0.6");
+    tl.fromTo(".device-swift",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.5,ease:"back.out(1.7)"},"-=0.4");
+    tl.fromTo(".device-badge",{opacity:0,x:-30},{opacity:1,x:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  }
+}
+
+/* ============================================
+   SHOWCASE BEGIN BUTTON
+   ============================================ */
+var showcaseBeginBtn=document.getElementById("showcaseBeginBtn");
+if(showcaseBeginBtn){
+  showcaseBeginBtn.addEventListener("click",function(){
+    if(typeof gsap!=="undefined"){
+      gsap.to(heroSection.querySelector(".hero-inner"),{
+        opacity:0,y:-30,scale:0.97,duration:0.35,ease:"power2.in",
+        onComplete:function(){showForm()}
+      });
+      gsap.to(document.getElementById("showcaseSection"),{
+        opacity:0,y:-20,duration:0.3,ease:"power2.in"
+      });
+    }else{
+      showForm();
+    }
+  });
+}
+
+/* ============================================
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
@@ -347,6 +434,7 @@ document.addEventListener("DOMContentLoaded",function(){
   initMagneticButtons();
   initTouchRipple();
   initToastContainer();
+  initDeviceParallax();
   updateProgress();
 });
 })();

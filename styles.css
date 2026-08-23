@@ -431,6 +431,155 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .success-desc{font-size:15px;color:var(--fuji);line-height:1.6;max-width:400px;margin:0 auto}
 
 /* ============================================
+   DEVICE SHOWCASE — 3D Floating Devices
+   ============================================ */
+.showcase-section{
+  position:relative;z-index:1;
+  padding:80px 24px 100px;
+  overflow:hidden;
+}
+.showcase-inner{
+  max-width:900px;margin:0 auto;text-align:center;
+}
+.showcase-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fuji);margin-bottom:16px;
+}
+.showcase-title{
+  font-family:var(--font-display);font-size:clamp(26px,5vw,40px);
+  font-weight:800;letter-spacing:-.03em;line-height:1.15;
+  color:var(--ink);margin-bottom:14px;
+}
+.showcase-title .accent{color:var(--swift)}
+.showcase-desc{
+  font-size:15px;line-height:1.6;color:var(--fuji);
+  max-width:480px;margin:0 auto 56px;
+}
+
+/* Devices Stage — 3D perspective container */
+.devices-stage{
+  position:relative;
+  height:420px;
+  perspective:1200px;
+  transform-style:preserve-3d;
+}
+
+/* Base device float */
+.device-float{
+  position:absolute;
+  transition:transform .4s var(--ease);
+  will-change:transform;
+}
+
+/* iPhone */
+.device-iphone{
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) rotateY(-8deg) rotateX(4deg);
+  z-index:3;
+}
+.device-iphone .device-frame{
+  position:relative;width:220px;
+}
+.device-iphone .device-img{
+  width:100%;height:auto;
+  filter:drop-shadow(0 20px 50px rgba(0,0,0,0.18));
+}
+.device-iphone .device-screen{
+  position:absolute;
+  top:6%;left:5%;right:5%;bottom:6%;
+  border-radius:28px;
+  overflow:hidden;
+}
+.device-iphone .screen-content{
+  width:100%;height:100%;
+  background:linear-gradient(160deg,#1a1a2e,#16213e,#0f3460);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:8px;
+}
+.screen-app-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,var(--swift),#e04010);
+  box-shadow:0 4px 20px rgba(240,81,35,0.4);
+  animation:iconPulse 3s ease-in-out infinite;
+}
+@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.screen-text{color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em}
+.screen-sub{color:rgba(255,255,255,0.5);font-size:9px;font-weight:400}
+
+/* MacBook */
+.device-macbook{
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) translateX(-200px) translateY(40px) rotateY(12deg) rotateX(-3deg) scale(0.75);
+  z-index:2;
+}
+.device-macbook .device-frame{position:relative;width:380px}
+.device-macbook .device-img{
+  width:100%;height:auto;
+  filter:drop-shadow(0 25px 60px rgba(0,0,0,0.15));
+}
+.device-macbook .device-screen{
+  position:absolute;
+  top:4%;left:8%;right:8%;bottom:14%;
+  border-radius:8px;overflow:hidden;
+}
+.screen-mac{
+  background:#1e1e2e;
+  display:flex;align-items:flex-start;justify-content:flex-start;
+  padding:12px;
+}
+.screen-code{
+  font-family:'SF Mono',Monaco,Consolas,monospace;
+  font-size:10px;line-height:1.6;color:#cdd6f4;
+  text-align:left;
+}
+.code-kw{color:#cba6f7}
+.code-mod{color:#89b4fa}
+.code-type{color:#f9e2af}
+.code-str{color:#a6e3a1}
+
+/* Swift Logo Float */
+.device-swift{
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) translateX(220px) translateY(-80px);
+  z-index:4;
+  animation:swiftFloat 4s ease-in-out infinite;
+}
+@keyframes swiftFloat{
+  0%,100%{transform:translate(-50%,-50%) translateX(220px) translateY(-80px) rotate(0deg)}
+  25%{transform:translate(-50%,-50%) translateX(225px) translateY(-90px) rotate(3deg)}
+  50%{transform:translate(-50%,-50%) translateX(218px) translateY(-85px) rotate(-2deg)}
+  75%{transform:translate(-50%,-50%) translateX(222px) translateY(-75px) rotate(1deg)}
+}
+.swift-float-icon{
+  width:72px;height:72px;
+  filter:drop-shadow(0 8px 24px rgba(240,81,35,0.35));
+}
+
+/* App Store Badge Float */
+.device-badge{
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) translateX(-240px) translateY(-60px);
+  z-index:4;
+  animation:badgeFloat 5s ease-in-out infinite 0.5s;
+}
+@keyframes badgeFloat{
+  0%,100%{transform:translate(-50%,-50%) translateX(-240px) translateY(-60px)}
+  50%{transform:translate(-50%,-50%) translateX(-235px) translateY(-70px)}
+}
+.app-store-img{
+  width:140px;height:auto;
+  filter:drop-shadow(0 6px 20px rgba(0,0,0,0.15));
+}
+
+/* Device labels */
+.device-label{
+  font-size:11px;font-weight:600;color:var(--fuji);
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-top:12px;text-align:center;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media(max-width:640px){
@@ -443,4 +592,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .form-nav{flex-direction:column}
   .prev-btn,.next-btn,.submit-btn{width:100%;justify-content:center}
   .toast-container{right:12px;left:12px}
+
+  /* Showcase mobile */
+  .devices-stage{height:320px}
+  .device-iphone .device-frame{width:160px}
+  .device-macbook{transform:translate(-50%,-50%) translateX(0) translateY(80px) rotateY(8deg) scale(0.5)}
+  .device-swift{transform:translate(-50%,-50%) translateX(100px) translateY(-40px)}
+  .swift-float-icon{width:48px;height:48px}
+  .device-badge{transform:translate(-50%,-50%) translateX(-110px) translateY(-30px)}
+  .app-store-img{width:100px}
+  .device-macbook .device-frame{width:260px}
+  .screen-code{font-size:8px}
 }
