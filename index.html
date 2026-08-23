@@ -886,6 +886,10 @@
     </div>
   </section>
 
+  <div class="swift-orb-decor">
+    <canvas id="swiftOrbCanvas" width="160" height="160"></canvas>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <img src="assets/mew.jpg" alt="mew" class="footer-mew">
@@ -894,6 +898,112 @@
     </div>
   </footer>
 
+  <script>
+  (() => {
+    const TAU = Math.PI * 2;
+    const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+    const smooth = v => { v = clamp01(v); return v * v * (3 - 2 * v); };
+    const lerp = (a, b, m) => a + (b - a) * m;
+    const hash = (x, y) => { const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return n - Math.floor(n); };
+    const fib = (i, n) => {
+      const ga = Math.PI * (3 - Math.sqrt(5));
+      const y = 1 - 2 * (i + .5) / n;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const th = i * ga;
+      return [r * Math.cos(th), y, r * Math.sin(th)];
+    };
+    const proj = (yaw, tilt, cx, cy, s) => {
+      const st = Math.sin(tilt), ct = Math.cos(tilt);
+      const sy = Math.sin(yaw), cyw = Math.cos(yaw);
+      return (x, y, z) => {
+        const px = x * cyw + z * sy, pz = -x * sy + z * cyw;
+        const py = y * ct - pz * st, z2 = y * st + pz * ct;
+        return [cx + px * s, cy - py * s, z2];
+      };
+    };
+    const rscale = S => Math.pow(S / 300, .6);
+    const maskCache = new Map();
+
+    function pathDots(key, d, N, vb) {
+      const ck = key + "-" + N;
+      if (maskCache.has(ck)) return maskCache.get(ck);
+      const px = 200, c = document.createElement("canvas");
+      c.width = c.height = px;
+      const g = c.getContext("2d");
+      g.setTransform(px / (vb || 24), 0, 0, px / (vb || 24), 0, 0);
+      g.fillStyle = "#fff";
+      g.fill(new Path2D(d));
+      const img = g.getImageData(0, 0, px, px).data;
+      let x0 = px, x1 = -1, y0 = px, y1 = -1;
+      for (let j = 0; j < px; j++) for (let i = 0; i < px; i++)
+        if (img[(j * px + i) * 4 + 3] > 128) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
+      const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, m = Math.max(x1 - x0, y1 - y0);
+      const pts = [];
+      for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+        const sx = mx + ((i + .5) / N * 2 - 1) * m / 2, sy = my + ((j + .5) / N * 2 - 1) * m / 2;
+        const ix = Math.round(sx), iy = Math.round(sy);
+        if (ix < 0 || iy < 0 || ix >= px || iy >= px) continue;
+        if (img[(iy * px + ix) * 4 + 3] <= 128) continue;
+        pts.push([(sx - mx) / (m / 2), (sy - my) / (m / 2)]);
+      }
+      maskCache.set(ck, pts);
+      return pts;
+    }
+
+    function paint(ctx, dots, accent, sat, rMin) {
+      dots.sort((a, b) => a.z - b.z);
+      for (const d of dots) {
+        const al = d.a ?? 1;
+        if (al < .02) continue;
+        const v = clamp01(d.v);
+        const g = v * 255;
+        let r = g, gg = g, b = g;
+        if (accent && sat) {
+          const lift = Math.min(1, v * 1.12);
+          r = g * (1 - sat) + accent[0] * lift * sat;
+          gg = g * (1 - sat) + accent[1] * lift * sat;
+          b = g * (1 - sat) + accent[2] * lift * sat;
+        }
+        if (v > .85) { const w = (v - .85) / .15 * .45; r += (255 - r) * w; gg += (255 - gg) * w; b += (255 - b) * w; }
+        ctx.fillStyle = `rgba(${r | 0},${gg | 0},${b | 0},${al})`;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, Math.max(rMin, d.r), 0, TAU);
+        ctx.fill();
+      }
+    }
+
+    const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
+
+    const canvas = document.getElementById("swiftOrbCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const S = 160;
+    canvas.width = S; canvas.height = S;
+    const accent = [240, 81, 56];
+
+    function draw() {
+      const t = performance.now() / 1000;
+      ctx.clearRect(0, 0, S, S);
+      const cx = S / 2, cy = S / 2, R = S / 2 * .88;
+      const rs = rscale(S);
+      const p = proj(.2 * Math.sin(t * .43), .18 * Math.sin(t * .31) - .04, cx, cy, R);
+      const pts = pathDots("swift", SWIFT_PATH, 27);
+      const bob = .035 * Math.sin(t * .95);
+      const wave = (((t * .4) % 1 + 1) % 1) * 2.4 - 1.2;
+      const dots = [];
+      for (const [gx, gy] of pts) {
+        const u = (gx - gy) * .5;
+        const crest = Math.exp(-Math.pow(u - wave, 2) / .05);
+        const [x, y, z] = p(gx, -gy + bob, 0);
+        const dep = (z + 1) / 2;
+        dots.push({ x, y, z, r: (.75 + .8 * dep + .45 * crest) * rs, v: .6 + .16 * dep + .26 * crest });
+      }
+      paint(ctx, dots, accent, .92, .3);
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>

@@ -458,6 +458,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .footer-text{font-size:14px;color:var(--ink);font-weight:500;margin-bottom:4px}
 .footer-sub{font-size:12px;color:var(--fuji)}
 
+.swift-orb-decor{
+  position:fixed;
+  bottom:40px;right:40px;
+  z-index:100;
+  pointer-events:none;
+  opacity:0.85;
+  filter:drop-shadow(0 4px 20px rgba(240,81,35,0.25));
+}
+
 /* ============================================
    SUCCESS SCREEN
    ============================================ */
