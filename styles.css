@@ -165,12 +165,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .liquid-glass::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent 3%,rgba(255,255,255,0.9) 28%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.9) 72%,transparent 97%);
-  z-index:3;pointer-events:none;
+  z-index:4;pointer-events:none;
 }
 
-/* Liquid glass shimmer — disabled to prevent shader bleed */
+/* Liquid glass — watery drifting sheen */
 .liquid-glass::after{
-  display:none;
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(70% 55% at 22% 0%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(55% 50% at 92% 100%, rgba(140,185,225,0.07), transparent 70%);
+  background-size:150% 150%;
+  opacity:.7;
+  animation:liquidFloat 10s ease-in-out infinite;
+}
+.liquid-glass > *{position:relative;z-index:3}
+@keyframes liquidFloat{
+  0%,100%{background-position:0% 0%}
+  50%{background-position:100% 100%}
 }
 
 /* ---- SVG Filters ---- */
