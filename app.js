@@ -4,7 +4,7 @@
 var TOTAL_PAGES=9,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
-var beginBtn=document.getElementById("beginBtn");
+var showcaseSection=document.getElementById("showcaseSection");
 var prevBtn=document.getElementById("prevBtn");
 var nextBtn=document.getElementById("nextBtn");
 var submitBtn=document.getElementById("submitBtn");
@@ -277,23 +277,14 @@ function goToPage(num){
    FORM SUBMISSION
    ============================================ */
 function showForm(){
-  heroSection.classList.add("hidden");
+  if(heroSection)heroSection.classList.add("hidden");
+  if(showcaseSection)showcaseSection.classList.add("hidden");
   formSection.classList.remove("hidden");
   goToPage(1);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* ---- Event Listeners ---- */
-beginBtn.addEventListener("click",function(){
-  if(typeof gsap!=="undefined"){
-    gsap.to(heroSection.querySelector(".hero-inner"),{
-      opacity:0,y:-30,scale:0.97,duration:0.35,ease:"power2.in",
-      onComplete:function(){showForm()}
-    });
-  }else{
-    showForm();
-  }
-});
-
 prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
 nextBtn.addEventListener("click",function(){
   if(validatePage(currentPage))goToPage(currentPage+1);
@@ -408,19 +399,7 @@ function initDeviceParallax(){
    ============================================ */
 var showcaseBeginBtn=document.getElementById("showcaseBeginBtn");
 if(showcaseBeginBtn){
-  showcaseBeginBtn.addEventListener("click",function(){
-    if(typeof gsap!=="undefined"){
-      gsap.to(heroSection.querySelector(".hero-inner"),{
-        opacity:0,y:-30,scale:0.97,duration:0.35,ease:"power2.in",
-        onComplete:function(){showForm()}
-      });
-      gsap.to(document.getElementById("showcaseSection"),{
-        opacity:0,y:-20,duration:0.3,ease:"power2.in"
-      });
-    }else{
-      showForm();
-    }
-  });
+  showcaseBeginBtn.addEventListener("click",showForm);
 }
 
 /* ============================================
