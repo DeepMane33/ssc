@@ -375,7 +375,7 @@ form.addEventListener("submit",function(e){
   var original=submitBtn.textContent;
   submitBtn.textContent="Submitting…";
   var row=buildRegistrationRow();
-  supabase.from("registrations").insert([row]).then(function(res){
+  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
     if(res.error)throw res.error;
     showSuccess();
   }).catch(function(err){

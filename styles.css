@@ -135,49 +135,49 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .liquid-glass{
   position:relative;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 26%),
-    linear-gradient(155deg, rgba(20,24,34,0.42) 0%, rgba(15,18,27,0.32) 50%, rgba(11,13,20,0.24) 100%);
-  backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
-  -webkit-backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
-  border:1px solid rgba(255,255,255,0.16);
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 20%),
+    linear-gradient(155deg, rgba(18,22,32,0.30) 0%, rgba(13,16,24,0.22) 50%, rgba(9,11,17,0.16) 100%);
+  backdrop-filter:blur(30px) saturate(1.7);
+  -webkit-backdrop-filter:blur(30px) saturate(1.7);
+  border:1px solid rgba(255,255,255,0.09);
   border-radius:var(--radius);
   box-shadow:
-    0 16px 48px rgba(0,0,0,0.4),
-    inset 0 1px 1px rgba(255,255,255,0.45),
-    inset 0 -10px 22px rgba(0,0,0,0.32),
-    inset 1px 0 1px rgba(255,255,255,0.10),
-    inset -1px 0 1px rgba(255,255,255,0.10);
+    0 16px 48px rgba(0,0,0,0.42),
+    inset 0 1px 1px rgba(255,255,255,0.16),
+    inset 0 -10px 22px rgba(0,0,0,0.30),
+    inset 1px 0 1px rgba(255,255,255,0.05),
+    inset -1px 0 1px rgba(255,255,255,0.05);
   overflow:hidden;
   transition:box-shadow .3s ease, border-color .3s ease;
 }
 
 .liquid-glass:hover{
-  border-color:rgba(255,255,255,0.24);
+  border-color:rgba(255,255,255,0.14);
   box-shadow:
-    0 20px 56px rgba(0,0,0,0.45),
-    inset 0 1px 1px rgba(255,255,255,0.55),
-    inset 0 -12px 24px rgba(0,0,0,0.36),
-    inset 1px 0 1px rgba(255,255,255,0.14),
-    inset -1px 0 1px rgba(255,255,255,0.14);
+    0 20px 56px rgba(0,0,0,0.46),
+    inset 0 1px 1px rgba(255,255,255,0.22),
+    inset 0 -12px 24px rgba(0,0,0,0.34),
+    inset 1px 0 1px rgba(255,255,255,0.08),
+    inset -1px 0 1px rgba(255,255,255,0.08);
 }
 
-/* Liquid glass top specular — bright chrome edge */
+/* Liquid glass top specular — thin glassy edge (kept subtle) */
 .liquid-glass::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent 3%,rgba(255,255,255,0.9) 28%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.9) 72%,transparent 97%);
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 4%,rgba(255,255,255,0.45) 30%,rgba(255,255,255,0.6) 50%,rgba(255,255,255,0.45) 70%,transparent 96%);
   z-index:4;pointer-events:none;
 }
 
-/* Liquid glass — watery drifting sheen */
+/* Liquid glass — watery drifting sheen (cool, not white) */
 .liquid-glass::after{
   content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
   border-radius:inherit;
   background:
-    radial-gradient(70% 55% at 22% 0%, rgba(255,255,255,0.12), transparent 60%),
-    radial-gradient(55% 50% at 92% 100%, rgba(140,185,225,0.07), transparent 70%);
+    radial-gradient(75% 60% at 25% -10%, rgba(150,195,230,0.10), transparent 60%),
+    radial-gradient(60% 55% at 95% 110%, rgba(120,170,220,0.06), transparent 70%);
   background-size:150% 150%;
-  opacity:.7;
-  animation:liquidFloat 10s ease-in-out infinite;
+  opacity:.55;
+  animation:liquidFloat 11s ease-in-out infinite;
 }
 .liquid-glass > *{position:relative;z-index:3}
 @keyframes liquidFloat{

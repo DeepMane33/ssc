@@ -75,5 +75,4 @@ drop policy if exists "anon can insert" on public.registrations;
 create policy "anon can insert"
   on public.registrations
   for insert
-  to anon
   with check (true);
