@@ -4,6 +4,9 @@ config.js
 .env.local
 .env*.local
 
+# Vercel link state (local only)
+.vercel
+
 # Dependencies / build
 node_modules/
 
@@ -11,3 +14,5 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+
+.vercel
