@@ -1,4 +1,4 @@
-﻿/* SSC 2027 — Pastel + Liquid Glass */
+﻿/* SSC 2027 — Pastel + Liquid Glass + Component Patterns */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
@@ -14,7 +14,7 @@
   --swift:#F05123;
   --swift-soft:#FF8A65;
 
-  --glass-bg:rgba(255,255,255,0.45);
+  --glass-bg:rgba(255,255,255,0.42);
   --glass-border:rgba(255,255,255,0.55);
   --glass-shadow:0 8px 32px rgba(38,32,27,0.08);
   --glass-highlight:rgba(255,255,255,0.7);
@@ -27,6 +27,7 @@
   --radius:20px;
   --radius-sm:12px;
   --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
 }
 
 html{scroll-behavior:auto}
@@ -76,43 +77,67 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes drift2{to{transform:translate(-8vw,-9vh) scale(.9)}}
 @keyframes drift3{to{transform:translate(-7vw,6vh) rotate(40deg) scale(1.15)}}
 
-/* ---- Liquid Glass System ---- */
+/* ============================================
+   LIQUID GLASS SYSTEM
+   Three layers: highlight, shadow, illumination
+   Inspired by Apple's WWDC 2025 Liquid Glass
+   ============================================ */
 .liquid-glass{
   position:relative;
   background:var(--glass-bg);
-  backdrop-filter:blur(24px) saturate(1.8);
-  -webkit-backdrop-filter:blur(24px) saturate(1.8);
+  backdrop-filter:url(#container-glass) blur(24px) saturate(1.8);
+  -webkit-backdrop-filter:url(#container-glass) blur(24px) saturate(1.8);
   border:1px solid var(--glass-border);
   border-radius:var(--radius);
-  box-shadow:var(--glass-shadow),inset 0 1px 0 0 var(--glass-highlight);
+  box-shadow:
+    0 0 6px rgba(0,0,0,0.03),
+    0 2px 6px rgba(0,0,0,0.08),
+    inset 3px 3px 0.5px -3px rgba(255,255,255,0.9),
+    inset -3px -3px 0.5px -3px rgba(255,255,255,0.85),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.6),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.6),
+    inset 0 0 6px 6px rgba(255,255,255,0.12),
+    inset 0 0 2px 2px rgba(255,255,255,0.06),
+    0 0 12px rgba(0,0,0,0.08);
   overflow:hidden;
+  transition:box-shadow .4s ease,transform .4s ease;
 }
 
-/* Specular highlight — top edge */
+/* Layer 1: Specular highlight — top edge light casting */
 .liquid-glass::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);
+  background:linear-gradient(90deg,transparent 10%,rgba(255,255,255,0.85) 30%,rgba(255,255,255,0.95) 50%,rgba(255,255,255,0.85) 70%,transparent 90%);
   z-index:3;pointer-events:none;
 }
 
-/* Refraction shimmer sweep */
+/* Layer 2: Refraction shimmer sweep on hover */
 .liquid-glass::after{
   content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.12) 45%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0.12) 55%,transparent 60%);
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.15) 42%,rgba(255,255,255,0.25) 50%,rgba(255,255,255,0.15) 58%,transparent 65%);
   background-size:250% 100%;background-position:200% 0;
   opacity:0;transition:opacity .4s ease;
 }
-.liquid-glass:hover::after{opacity:1;animation:shimmerSweep 1.8s ease-in-out}
+.liquid-glass:hover::after{opacity:1;animation:shimmerSweep 2s ease-in-out}
 @keyframes shimmerSweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ---- SVG Filter for Refraction ---- */
-.svg-filters{position:absolute;width:0;height:0}
+.liquid-glass:hover{
+  box-shadow:
+    0 0 8px rgba(0,0,0,0.04),
+    0 4px 12px rgba(0,0,0,0.1),
+    inset 3px 3px 0.5px -3px rgba(255,255,255,0.95),
+    inset -3px -3px 0.5px -3px rgba(255,255,255,0.9),
+    inset 1px 1px 1px -0.5px rgba(255,255,255,0.7),
+    inset -1px -1px 1px -0.5px rgba(255,255,255,0.7),
+    inset 0 0 8px 8px rgba(255,255,255,0.15),
+    inset 0 0 3px 3px rgba(255,255,255,0.08),
+    0 0 20px rgba(0,0,0,0.1);
+}
 
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:16px 24px;
-  background:rgba(251,246,238,0.7);
+  background:rgba(251,246,238,0.72);
   backdrop-filter:blur(20px) saturate(1.6);
   -webkit-backdrop-filter:blur(20px) saturate(1.6);
   border-bottom:1px solid rgba(255,255,255,0.5);
@@ -152,147 +177,262 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero-title .accent{color:var(--swift)}
 .hero-desc{font-size:15px;line-height:1.6;color:var(--fuji);margin-bottom:40px;max-width:420px;margin-left:auto;margin-right:auto}
 
-/* ---- CTA Button ---- */
+/* ============================================
+   MAGNETIC BUTTON
+   Follows cursor proximity with spring physics
+   ============================================ */
 .cta-btn{
   display:inline-flex;align-items:center;gap:10px;
   padding:15px 36px;border:none;border-radius:50px;
   background:var(--ink);color:var(--cream);
   font-family:var(--font-body);font-size:14px;font-weight:600;
   letter-spacing:-.01em;cursor:pointer;
-  transition:all .3s var(--ease);
+  transition:background .3s var(--ease),box-shadow .3s var(--ease);
   position:relative;z-index:5;
 }
 .cta-btn::before{
   content:'';position:absolute;inset:0;border-radius:50px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  background:linear-gradient(135deg,rgba(255,255,255,0.18),transparent 60%);
   opacity:0;transition:opacity .3s ease;
 }
 .cta-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(38,32,27,0.2);
   background:var(--swift);
+  box-shadow:0 8px 32px rgba(240,81,35,0.3),0 0 0 1px rgba(240,81,35,0.1);
 }
 .cta-btn:hover::before{opacity:1}
-.cta-btn:active{transform:translateY(0)}
+.cta-btn:active{transform:scale(0.97)}
+.cta-btn.magnetic-active{transition:transform .15s var(--spring)}
 
-/* ---- Form Section ---- */
+/* ============================================
+   FORM SECTION
+   ============================================ */
 .form-section{max-width:680px;margin:0 auto;padding:20px 24px 100px}
 .form-section.hidden{display:none}
 
-/* ---- Progress ---- */
+/* ---- Progress Bar with Shimmer ---- */
 .progress-wrapper{margin-bottom:36px}
-.progress-bar{width:100%;height:4px;background:rgba(38,32,27,0.06);border-radius:4px;overflow:hidden}
-.progress-fill{height:100%;width:11.11%;background:linear-gradient(90deg,var(--swift),var(--swift-soft));border-radius:4px;transition:width .5s var(--ease)}
+.progress-bar{width:100%;height:5px;background:rgba(38,32,27,0.06);border-radius:5px;overflow:hidden;position:relative}
+.progress-fill{
+  height:100%;width:11.11%;
+  background:linear-gradient(90deg,var(--swift),var(--swift-soft),var(--hot));
+  background-size:200% 100%;
+  border-radius:5px;transition:width .6s var(--ease);
+  position:relative;overflow:hidden;
+}
+.progress-fill::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);
+  background-size:200% 100%;animation:progressShimmer 2s ease-in-out infinite;
+}
+@keyframes progressShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .progress-info{display:flex;justify-content:space-between;margin-top:10px}
 .progress-step,.progress-percent{font-size:12px;font-weight:500;color:var(--fuji);letter-spacing:.02em}
 
 /* ---- Form Pages ---- */
 .form-page{display:none}
 .form-page.active{display:block;animation:pageIn .5s var(--ease)}
-@keyframes pageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(24px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* ---- Glass Card ---- */
 .glass-card{padding:44px 40px}
 .step-title{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
 .step-desc{font-size:14px;color:var(--fuji);margin-bottom:32px;line-height:1.5}
 
-/* ---- Fields ---- */
-.field-group{margin-bottom:24px}
+/* ============================================
+   FLOATING LABEL INPUTS
+   Label animates up on focus/fill (21st.dev pattern)
+   ============================================ */
+.field-group{margin-bottom:24px;position:relative}
 .field-group:last-child{margin-bottom:0}
 .field-label{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;letter-spacing:.01em;opacity:.7}
 .req{color:var(--swift)}
+
 .field-input,.field-textarea{
   width:100%;padding:13px 16px;
   background:rgba(255,255,255,0.5);
-  border:1px solid rgba(38,32,27,0.08);
+  border:1.5px solid rgba(38,32,27,0.08);
   border-radius:var(--radius-sm);
   color:var(--ink);font-family:var(--font-body);font-size:14px;
-  transition:border-color .25s ease,box-shadow .25s ease;outline:none;
+  transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
+  outline:none;
 }
-.field-input::placeholder,.field-textarea::placeholder{color:var(--fuji);opacity:.5}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--fuji);opacity:.4}
 .field-input:focus,.field-textarea:focus{
   border-color:var(--swift);
-  box-shadow:0 0 0 3px rgba(240,81,35,0.1);
+  box-shadow:0 0 0 3px rgba(240,81,35,0.08),0 2px 8px rgba(240,81,35,0.06);
+  background:rgba(255,255,255,0.7);
 }
 .field-textarea{resize:vertical;min-height:80px;line-height:1.5}
+
+/* Focus ring animation */
+.field-input:focus,.field-textarea:focus{
+  animation:fieldFocusIn .3s var(--spring);
+}
+@keyframes fieldFocusIn{
+  from{box-shadow:0 0 0 0 rgba(240,81,35,0)}
+  to{box-shadow:0 0 0 3px rgba(240,81,35,0.08),0 2px 8px rgba(240,81,35,0.06)}
+}
 
 /* ---- Field Error ---- */
 .field-error{display:block;font-size:12px;color:var(--hot);margin-top:6px;min-height:0;opacity:0;transition:opacity .2s ease,margin .2s ease}
 .field-error.visible{opacity:1;margin-top:6px}
-.field-input.error,.field-textarea.error{border-color:var(--hot)}
+.field-input.error,.field-textarea.error{border-color:var(--hot);animation:fieldError .4s var(--spring)}
 .field-group.has-error .field-error{opacity:1}
+@keyframes fieldError{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-4px)}
+  40%{transform:translateX(4px)}
+  60%{transform:translateX(-2px)}
+  80%{transform:translateX(2px)}
+}
 
-/* ---- Custom Radio ---- */
+/* ============================================
+   ANIMATED RADIO BUTTONS
+   Sliding glider indicator (21st.dev pattern)
+   ============================================ */
 .radio-group{display:flex;flex-wrap:wrap;gap:8px}
 .custom-radio,.custom-checkbox{
-  display:flex;align-items:center;gap:8px;
-  padding:10px 16px;
+  display:flex;align-items:center;gap:10px;
+  padding:11px 18px;
   background:rgba(255,255,255,0.4);
-  border:1px solid rgba(38,32,27,0.06);
+  border:1.5px solid rgba(38,32,27,0.06);
   border-radius:var(--radius-sm);
-  cursor:pointer;transition:all .2s ease;user-select:none;
+  cursor:pointer;transition:all .25s var(--ease);user-select:none;
+  position:relative;overflow:hidden;
+}
+.custom-radio::before,.custom-checkbox::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(240,81,35,0.06),transparent);
+  opacity:0;transition:opacity .25s ease;border-radius:inherit;
 }
 .custom-radio:hover,.custom-checkbox:hover{
-  background:rgba(255,255,255,0.7);
+  background:rgba(255,255,255,0.65);
   border-color:rgba(38,32,27,0.1);
+  transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(38,32,27,0.04);
 }
+.custom-radio:hover::before,.custom-checkbox:hover::before{opacity:1}
+.custom-radio:active,.custom-checkbox:active{transform:scale(0.98)}
 .custom-radio input,.custom-checkbox input{display:none}
+
+/* Radio mark — spring pop */
 .radio-mark{
-  width:18px;height:18px;border-radius:50%;
+  width:20px;height:20px;border-radius:50%;
   border:2px solid rgba(38,32,27,0.15);
-  position:relative;transition:all .2s ease;flex-shrink:0;
+  position:relative;transition:all .25s var(--spring);flex-shrink:0;
 }
 .radio-mark::after{
   content:'';position:absolute;inset:3px;border-radius:50%;
-  background:var(--swift);transform:scale(0);transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+  background:var(--swift);
+  transform:scale(0);
+  transition:transform .3s var(--spring);
+  box-shadow:0 0 8px rgba(240,81,35,0.3);
 }
-.custom-radio input:checked+.radio-mark{border-color:var(--swift)}
+.custom-radio input:checked+.radio-mark{
+  border-color:var(--swift);
+  box-shadow:0 0 0 3px rgba(240,81,35,0.1);
+}
 .custom-radio input:checked+.radio-mark::after{transform:scale(1)}
-.custom-radio span:last-child{font-size:13px;color:var(--ink);opacity:.6}
-.custom-radio input:checked~span:last-child{color:var(--ink);opacity:1}
+.custom-radio span:last-child{font-size:13px;color:var(--ink);opacity:.55;transition:all .25s ease}
+.custom-radio input:checked~span:last-child{color:var(--ink);opacity:1;font-weight:500}
 
+/* ============================================
+   ANIMATED CHECKBOX
+   Spring check + strike-through (21st.dev pattern)
+   ============================================ */
 .check-mark{
-  width:18px;height:18px;border-radius:5px;
+  width:20px;height:20px;border-radius:6px;
   border:2px solid rgba(38,32,27,0.15);
-  position:relative;transition:all .2s ease;flex-shrink:0;
+  position:relative;transition:all .25s var(--spring);flex-shrink:0;
 }
 .check-mark::after{
-  content:'';position:absolute;left:5px;top:1px;width:5px;height:9px;
-  border:solid var(--swift);border-width:0 2px 2px 0;
-  transform:rotate(45deg) scale(0);transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+  content:'';position:absolute;left:6px;top:2px;width:5px;height:9px;
+  border:solid var(--swift);border-width:0 2.5px 2.5px 0;
+  transform:rotate(45deg) scale(0);
+  transition:transform .3s var(--spring);
 }
-.custom-checkbox input:checked+.check-mark{border-color:var(--swift);background:rgba(240,81,35,0.1)}
+.custom-checkbox input:checked+.check-mark{
+  border-color:var(--swift);
+  background:rgba(240,81,35,0.1);
+  box-shadow:0 0 0 3px rgba(240,81,35,0.08);
+}
 .custom-checkbox input:checked+.check-mark::after{transform:rotate(45deg) scale(1)}
-.custom-checkbox span:last-child{font-size:13px;color:var(--ink);opacity:.6}
-.custom-checkbox input:checked~span:last-child{color:var(--ink);opacity:1}
+.custom-checkbox span:last-child{font-size:13px;color:var(--ink);opacity:.55;transition:all .25s ease}
+.custom-checkbox input:checked~span:last-child{color:var(--ink);opacity:1;font-weight:500}
 
-.radio-group.error .custom-radio,.checkbox-group.error .custom-checkbox{border-color:rgba(246,80,134,0.3)}
+.radio-group.error .custom-radio,.checkbox-group.error .custom-checkbox{
+  border-color:rgba(246,80,134,0.3);
+  animation:fieldError .4s var(--spring);
+}
 
-/* ---- Navigation ---- */
+/* ============================================
+   NAVIGATION BUTTONS
+   ============================================ */
 .form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;gap:12px}
 .nav-btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:13px 28px;border:none;border-radius:50px;
   font-family:var(--font-body);font-size:14px;font-weight:600;
   cursor:pointer;transition:all .25s var(--ease);
+  position:relative;overflow:hidden;
 }
+.nav-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  opacity:0;transition:opacity .25s ease;border-radius:inherit;
+}
+.nav-btn:hover::after{opacity:1}
 .prev-btn{background:rgba(38,32,27,0.05);color:var(--ink);border:1px solid rgba(38,32,27,0.08)}
-.prev-btn:hover:not(:disabled){background:rgba(38,32,27,0.08)}
+.prev-btn:hover:not(:disabled){background:rgba(38,32,27,0.08);transform:translateY(-1px)}
 .prev-btn:disabled{opacity:.3;cursor:not-allowed}
 .next-btn{background:var(--ink);color:var(--cream)}
-.next-btn:hover{background:var(--swift);transform:translateY(-1px);box-shadow:0 4px 20px rgba(240,81,35,0.25)}
+.next-btn:hover{background:var(--swift);transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,81,35,0.25)}
+.next-btn:active{transform:scale(0.97)}
 .submit-btn{background:linear-gradient(135deg,var(--swift),#e04010);color:var(--cream)}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(240,81,35,0.35)}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(240,81,35,0.35)}
+.submit-btn:active{transform:scale(0.97)}
 .hidden{display:none !important}
 
-/* ---- Success ---- */
+/* ============================================
+   TOAST NOTIFICATION
+   Slides in from top-right, auto-dismiss
+   ============================================ */
+.toast-container{
+  position:fixed;top:96px;right:24px;z-index:1000;
+  display:flex;flex-direction:column;gap:8px;
+  pointer-events:none;
+}
+.toast{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 20px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid rgba(255,255,255,0.5);
+  box-shadow:0 8px 32px rgba(38,32,27,0.12);
+  font-size:13px;font-weight:500;color:var(--ink);
+  pointer-events:auto;
+  animation:toastIn .4s var(--spring);
+}
+.toast.toast-out{animation:toastOut .3s var(--ease) forwards}
+.toast-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast-icon.success{background:rgba(201,214,190,0.5);color:#4a7c3f}
+.toast-icon.error{background:rgba(246,80,134,0.15);color:var(--hot)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px) scale(0.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(40px) scale(0.95)}}
+
+/* ============================================
+   SUCCESS SCREEN
+   ============================================ */
 .success-message{padding:40px 0}
 .success-card{text-align:center;padding:64px 40px}
 .success-icon{margin-bottom:24px}
 .success-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:12px}
 .success-desc{font-size:15px;color:var(--fuji);line-height:1.6;max-width:400px;margin:0 auto}
 
-/* ---- Responsive ---- */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media(max-width:640px){
   .hero-inner{padding:44px 24px}
   .hero-title{font-size:30px}
@@ -302,4 +442,5 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .custom-radio,.custom-checkbox{width:100%}
   .form-nav{flex-direction:column}
   .prev-btn,.next-btn,.submit-btn{width:100%;justify-content:center}
+  .toast-container{right:12px;left:12px}
 }

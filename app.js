@@ -1,4 +1,4 @@
-﻿/* SSC 2027 — Form Logic + GSAP + Lenis */
+﻿/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
 var TOTAL_PAGES=9,currentPage=1,lenis=null;
@@ -18,15 +18,18 @@ var pages=document.querySelectorAll(".form-page");
 var pageValidation={
   1:["email"],
   2:["fullName","contact","faculty","programme","semester","hasUniEmail"],
-  3:["uniEmail","enrollId"],
-  4:["personalEmail","studentStatus","enrollNumber"],
+  3:["uniEmail","enrollmentId"],
+  4:["personalEmail","studentStatus","enrollmentNumber"],
   5:["macAccess","needMacLab","prepHours"],
   6:["appExperience","appleExperience","independence","prevCompetitions"],
   7:["commitmentLevel","programHours","attendSessions"],
-  8:["whyInterested","hasIdea","ideaDesc"],
+  8:["whyInterested","hasIdea"],
   9:["confirmAccuracy","noGuarantee","agreeContact"]
 };
 
+/* ============================================
+   LENIS SMOOTH SCROLL
+   ============================================ */
 function initLenis(){
   if(typeof Lenis==="undefined")return;
   lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},smoothWheel:true});
@@ -34,20 +37,33 @@ function initLenis(){
   requestAnimationFrame(raf);
 }
 
+/* ============================================
+   GSAP ANIMATIONS
+   ============================================ */
 function initGSAP(){
   if(typeof gsap==="undefined")return;
   if(typeof ScrollTrigger!=="undefined")gsap.registerPlugin(ScrollTrigger);
-  gsap.fromTo(heroSection.querySelector(".hero-inner"),{opacity:0,y:40,scale:0.97},{opacity:1,y:0,scale:1,duration:1,ease:"power3.out",delay:0.2});
-  gsap.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out",delay:0.1});
+
+  /* Hero entrance — staggered reveal */
+  var heroTl=gsap.timeline({delay:0.3});
+  heroTl.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out"});
+  heroTl.fromTo(heroSection.querySelector(".swift-logo"),{opacity:0,scale:0.5,rotation:-10},{opacity:1,scale:1,rotation:0,duration:0.7,ease:"back.out(1.7)"},"-=0.3");
+  heroTl.fromTo(".hero-eyebrow",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  heroTl.fromTo(".hero-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.2");
+  heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  heroTl.fromTo(".cta-btn",{opacity:0,y:15,scale:0.9},{opacity:1,y:0,scale:1,duration:0.5,ease:"back.out(1.4)"},"-=0.2");
 }
 
+/* ============================================
+   SPECULAR HIGHLIGHT TRACKING
+   ============================================ */
 function initSpecularTracking(){
   document.addEventListener("mousemove",function(e){
     document.querySelectorAll(".liquid-glass").forEach(function(card){
       var rect=card.getBoundingClientRect();
       var x=e.clientX-rect.left,y=e.clientY-rect.top;
       if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
-        card.style.background="radial-gradient(circle 350px at "+x+"px "+y+"px,rgba(255,255,255,0.18),rgba(255,255,255,0.45) 60%,rgba(255,255,255,0.45))";
+        card.style.background="radial-gradient(circle 350px at "+x+"px "+y+"px,rgba(255,255,255,0.18),rgba(255,255,255,0.42) 60%,rgba(255,255,255,0.42))";
       }else{
         card.style.background="";
       }
@@ -55,6 +71,9 @@ function initSpecularTracking(){
   });
 }
 
+/* ============================================
+   TILT EFFECT
+   ============================================ */
 function initTilt(){
   document.querySelectorAll("[data-tilt]").forEach(function(card){
     card.addEventListener("mousemove",function(e){
@@ -71,13 +90,97 @@ function initTilt(){
   });
 }
 
+/* ============================================
+   MAGNETIC BUTTON
+   Proximity-based displacement + spring snap-back
+   ============================================ */
+function initMagneticButtons(){
+  var magneticEls=document.querySelectorAll(".cta-btn,.submit-btn");
+  magneticEls.forEach(function(btn){
+    var strength=0.3;
+    btn.addEventListener("mousemove",function(e){
+      var rect=btn.getBoundingClientRect();
+      var x=e.clientX-rect.left-rect.width/2;
+      var y=e.clientY-rect.top-rect.height/2;
+      btn.style.transform="translate("+(x*strength)+"px,"+(y*strength)+"px)";
+      btn.classList.add("magnetic-active");
+    });
+    btn.addEventListener("mouseleave",function(){
+      btn.style.transform="translate(0,0)";
+      btn.style.transition="transform .4s cubic-bezier(.34,1.56,.64,1)";
+      btn.classList.remove("magnetic-active");
+      setTimeout(function(){btn.style.transition=""},400);
+    });
+  });
+}
+
+/* ============================================
+   TOUCH RIPPLE EFFECT
+   Material-style ripple on tap for mobile
+   ============================================ */
+function initTouchRipple(){
+  var rippleEls=document.querySelectorAll(".custom-radio,.custom-checkbox,.nav-btn,.cta-btn");
+  rippleEls.forEach(function(el){
+    el.style.position="relative";
+    el.style.overflow="hidden";
+    el.addEventListener("click",function(e){
+      var rect=el.getBoundingClientRect();
+      var ripple=document.createElement("span");
+      var size=Math.max(rect.width,rect.height);
+      ripple.style.cssText="position:absolute;border-radius:50%;pointer-events:none;width:"+size+"px;height:"+size+"px;left:"+(e.clientX-rect.left-size/2)+"px;top:"+(e.clientY-rect.top-size/2)+"px;background:rgba(240,81,35,0.12);transform:scale(0);animation:rippleEffect .5s ease-out forwards";
+      el.appendChild(ripple);
+      setTimeout(function(){ripple.remove()},600);
+    });
+  });
+
+  /* Inject ripple keyframes */
+  if(!document.getElementById("rippleStyle")){
+    var style=document.createElement("style");
+    style.id="rippleStyle";
+    style.textContent="@keyframes rippleEffect{to{transform:scale(3);opacity:0}}";
+    document.head.appendChild(style);
+  }
+}
+
+/* ============================================
+   TOAST NOTIFICATION SYSTEM
+   ============================================ */
+var toastContainer=null;
+function initToastContainer(){
+  if(!toastContainer){
+    toastContainer=document.createElement("div");
+    toastContainer.className="toast-container";
+    document.body.appendChild(toastContainer);
+  }
+}
+
+function showToast(message,type){
+  initToastContainer();
+  var toast=document.createElement("div");
+  toast.className="toast";
+  var iconClass=type==="error"?"error":"success";
+  var iconSvg=type==="error"
+    ?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    :'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  toast.innerHTML='<span class="toast-icon '+iconClass+'">'+iconSvg+'</span><span>'+message+'</span>';
+  toastContainer.appendChild(toast);
+
+  setTimeout(function(){
+    toast.classList.add("toast-out");
+    setTimeout(function(){toast.remove()},350);
+  },3500);
+}
+
+/* ============================================
+   FIELD VALIDATION
+   ============================================ */
 function validateField(name){
   var isValid=true,errorMsg="";
   var radios=form.querySelectorAll("[name=\""+name+"\"]");
   var isRadio=radios.length>0&&radios[0].type==="radio";
   var input=form.querySelector("[name=\""+name+"\"]");
   var fieldGroup=input?input.closest(".field-group"):null;
-  if(!fieldGroup&&isRadio)fieldGroup=radios[0].closest(".field-group");
+  if(!fieldGroup&&isRadio&&radios[0])fieldGroup=radios[0].closest(".field-group");
   var errorEl=fieldGroup?fieldGroup.querySelector(".field-error"):null;
 
   if(input&&input.type!=="radio"){
@@ -94,6 +197,7 @@ function validateField(name){
     if(fieldGroup)fieldGroup.classList.add("has-error");
     if(input&&input.type!=="radio")input.classList.add("error");
     if(isRadio){var rg=radios[0].closest(".radio-group");if(rg)rg.classList.add("error")}
+    showToast(errorMsg,"error");
   }else{
     if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
     if(fieldGroup)fieldGroup.classList.remove("has-error");
@@ -117,6 +221,9 @@ function validatePage(num){
   return allValid;
 }
 
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
 function updateProgress(){
   var pct=Math.round((currentPage/TOTAL_PAGES)*100);
   progressFill.style.width=pct+"%";
@@ -124,28 +231,51 @@ function updateProgress(){
   progressPercent.textContent=pct+"%";
 }
 
+/* ============================================
+   PAGE NAVIGATION with stagger animation
+   ============================================ */
 function goToPage(num){
   if(num<1||num>TOTAL_PAGES)return;
   clearValidation();
-  pages.forEach(function(p){p.classList.remove("active")});
-  pages[num-1].classList.add("active");
-  currentPage=num;
-  updateProgress();
-  prevBtn.disabled=currentPage===1;
-  if(currentPage===TOTAL_PAGES){
-    nextBtn.classList.add("hidden");
-    submitBtn.classList.remove("hidden");
-  }else{
-    nextBtn.classList.remove("hidden");
-    submitBtn.classList.add("hidden");
+
+  /* Animate out current page */
+  var currentCard=pages[currentPage-1].querySelector(".glass-card");
+  if(currentCard&&typeof gsap!=="undefined"){
+    gsap.to(currentCard,{opacity:0,y:-15,duration:0.2,ease:"power2.in"});
   }
-  var card=pages[num-1].querySelector(".glass-card");
-  if(card&&typeof gsap!=="undefined"){
-    gsap.fromTo(card,{opacity:0,y:24,scale:0.98},{opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"});
-  }
-  window.scrollTo({top:0,behavior:"smooth"});
+
+  setTimeout(function(){
+    pages.forEach(function(p){p.classList.remove("active")});
+    pages[num-1].classList.add("active");
+    currentPage=num;
+    updateProgress();
+    prevBtn.disabled=currentPage===1;
+    if(currentPage===TOTAL_PAGES){
+      nextBtn.classList.add("hidden");
+      submitBtn.classList.remove("hidden");
+    }else{
+      nextBtn.classList.remove("hidden");
+      submitBtn.classList.add("hidden");
+    }
+
+    /* Stagger animate new page elements */
+    var card=pages[num-1].querySelector(".glass-card");
+    if(card&&typeof gsap!=="undefined"){
+      var tl=gsap.timeline();
+      tl.fromTo(card,{opacity:0,y:24,scale:0.98},{opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"});
+      /* Stagger field groups */
+      var fields=card.querySelectorAll(".field-group");
+      if(fields.length>0){
+        tl.fromTo(fields,{opacity:0,y:12},{opacity:1,y:0,duration:0.3,ease:"power2.out",stagger:0.04},"-=0.2");
+      }
+    }
+    window.scrollTo({top:0,behavior:"smooth"});
+  },200);
 }
 
+/* ============================================
+   FORM SUBMISSION
+   ============================================ */
 function showForm(){
   heroSection.classList.add("hidden");
   formSection.classList.remove("hidden");
@@ -179,12 +309,19 @@ form.addEventListener("submit",function(e){
     else{data[k]=v}
   });
   console.log("Form submitted:",data);
+
+  /* Success animation */
   form.classList.add("hidden");
   document.querySelector(".progress-wrapper").classList.add("hidden");
   successMessage.classList.remove("hidden");
   if(typeof gsap!=="undefined"){
-    gsap.fromTo(successMessage.querySelector(".success-card"),{opacity:0,y:30,scale:0.97},{opacity:1,y:0,scale:1,duration:0.6,ease:"power3.out"});
+    var successTl=gsap.timeline();
+    successTl.fromTo(successMessage.querySelector(".success-card"),{opacity:0,y:30,scale:0.97},{opacity:1,y:0,scale:1,duration:0.6,ease:"power3.out"});
+    successTl.fromTo(successMessage.querySelector(".swift-logo"),{opacity:0,scale:0.5,rotation:-15},{opacity:1,scale:1,rotation:0,duration:0.5,ease:"back.out(1.7)"},"-=0.3");
+    successTl.fromTo(".success-title",{opacity:0,y:15},{opacity:1,y:0,duration:0.4,ease:"power2.out"},"-=0.2");
+    successTl.fromTo(".success-desc",{opacity:0,y:12},{opacity:1,y:0,duration:0.4,ease:"power2.out"},"-=0.15");
   }
+  showToast("Application submitted successfully!","success");
 });
 
 /* live validation on change */
@@ -199,12 +336,17 @@ form.querySelectorAll("input,textarea").forEach(function(el){
   });
 });
 
-/* ---- Init ---- */
+/* ============================================
+   INIT
+   ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
   initLenis();
   initGSAP();
   initSpecularTracking();
   initTilt();
+  initMagneticButtons();
+  initTouchRipple();
+  initToastContainer();
   updateProgress();
 });
 })();

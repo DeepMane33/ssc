@@ -13,6 +13,21 @@
 
   <div class="grain"></div>
 
+  <!-- SVG Filters for Liquid Glass Refraction -->
+  <svg class="svg-filters" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="container-glass" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="contrast"/>
+        <feComposite in="contrast" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <filter id="displacement" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <div class="blobs">
     <div class="blob b1"></div>
     <div class="blob b2"></div>
@@ -41,7 +56,7 @@
   </header>
 
   <section id="heroSection" class="hero-section">
-    <div class="hero-inner">
+    <div class="hero-inner" data-tilt>
       <svg class="swift-logo" viewBox="0 0 256 310" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:auto;margin-bottom:2rem;">
         <defs>
           <linearGradient id="swiftGradHero" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -74,7 +89,7 @@
 
       <!-- Page 1: Before You Apply -->
       <div class="form-page active" data-page="1">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Before You Apply</h2>
           <p class="step-desc">Let's start with your email so we can track your application.</p>
 
@@ -88,7 +103,7 @@
 
       <!-- Page 2: About You -->
       <div class="form-page" data-page="2">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">About You</h2>
           <p class="step-desc">Tell us about yourself and your academic background.</p>
 
@@ -178,7 +193,7 @@
       </div>
       <!-- Page 3: University Verification -->
       <div class="form-page" data-page="3">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">University Verification</h2>
           <p class="step-desc">Help us verify your enrollment at Parul University.</p>
 
@@ -198,7 +213,7 @@
 
       <!-- Page 4: Student Verification -->
       <div class="form-page" data-page="4">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Student Verification</h2>
           <p class="step-desc">Verify your student identity and status.</p>
 
@@ -240,7 +255,7 @@
 
       <!-- Page 5: Device & Access -->
       <div class="form-page" data-page="5">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Device &amp; Access</h2>
           <p class="step-desc">Tell us about the hardware you have access to for development.</p>
 
@@ -350,7 +365,7 @@
       </div>
       <!-- Page 6: Starting Point -->
       <div class="form-page" data-page="6">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Starting Point</h2>
           <p class="step-desc">Help us understand your experience level and interests.</p>
 
@@ -491,7 +506,7 @@
       </div>
       <!-- Page 7: Commitment -->
       <div class="form-page" data-page="7">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Commitment</h2>
           <p class="step-desc">How committed are you to this challenge?</p>
 
@@ -595,7 +610,7 @@
       </div>
       <!-- Page 8: Idea & Motivation -->
       <div class="form-page" data-page="8">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Idea &amp; Motivation</h2>
           <p class="step-desc">Share your vision and what drives you.</p>
 
@@ -707,7 +722,7 @@
       </div>
       <!-- Page 9: Consent -->
       <div class="form-page" data-page="9">
-        <div class="glass-card liquid-glass">
+        <div class="glass-card liquid-glass" data-tilt>
           <h2 class="step-title">Consent</h2>
           <p class="step-desc">Please review and confirm the following.</p>
 
@@ -780,7 +795,7 @@
   </section>
 
   <section id="successMessage" class="success-message hidden">
-    <div class="success-card glass-card liquid-glass">
+    <div class="success-card glass-card liquid-glass" data-tilt>
       <svg class="swift-logo" viewBox="0 0 256 310" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:60px;height:auto;margin-bottom:1.5rem;">
         <defs>
           <linearGradient id="swiftGradSuccess" x1="0%" y1="0%" x2="100%" y2="100%">
