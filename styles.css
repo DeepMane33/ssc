@@ -168,7 +168,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav-swift-icon:hover{opacity:.7}
 
 /* ---- Hero ---- */
-.main-content{position:relative;z-index:1;padding-top:80px;min-height:100vh}
+.main-content{position:relative;z-index:2;padding-top:80px;min-height:100vh}
 .hero-section{
   display:flex;align-items:center;justify-content:center;
   min-height:calc(100vh - 80px);padding:40px 24px;
@@ -463,8 +463,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   position:fixed;top:0;left:0;width:100vw;height:100vh;
   z-index:0;pointer-events:none;
 }
-.swift-orb-decor{position:fixed;z-index:0;pointer-events:none;}
-.swift-orb-canvas{display:block;opacity:.9;}
+.swift-orb-decor{position:fixed;z-index:1;pointer-events:none;}
+.swift-orb-canvas{display:block;opacity:1;}
 
 /* ============================================
    SUCCESS SCREEN
