@@ -164,7 +164,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes shimmerSweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 .liquid-glass:hover{
-  background:rgba(255,255,255,0.12);
   border-color:rgba(255,255,255,0.18);
   box-shadow:
     0 12px 40px rgba(0,0,0,0.25),
