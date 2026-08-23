@@ -153,14 +153,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .brand-sub{font-size:10.5px;font-weight:500;color:var(--fuji);letter-spacing:.04em}
 
 .parul-logo-badge{
-  width:32px;height:32px;
-  background:linear-gradient(135deg,var(--swift),var(--hot));
+  width:36px;height:36px;
   border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-display);font-size:11px;font-weight:700;color:#fff;
-  letter-spacing:0.02em;
-  box-shadow:0 2px 8px rgba(240,81,35,0.25);
+  overflow:hidden;
   flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  background:#fff;
+}
+.parul-logo-img{
+  width:100%;height:100%;object-fit:contain;
 }
 .nav-swift-icon{width:22px;height:27px;flex-shrink:0;opacity:.35;transition:opacity .3s ease}
 .nav-swift-icon:hover{opacity:.7}
