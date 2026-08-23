@@ -895,115 +895,105 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
   (function(){
-    var c=document.getElementById("ribbonCanvas");
-    if(!c)return;
-    var ctx=c.getContext("2d");
+    var canvas=document.getElementById("ribbonCanvas");
+    if(!canvas)return;
+    var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.setClearColor(0x000000,0);
+    var scene=new THREE.Scene();
+    var camera=new THREE.OrthographicCamera(-1,1,1,-1,0.1,10);
+
     var W,H;
-    function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+    function resize(){
+      W=window.innerWidth;H=window.innerHeight;
+      renderer.setSize(W,H,false);
+      canvas.style.width="100%";canvas.style.height="100%";
+      var aspect=W/H;
+      camera.left=-aspect;camera.right=aspect;
+      camera.bottom=-1;camera.top=1;
+      camera.updateProjectionMatrix();
+    }
     resize();
     window.addEventListener("resize",resize);
+    camera.position.z=1;
 
-    var mouseX=W/2,mouseY=H/2;
-    document.addEventListener("mousemove",function(e){mouseX=e.clientX;mouseY=e.clientY});
+    var gridSize=40;
+    var geometry=new THREE.BufferGeometry();
+    var positions=[];
+    var seeds=[];
 
-    var ribbons=[];
-    var ribbonCount=8;
-    var palette=[
-      [240,81,35],
-      [255,199,217],
-      [255,217,184],
-      [201,214,190],
-      [196,213,234],
-      [220,207,240],
-      [240,81,35],
-      [255,199,217]
-    ];
-
-    for(var i=0;i<ribbonCount;i++){
-      ribbons.push({
-        color:palette[i],
-        speed:0.2+Math.random()*0.3,
-        amplitude:60+Math.random()*100,
-        frequency:0.0015+Math.random()*0.002,
-        phase:Math.random()*Math.PI*2,
-        yBase:Math.random(),
-        dotSpacing:6+Math.random()*4,
-        ribbonWidth:30+Math.random()*50,
-        dotSize:1.5+Math.random()*1.5
-      });
-    }
-
-    var halftoneDots=[];
-    var gridSpacing=18;
-    var time=0;
-
-    function getRibbonY(ribbon,x,t){
-      var baseY=ribbon.yBase*H;
-      var distToMouse=Math.abs(x-mouseX)/W;
-      var mouseFactor=1-distToMouse*0.6;
-      return baseY
-        +Math.sin(x*ribbon.frequency+t*ribbon.speed+ribbon.phase)*ribbon.amplitude*mouseFactor
-        +Math.cos(x*ribbon.frequency*0.6+t*ribbon.speed*0.5)*ribbon.amplitude*0.3;
-    }
-
-    function buildHalftone(t){
-      halftoneDots=[];
-      for(var gx=0;gx<W+gridSpacing;gx+=gridSpacing){
-        for(var gy=0;gy<H+gridSpacing;gy+=gridSpacing){
-          var px=gx+Math.sin(gy*0.01+t*0.3)*3;
-          var py=gy+Math.cos(gx*0.01+t*0.2)*3;
-
-          for(var r=0;r<ribbons.length;r++){
-            var ribbon=ribbons[r];
-            var ribbonY=getRibbonY(ribbon,px,t);
-            var dy=Math.abs(py-ribbonY);
-            var maxDist=ribbon.ribbonWidth*0.5;
-
-            if(dy<maxDist){
-              var intensity=1-dy/maxDist;
-              intensity=Math.pow(intensity,0.6);
-              var mouseDx=px-mouseX;
-              var mouseDy=py-mouseY;
-              var mouseDist=Math.sqrt(mouseDx*mouseDx+mouseDy*mouseDy);
-              var mouseGlow=mouseDist<250?1-mouseDist/250:0;
-              intensity=Math.min(1,intensity+mouseGlow*0.3);
-
-              if(intensity>0.02){
-                var c=ribbon.color;
-                var alpha=intensity*0.35;
-                var dotR=ribbon.dotSize*(0.5+intensity*0.8);
-                halftoneDots.push({
-                  x:px,y:py,
-                  r:dotR,
-                  cr:Math.min(255,c[0]+mouseGlow*40),
-                  cg:Math.min(255,c[1]+mouseGlow*20),
-                  cb:Math.min(255,c[2]+mouseGlow*10),
-                  a:alpha
-                });
-              }
-            }
-          }
-        }
+    for(var x=-gridSize;x<=gridSize;x++){
+      for(var y=-gridSize;y<=gridSize;y++){
+        positions.push(x*0.08,y*0.08,0);
+        seeds.push(Math.random()*100);
       }
     }
 
+    geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
+    geometry.setAttribute("seed",new THREE.Float32BufferAttribute(seeds,1));
+
+    var material=new THREE.ShaderMaterial({
+      uniforms:{
+        time:{value:0},
+        color1:{value:new THREE.Color(0xF05135)},
+        color2:{value:new THREE.Color(0xFFC7D9)},
+        color3:{value:new THREE.Color(0xC4D5EA)},
+        mouse:{value:new THREE.Vector2(0,0)}
+      },
+      vertexShader:"\n"+
+        "attribute float seed;\n"+
+        "varying vec2 vUv;\n"+
+        "varying float vScale;\n"+
+        "varying float vSeed;\n"+
+        "uniform float time;\n"+
+        "uniform vec2 mouse;\n"+
+        "void main(){\n"+
+        "  vUv=position.xy;\n"+
+        "  vSeed=seed;\n"+
+        "  float dist=length(position.xy);\n"+
+        "  float wave=sin(dist*4.0-time*1.5+seed)*0.5+0.5;\n"+
+        "  float mouseDist=length(position.xy-mouse);\n"+
+        "  float mouseGlow=smoothstep(2.0,0.0,mouseDist)*0.4;\n"+
+        "  float s=wave*0.7+mouseGlow+0.15;\n"+
+        "  vScale=s;\n"+
+        "  gl_PointSize=s*5.0;\n"+
+        "  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);\n"+
+        "}",
+      fragmentShader:"\n"+
+        "uniform vec3 color1;\n"+
+        "uniform vec3 color2;\n"+
+        "uniform vec3 color3;\n"+
+        "varying vec2 vUv;\n"+
+        "varying float vScale;\n"+
+        "varying float vSeed;\n"+
+        "void main(){\n"+
+        "  vec2 c=gl_PointCoord-vec2(0.5);\n"+
+        "  if(length(c)>0.5) discard;\n"+
+        "  float t=(vUv.y+1.0)*0.5;\n"+
+        "  vec3 col=mix(mix(color2,color1,t),color3,sin(vSeed)*0.5+0.5);\n"+
+        "  gl_FragColor=vec4(col,vScale*0.8);\n"+
+        "}",
+      transparent:true
+    });
+
+    var points=new THREE.Points(geometry,material);
+    scene.add(points);
+
+    var mouseX=0,mouseY=0;
+    document.addEventListener("mousemove",function(e){
+      mouseX=(e.clientX/window.innerWidth)*2-1;
+      mouseY=-(e.clientY/window.innerHeight)*2+1;
+    });
+
+    var clock=new THREE.Clock();
     function animate(){
-      time+=0.016;
-      ctx.clearRect(0,0,W,H);
-
-      buildHalftone(time);
-
-      for(var i=0;i<halftoneDots.length;i++){
-        var d=halftoneDots[i];
-        ctx.beginPath();
-        ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-        ctx.fillStyle="rgba("+Math.round(d.cr)+","+Math.round(d.cg)+","+Math.round(d.cb)+","+d.a+")";
-        ctx.fill();
-      }
-
       requestAnimationFrame(animate);
+      material.uniforms.time.value=clock.getElapsedTime();
+      material.uniforms.mouse.value.set(mouseX*3,mouseY*2);
+      renderer.render(scene,camera);
     }
     animate();
   })();
