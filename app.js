@@ -75,10 +75,10 @@ function buildRegistrationRow(){
   return row;
 }
 
-var TOTAL_PAGES=9,currentPage=1,lenis=null;
+var TOTAL_PAGES=10,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
-var showcaseSection=document.getElementById("showcaseSection");
+var guidelinesSection=document.getElementById("guidelinesSection");
 var prevBtn=document.getElementById("prevBtn");
 var nextBtn=document.getElementById("nextBtn");
 var submitBtn=document.getElementById("submitBtn");
@@ -97,8 +97,9 @@ var pageValidation={
   5:["macAccess","needMacLab","prepHours"],
   6:["appExperience","appleExperience","independence","prevCompetitions"],
   7:["commitmentLevel","programHours","attendSessions"],
-  8:["whyInterested","hasIdea"],
-  9:["confirmAccuracy","noGuarantee","agreeContact"]
+  8:["agreeTerms"],
+  9:["whyInterested","hasIdea"],
+  10:["confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================
@@ -106,7 +107,7 @@ var pageValidation={
    ============================================ */
 function initLenis(){
   if(typeof Lenis==="undefined")return;
-  lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},smoothWheel:true});
+  lenis=new Lenis({duration:1.8,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},smoothWheel:true,touchMultiplier:1.2,orientation:"vertical"});
   function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
   requestAnimationFrame(raf);
 }
@@ -139,7 +140,7 @@ function initGSAP(){
 function initSpecularTracking(){
   document.addEventListener("mousemove",function(e){
     document.querySelectorAll(".liquid-glass").forEach(function(card){
-      if(card.classList.contains("guideline-card")||card.classList.contains("confirm-box"))return;
+      if(card.classList.contains("guideline-card")||card.classList.contains("confirm-box")||card.closest(".form-section"))return;
       var rect=card.getBoundingClientRect();
       var x=e.clientX-rect.left,y=e.clientY-rect.top;
       if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
@@ -264,7 +265,8 @@ function validateField(name){
   var errorEl=fieldGroup?fieldGroup.querySelector(".field-error"):null;
 
   if(input&&input.type!=="radio"){
-    if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
+    if(input.type==="checkbox"&&input.required&&!input.checked){isValid=false;errorMsg="This field is required"}
+    else if(input.type!=="checkbox"&&input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
     else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email"}
     else if(input.type==="url"&&input.value&&!/^https?:\/\/.+/.test(input.value)){isValid=false;errorMsg="Please enter a valid URL"}
   }
@@ -358,10 +360,10 @@ function goToPage(num){
    ============================================ */
 function showForm(){
   if(heroSection)heroSection.classList.add("hidden");
-  if(showcaseSection)showcaseSection.classList.add("hidden");
+  if(guidelinesSection)guidelinesSection.classList.add("hidden");
   formSection.classList.remove("hidden");
   goToPage(1);
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top:0,behavior:"auto"});
 }
 
 /* ---- Event Listeners ---- */
@@ -453,78 +455,48 @@ form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(rad
 });
 
 /* ============================================
-   3D PARALLAX DEVICE SHOWCASE
-   Mouse-tracked perspective on device stage
+   SWIFT LOGO 3D TILT
+   Pointer-tracked rotate with eased lerp follow
    ============================================ */
-function initDeviceParallax(){
-  var stage=document.getElementById("devicesStage");
-  if(!stage)return;
-  var devices=stage.querySelectorAll(".device-float");
-
-  stage.addEventListener("mousemove",function(e){
-    var rect=stage.getBoundingClientRect();
-    var x=(e.clientX-rect.left)/rect.width-0.5;
-    var y=(e.clientY-rect.top)/rect.height-0.5;
-
-    devices.forEach(function(dev){
-      var speed=parseFloat(dev.dataset.speed)||1;
-      var rotateY=x*12*speed;
-      var rotateX=-y*8*speed;
-      var translateX=x*15*speed;
-      var translateY=y*12*speed;
-
-      if(dev.classList.contains("device-iphone")){
-        dev.style.transform="translate(-50%,-50%) rotateY("+(rotateY-6)+"deg) rotateX("+(rotateX+3)+"deg) translateX("+translateX+"px) translateY("+translateY+"px)";
-      }else if(dev.classList.contains("device-macbook")){
-        dev.style.transform="translate(-50%,-50%) rotateY("+(rotateY+10)+"deg) rotateX("+(rotateX-2)+"deg) scale(0.8) translateX("+translateX+"px) translateY("+translateY+"px)";
-      }else if(dev.classList.contains("device-swift")){
-        dev.style.animationPlayState="paused";
-        dev.style.transform="translateY("+translateY+"px) rotate("+(rotateY*0.3)+"deg)";
-      }else if(dev.classList.contains("device-badge")){
-        dev.style.animationPlayState="paused";
-        dev.style.transform="translateY("+translateY+"px)";
-      }
-    });
-  });
-
-  stage.addEventListener("mouseleave",function(){
-    devices.forEach(function(dev){
-      dev.style.transition="transform .6s cubic-bezier(.22,1,.36,1)";
-      if(dev.classList.contains("device-iphone")){
-        dev.style.transform="translate(-50%,-50%) rotateY(-6deg) rotateX(3deg)";
-      }else if(dev.classList.contains("device-macbook")){
-        dev.style.transform="translate(-50%,-50%) rotateY(10deg) rotateX(-2deg) scale(0.8)";
-      }else if(dev.classList.contains("device-swift")){
-        dev.style.transform="none";
-        dev.style.animationPlayState="running";
-      }else if(dev.classList.contains("device-badge")){
-        dev.style.transform="none";
-        dev.style.animationPlayState="running";
-      }
-      setTimeout(function(){dev.style.transition=""},600);
-    });
-  });
-
-  /* Scroll-triggered reveal */
-  if(typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined"){
-    gsap.registerPlugin(ScrollTrigger);
-    var tl=gsap.timeline({scrollTrigger:{trigger:stage,start:"top 80%",once:true}});
-    tl.fromTo(".showcase-eyebrow",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"});
-    tl.fromTo(".showcase-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.3");
-    tl.fromTo(".showcase-desc",{opacity:0,y:18},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-    tl.fromTo(".device-iphone",{opacity:0,y:60,rotateY:-15},{opacity:1,y:0,rotateY:-6,duration:0.8,ease:"power3.out"},"-=0.3");
-    tl.fromTo(".device-macbook",{opacity:0,y:50,rotateY:20},{opacity:1,y:0,rotateY:10,duration:0.8,ease:"power3.out"},"-=0.6");
-    tl.fromTo(".device-swift",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.5,ease:"back.out(1.7)"},"-=0.4");
-    tl.fromTo(".device-badge",{opacity:0,y:-20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+function initSwiftTilt(){
+  var logo=document.getElementById("swiftLiquidLogo");
+  if(!logo)return;
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var tx=0,ty=0,cx=0,cy=0,raf=null;
+  function tick(){
+    cx+=(tx-cx)*0.07;
+    cy+=(ty-cy)*0.07;
+    logo.style.transform="perspective(700px) rotateX("+cy.toFixed(3)+"deg) rotateY("+cx.toFixed(3)+"deg)";
+    if(Math.abs(tx-cx)>0.01||Math.abs(ty-cy)>0.01){raf=requestAnimationFrame(tick)}
+    else{raf=null}
   }
+  function kick(){if(!raf)raf=requestAnimationFrame(tick)}
+  logo.addEventListener("pointermove",function(e){
+    var r=logo.getBoundingClientRect();
+    var nx=(e.clientX-r.left)/r.width-0.5;
+    var ny=(e.clientY-r.top)/r.height-0.5;
+    tx=nx*22;ty=-ny*16;
+    kick();
+  });
+  logo.addEventListener("pointerleave",function(){tx=0;ty=0;kick()});
 }
 
 /* ============================================
-   SHOWCASE BEGIN BUTTON
+   SWIFT FLUID LOGO — molten orange/black shader
+   WebGL noise-flow rendered offscreen, then
+   masked to the Swift silhouette + black outline
    ============================================ */
-var showcaseBeginBtn=document.getElementById("showcaseBeginBtn");
-if(showcaseBeginBtn){
-  showcaseBeginBtn.addEventListener("click",showForm);
+
+/* ============================================
+   GUIDELINES APPLY BUTTON
+   ============================================ */
+var agreeCheckbox=document.getElementById("agreeTerms");
+var guidelinesApplyBtn=document.getElementById("guidelinesApplyBtn");
+if(agreeCheckbox&&guidelinesApplyBtn){
+  agreeCheckbox.addEventListener("change",function(){
+    guidelinesApplyBtn.disabled=!agreeCheckbox.checked;
+  });
+  guidelinesApplyBtn.addEventListener("click",showForm);
 }
 
 /* ============================================
@@ -538,7 +510,7 @@ document.addEventListener("DOMContentLoaded",function(){
   initMagneticButtons();
   initTouchRipple();
   initToastContainer();
-  initDeviceParallax();
+  initSwiftTilt();
   updateProgress();
 });
 })();

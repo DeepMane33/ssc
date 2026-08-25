@@ -70,9 +70,52 @@
 
   <section id="heroSection" class="hero-section">
     <div class="hero-inner" data-tilt>
-      <svg class="hero-icon liquid-glass-icon" viewBox="0 0 814 1000" fill="#fff" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:auto;margin-bottom:2rem;" aria-hidden="true">
-        <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.3-81-105.4-207.3-105.4-328 0-192.8 125.3-294.9 248.5-294.9 65.2 0 119.9 42.8 161 42.8 39.2 0 100.4-45.3 175.3-45.3 28.3 0 130 2.6 197.2 99.4zM554.1 159.4c31.1-36.9 53.4-88.1 53.4-139.3 0-7.1-.6-14.3-1.9-20.1-50.9 1.9-110.7 33.9-147.1 76.5-28.3 31.8-55.9 83.1-55.9 135 0 7.8.6 15.6 1.3 18.2 2.6.6 6.5 1.3 10.4 1.3 45.3 0 102.8-30.5 139.8-71.6z"/>
-      </svg>
+<svg id="swiftLiquidLogo" class="hero-icon swift-liquid-wrap" viewBox="0 0 24 24" role="img" aria-label="Swift">
+  <defs>
+    <clipPath id="sMask"><path d="M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z"/></clipPath>
+    <linearGradient id="sOrg" x1="0" y1="0" x2=".3" y2="1">
+      <stop offset="0" stop-color="#ffc89a"/>
+      <stop offset=".15" stop-color="#ffa060"/>
+      <stop offset=".32" stop-color="#ff7a3a"/>
+      <stop offset=".5" stop-color="#f05e28"/>
+      <stop offset=".68" stop-color="#e04a1c"/>
+      <stop offset=".82" stop-color="#b83414"/>
+      <stop offset="1" stop-color="#7a1e0a"/>
+    </linearGradient>
+    <linearGradient id="sSheen" gradientUnits="userSpaceOnUse" x1="-4" y1="6" x2="28" y2="20">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".25" stop-color="#fff" stop-opacity=".18"/>
+      <stop offset=".45" stop-color="#ffe8d0" stop-opacity=".28"/>
+      <stop offset=".55" stop-color="#fff" stop-opacity=".12"/>
+      <stop offset=".75" stop-color="#fff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-6 0;24 0;-6 0" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.5;1" keySplines=".42 0 .58 1;.42 0 .58 1"/>
+    </linearGradient>
+    <linearGradient id="sInk1" gradientUnits="userSpaceOnUse" x1="-6" y1="20" x2="30" y2="-4">
+      <stop offset="0" stop-color="#3a0e04" stop-opacity=".45"/>
+      <stop offset=".35" stop-color="#200803" stop-opacity=".25"/>
+      <stop offset=".6" stop-color="#100302" stop-opacity=".15"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-6 20;32 -20;-6 20" dur="11s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.5;1" keySplines=".42 0 .58 1;.42 0 .58 1"/>
+    </linearGradient>
+    <radialGradient id="sGlow" cx=".38" cy=".62" r=".55">
+      <stop offset="0" stop-color="#ff8844" stop-opacity=".55">
+        <animate attributeName="stop-opacity" values=".35;.6;.35" dur="3.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.5;1" keySplines=".42 0 .58 1;.42 0 .58 1"/>
+      </stop>
+      <stop offset="1" stop-color="#ff6622" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g>
+    <path fill="#6e1a09" opacity=".4" transform="translate(.5,.6)" d="M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z"/>
+    <path fill="url(#sOrg)" d="M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z"/>
+    <g clip-path="url(#sMask)">
+      <rect x="-10" y="-10" width="44" height="44" fill="url(#sSheen)"/>
+      <rect x="-10" y="-10" width="44" height="44" fill="url(#sInk1)"/>
+    </g>
+    <path fill="url(#sGlow)" d="M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z"/>
+  </g>
+</svg>
+
       <p class="hero-eyebrow">Apple Authorized Training Center · Parul University</p>
       <h1 class="hero-title">Swift Student Challenge 2027</h1>
       <p class="hero-desc">Build something extraordinary with Swift. Apply now and represent Parul University at the global stage.</p>
@@ -158,89 +201,17 @@
       </div>
 
     </div>
-  </section>
 
-  <!-- Device Showcase — 3D Floating Devices -->
-  <section id="showcaseSection" class="showcase-section">
-    <div class="showcase-inner">
-      <p class="showcase-eyebrow">Apple Authorized Training Center · Parul University</p>
-      <h2 class="showcase-title">Build for the <span class="accent">Apple Ecosystem</span></h2>
-      <p class="showcase-desc">Design your app with Swift and deploy it across iPhone, iPad, and Mac. One codebase, infinite possibilities.</p>
-
-      <div class="devices-stage" id="devicesStage">
-        <!-- iPhone Device -->
-        <div class="device-float device-iphone" data-speed="0.8">
-          <div class="device-frame">
-            <img src="assets/iphone-mockup.png" alt="iPhone 15 Pro" class="device-img" loading="lazy">
-            <div class="device-screen">
-              <div class="screen-content">
-                <img src="assets/iphone-wallpaper.jpg" alt="" class="phone-wallpaper" loading="eager">
-              </div>
-            </div>
-          </div>
-          <div class="device-label">iPhone 15 Pro</div>
-        </div>
-
-        <!-- MacBook Device -->
-        <div class="device-float device-macbook" data-speed="0.5">
-          <div class="device-frame">
-            <img src="assets/macbook-pro-mockup.png" alt="MacBook Pro" class="device-img" loading="lazy">
-            <div class="device-screen">
-              <div class="screen-content screen-mac">
-                <div class="mac-titlebar">
-                  <div class="mac-dots"><span></span><span></span><span></span></div>
-                  <div class="mac-title">ContentView.swift — SSC2027</div>
-                  <div class="mac-dots-placeholder"></div>
-                </div>
-                <div class="mac-editor">
-                  <div class="mac-sidebar">
-                    <div class="mac-sidebar-item active"><svg width="10" height="10" viewBox="0 0 24 24" fill="#89b4fa"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5z"/></svg> ContentView.swift</div>
-                    <div class="mac-sidebar-item"><svg width="10" height="10" viewBox="0 0 24 24" fill="#585b70"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5z"/></svg> App.swift</div>
-                    <div class="mac-sidebar-item"><svg width="10" height="10" viewBox="0 0 24 24" fill="#585b70"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5z"/></svg> Assets.xcassets</div>
-                  </div>
-                  <div class="mac-code-area">
-                    <div class="mac-line"><span class="mac-ln">1</span><span class="code-kw">import</span> <span class="code-mod">SwiftUI</span></div>
-                    <div class="mac-line"><span class="mac-ln">2</span></div>
-                    <div class="mac-line"><span class="mac-ln">3</span><span class="code-kw">struct</span> <span class="code-type">ContentView</span>: <span class="code-type">View</span> {</div>
-                    <div class="mac-line"><span class="mac-ln">4</span>    <span class="code-kw">var</span> body: <span class="code-kw">some</span> <span class="code-type">View</span> {</div>
-                    <div class="mac-line"><span class="mac-ln">5</span>        <span class="code-type">VStack</span>(spacing: <span class="code-str">20</span>) {</div>
-                    <div class="mac-line"><span class="mac-ln">6</span>            <span class="code-type">Image</span>(systemName: <span class="code-str">"swift"</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">7</span>                .<span class="code-mod">font</span>(.<span class="code-mod">system</span>(size: <span class="code-str">48</span>))</div>
-                    <div class="mac-line"><span class="mac-ln">8</span>                .<span class="code-mod">foregroundStyle</span>(.<span class="code-mod">orange</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">9</span></div>
-                    <div class="mac-line"><span class="mac-ln">10</span>            <span class="code-type">Text</span>(<span class="code-str">"Hello SSC!"</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">11</span>                .<span class="code-mod">font</span>(.<span class="code-mod">title</span>.<span class="code-mod">bold</span>())</div>
-                    <div class="mac-line"><span class="mac-ln">12</span>                .<span class="code-mod">foregroundStyle</span>(.<span class="code-mod">primary</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">13</span></div>
-                    <div class="mac-line"><span class="mac-ln">14</span>            <span class="code-type">Text</span>(<span class="code-str">"Build with Swift"</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">15</span>                .<span class="code-mod">foregroundStyle</span>(.<span class="code-mod">secondary</span>)</div>
-                    <div class="mac-line"><span class="mac-ln">16</span>        }</div>
-                    <div class="mac-line"><span class="mac-ln">17</span>        .<span class="code-mod">padding</span>()</div>
-                    <div class="mac-line"><span class="mac-ln">18</span>    }</div>
-                    <div class="mac-line"><span class="mac-ln">19</span>}</div>
-                    <div class="mac-line mac-cursor"><span class="mac-ln">20</span><span class="mac-cursor-line"></span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="device-label">MacBook Pro</div>
-        </div>
-
-        <!-- Swift Logo Float -->
-        <div class="device-float device-swift" data-speed="1.2">
-          <img src="assets/swift-icon.svg" alt="Swift" class="swift-float-icon" loading="lazy">
-        </div>
-
-        <!-- App Store Badge Float -->
-        <div class="device-float device-badge" data-speed="0.6">
-          <img src="assets/app-store-badge.svg" alt="Download on the App Store" class="app-store-img" loading="lazy">
-        </div>
-      </div>
-
-      <button id="showcaseBeginBtn" class="cta-btn" style="margin-top:48px">Apply Now</button>
+    <div class="terms-agree">
+      <label class="custom-checkbox" for="agreeTerms">
+        <input type="checkbox" id="agreeTerms">
+        <span class="checkmark"></span>
+        <span>I have read and agree to the terms above</span>
+      </label>
+      <button id="guidelinesApplyBtn" class="cta-btn" disabled>Apply Now</button>
     </div>
   </section>
+
 
   <section id="formSection" class="form-section hidden">
 
@@ -781,7 +752,35 @@
         </div>
       </div>
       <!-- Page 8: Idea & Motivation -->
+
+      <!-- Page 8: Terms Agreement -->
       <div class="form-page" data-page="8">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Terms &amp; Conditions</h2>
+          <p class="step-desc">Please read and confirm before proceeding.</p>
+
+          <div class="field-group">
+            <div class="terms-box">
+              <p>By submitting this application, you agree to the following:</p>
+              <ul>
+                <li>Your submission must be your own individual work.</li>
+                <li>You should have existing familiarity with Swift and/or Apple's development ecosystem.</li>
+                <li>You are willing to learn, experiment, and build independently.</li>
+                <li>Your submission should follow Apple's official eligibility and submission requirements.</li>
+                <li>Apple's official dates and requirements for the 2027 Swift Student Challenge will be followed once announced.</li>
+                <li>There is no guarantee of selection.</li>
+              </ul>
+            </div>
+            <label class="custom-checkbox" for="agreeTermsForm">
+              <input type="checkbox" id="agreeTermsForm" name="agreeTerms" required>
+              <span class="check-mark"></span>
+              I have read and agree to the terms and conditions *
+            </label>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-page" data-page="9">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">Idea &amp; Motivation</h2>
           <p class="step-desc">Share your vision and what drives you.</p>
@@ -893,7 +892,7 @@
         </div>
       </div>
       <!-- Page 9: Consent -->
-      <div class="form-page" data-page="9">
+      <div class="form-page" data-page="10">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">Consent</h2>
           <p class="step-desc">Please review and confirm the following.</p>
