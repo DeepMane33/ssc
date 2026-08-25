@@ -292,10 +292,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     inset 1px 0 1px rgba(255,255,255,0.12),
     inset -1px 0 1px rgba(255,255,255,0.12);
 }
-.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%}
+.header-inner{display:flex;align-items:center;justify-content:center;width:100%;gap:16px}
 .brand{display:flex;align-items:center;gap:18px}
 .brand-logos{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.swift-logo{width:38px;height:38px;flex-shrink:0;object-fit:contain;margin-left:16px}
+.swift-logo{width:38px;height:38px;flex-shrink:0;object-fit:contain}
 .brand-text{display:flex;flex-direction:column;gap:2px}
 .brand-name{font-family:var(--font-body);font-size:16px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap}
 .brand-sub{font-size:10.5px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:.03em;white-space:nowrap}
@@ -324,7 +324,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   padding:64px 48px;
 }
 .hero-eyebrow{
-  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(242,191,115,0.85);margin-bottom:20px;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
@@ -337,15 +337,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Liquid-Metal Apple — inline SVG clipPath + animated gradient (no CSS mask) */
 .hero-apple{
   display:block;
-  width:180px;height:180px;
+  width:212px;height:212px;
   margin:0 auto 2rem;
   overflow:visible;
   filter:drop-shadow(0 12px 26px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(240,120,40,.32)) drop-shadow(0 2px 3px rgba(255,220,180,.25));
 }
 
 .hero-title{
-  font-family:var(--font-display);font-size:clamp(32px,6vw,52px);
-  font-weight:900;letter-spacing:-.03em;line-height:1.1;
+  font-family:'Instrument Serif', serif;font-size:clamp(40px,7vw,64px);
+  font-weight:400;letter-spacing:.005em;line-height:1.05;
   margin-bottom:16px;
   background:linear-gradient(135deg,#fff3d8 0%,#f2bf73 32%,#e8741f 62%,#fff3d8 100%);
   -webkit-background-clip:text;background-clip:text;
@@ -1002,21 +1002,22 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 /* Mobile (640px and below) */
 @media(max-width:640px){
   /* Header */
-  .site-header{padding:8px 14px;top:12px}
+  .site-header{padding:8px 12px;top:12px}
   .brand-name{font-size:13px}
   .brand-sub{font-size:8.5px}
-  .swift-logo{width:32px;height:32px}
-  .parul-logo{height:28px}
-  .aatce-logo{height:30px}
-  .vthub-logo{height:28px}
-  .brand{gap:12px}
+  .swift-logo{width:24px;height:24px;margin-left:8px}
+  .parul-logo{height:20px}
+  .aatce-logo{height:22px;max-width:84px}
+  .vthub-logo{height:22px}
+  .brand{gap:8px}
 
   /* Hero */
   .hero-section{min-height:calc(100vh - 60px);padding:24px 16px}
   .hero-inner{padding:36px 20px}
   .hero-title{font-size:28px;letter-spacing:-.02em}
   .hero-desc{font-size:14px;margin-bottom:32px}
-  .hero-eyebrow{font-size:10px;margin-bottom:16px}
+  .hero-eyebrow{font-size:11px;margin-bottom:16px}
+  .hero-apple{width:176px;height:176px}
   .hero-inner .swift-logo{width:56px;margin-bottom:1.5rem}
   .cta-btn{padding:14px 32px;font-size:13px}
 
@@ -1128,14 +1129,13 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   .app-store-img{width:75px}
 
   /* Keep the header tidy on tiny screens */
-  .site-header{padding:6px 10px}
-  .header-inner{gap:8px}
-  .brand{gap:10px}
-  .parul-logo{height:24px}
-  .swift-logo{width:28px;height:28px}
-  .aatce-logo{height:26px}
-  .vthub-logo{height:24px}
-  .nav-divider{height:20px}
+  .site-header{padding:6px 8px}
+  .header-inner{gap:6px}
+  .brand{gap:8px}
+  .parul-logo{height:18px}
+  .swift-logo{width:22px;height:22px;margin-left:6px}
+  .aatce-logo{height:20px;max-width:72px}
+  .vthub-logo{height:20px}
 
   /* Tighten hero/glass cards so nothing feels cramped */
   .hero-inner{padding:32px 18px}
