@@ -23,9 +23,11 @@
 <body>
 
   <div id="boot" class="boot" aria-hidden="true">
-    <img src="assets/swift-logo.svg" alt="Swift" class="boot-logo">
-    <p class="boot-text">Swift Student Challenge</p>
-    <p class="boot-sub">AATCe Parul University</p>
+    <div class="boot-logo-wrap">
+      <img src="assets/swift-logo.svg" alt="Swift" class="boot-logo">
+    </div>
+    <p class="boot-text"><span>Swift</span> <span>Student</span> <span>Challenge</span></p>
+    <p class="boot-sub">AATCe · Parul University</p>
   </div>
 
   <div class="grain"></div>
@@ -57,6 +59,7 @@
     <div class="header-inner">
       <div class="brand">
         <img src="assets/parul-logo.svg" alt="Parul University" class="parul-logo">
+        <span class="nav-divider" aria-hidden="true"></span>
         <img src="assets/swift-logo.svg" alt="Swift" class="swift-logo">
       </div>
       <img src="https://appledge.vercel.app/images/aatce_logo.svg" alt="AATCe" class="aatce-logo">
@@ -1001,9 +1004,9 @@
       </div>
 
     <div class="form-nav">
-      <button type="button" id="prevBtn" class="nav-btn prev-btn" disabled>Previous</button>
-      <button type="button" id="nextBtn" class="nav-btn next-btn">Next</button>
-      <button type="submit" id="submitBtn" class="nav-btn submit-btn hidden">Submit Application</button>
+      <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
+      <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
+      <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
     </div>
 
     </form>
@@ -1279,14 +1282,18 @@ void main(){
     (() => {
       const boot = document.getElementById('boot');
       const logo = boot?.querySelector('.boot-logo');
-      if (!boot || !logo) return;
-      logo.addEventListener('animationend', () => {
-        // text visible ~1.2s in; hold a moment, then fade the boot screen
-          setTimeout(() => {
-            boot.classList.add('hidden');
-            setTimeout(() => boot.remove(), 900);
-          }, 1000);
-      });
+      if (!boot) return;
+      let hidden = false;
+      const hide = () => {
+        if (hidden) return;
+        hidden = true;
+        boot.classList.add('hidden');
+        document.body.classList.add('boot-done');
+        setTimeout(() => boot.remove(), 850);
+      };
+      // logo entrance ends ~1.4s; hold a beat, then exit
+      if (logo) logo.addEventListener('animationend', () => setTimeout(hide, 900));
+      setTimeout(hide, 4200); // safety net
     })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
