@@ -63,7 +63,7 @@ img{max-width:100%;display:block}
 }
 .boot-logo{
   width:120px; height:120px;
-  animation: bounceRoll 6s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation: bounceRoll 2s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 .boot-text{
   margin-top:1rem;
@@ -72,7 +72,7 @@ img{max-width:100%;display:block}
   font-weight:700;
   color:#fff;
   opacity:0;
-  animation: fadeIn 1s ease 6s forwards;
+  animation: fadeIn 1s ease 1.2s forwards;
 }
 .boot-sub{
   margin-top:.35rem;
@@ -81,7 +81,7 @@ img{max-width:100%;display:block}
   font-weight:400;
   color:rgba(255,255,255,.55);
   opacity:0;
-  animation: fadeIn 1s ease 6.5s forwards;
+  animation: fadeIn 1s ease 1.7s forwards;
 }
 .boot.hidden{
   opacity:0;
@@ -301,6 +301,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background:var(--sage);animation:pulse 2s ease-in-out infinite;
 }
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-apple{animation:none}
+  .hero-apple canvas{display:none}
+  .hero-apple.ready .hero-apple-fallback{opacity:1}
+}
 .hero-title{
   font-family:var(--font-display);font-size:clamp(32px,6vw,52px);
   font-weight:900;letter-spacing:-.03em;line-height:1.1;
@@ -1063,14 +1069,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .guideline-card{padding:34px 34px}
 .guideline-card h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:16px;display:flex;align-items:center}
 .guideline-card h2::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--swift);transform:rotate(45deg);flex:none;margin-right:12px}
-.guideline-card.important h2{color:var(--hot)}
-.guideline-card.important h2::before{background:var(--hot)}
+.guideline-card.important h2{color:#fff}
+.guideline-card.important h2::before{background:var(--swift)}
 .guideline-card p{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.75;margin-bottom:14px}
 .guideline-card p:last-child{margin-bottom:0}
 .guideline-card ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin:4px 0 14px}
 .guideline-card li{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.6;padding-left:22px;position:relative}
 .guideline-card li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:var(--swift);transform:rotate(45deg)}
-.guideline-card.important li::before{background:var(--hot)}
+.guideline-card.important li::before{background:var(--swift)}
 
 .confirm-wrap{display:flex;justify-content:center;margin-top:40px}
 .confirm-box{max-width:600px;width:100%;padding:22px 26px}
@@ -1080,12 +1086,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .confirm-note{text-align:center;font-size:13px;color:rgba(255,255,255,0.5);margin-top:14px;transition:opacity .3s ease}
 .guideline-cta{text-align:center;margin-top:26px}
 
-/* GUIDELINES PANELS — black brutalism + neomorphism + a touch of skeuomorphism */
+/* GUIDELINES PANELS — heavy black brutalism + neomorphic rivets + skeuomorphic number plates */
+.guidelines-list{counter-reset:gcard}
 .glass-card.liquid-glass.guideline-card,
 .glass-card.liquid-glass.confirm-box{
+  position:relative;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,0) 32%),
-    repeating-linear-gradient(135deg, rgba(255,255,255,.012) 0 2px, rgba(0,0,0,0) 2px 4px),
+    radial-gradient(circle 8px at 15px 15px, rgba(255,255,255,.13) 0 2.5px, transparent 3px),
+    radial-gradient(circle 8px at calc(100% - 15px) 15px, rgba(255,255,255,.13) 0 2.5px, transparent 3px),
+    radial-gradient(circle 8px at 15px calc(100% - 15px), rgba(255,255,255,.10) 0 2.5px, transparent 3px),
+    radial-gradient(circle 8px at calc(100% - 15px) calc(100% - 15px), rgba(255,255,255,.10) 0 2.5px, transparent 3px),
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 26%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.014) 0 2px, rgba(0,0,0,0) 2px 5px),
     #0a0a0b;
   border:2px solid #000;
   border-radius:4px;
@@ -1093,44 +1105,47 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   -webkit-backdrop-filter:none;
   box-shadow:
     8px 8px 0 0 #000,
-    -3px -3px 9px rgba(255,255,255,.035),
+    -3px -3px 9px rgba(255,255,255,.04),
     6px 6px 18px rgba(0,0,0,.7),
-    inset 1px 1px 0 rgba(255,255,255,.07),
+    inset 1px 1px 0 rgba(255,255,255,.08),
     inset -2px -2px 0 rgba(0,0,0,.9);
 }
 .glass-card.liquid-glass.guideline-card::before,
 .glass-card.liquid-glass.confirm-box::before{display:none}
 
+/* Numbered plate — inline machine tag at the top of each panel */
+.guidelines-list .glass-card.liquid-glass.guideline-card::before{
+  display:inline-flex;
+  align-items:center;
+  content:counter(gcard,decimal-leading-zero);
+  counter-increment:gcard;
+  padding:4px 11px;
+  margin-bottom:18px;
+  background:#101012;
+  color:var(--swift);
+  font-family:var(--font-display);
+  font-size:10.5px;font-weight:800;letter-spacing:.12em;
+  border:2px solid #000;border-radius:3px;
+  box-shadow:3px 3px 0 #000, inset 0 1px 0 rgba(255,255,255,.14);
+}
+.guidelines-list .glass-card.liquid-glass.guideline-card.important::before{
+  background:#f5f4ee;
+  color:#0a0a0a;
+  box-shadow:3px 3px 0 #000, inset 0 1px 0 rgba(255,255,255,.7);
+}
+
 .guideline-card h2{
   text-transform:uppercase;
   letter-spacing:.02em;
-  border-bottom:1px solid rgba(255,255,255,.12);
+  border-bottom:2px solid rgba(255,255,255,.12);
   padding-bottom:14px;
-  margin-bottom:18px;
+  margin-bottom:20px;
 }
 .guideline-card h2::before{
   width:10px;height:10px;border-radius:0;margin-right:13px;
   box-shadow:2px 2px 0 rgba(0,0,0,.6);
 }
 .guideline-card li::before{box-shadow:1px 1px 0 rgba(0,0,0,.5)}
-
-/* Important = brutalist inverted block */
-.glass-card.liquid-glass.guideline-card.important{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 38%),
-    #ecebe4;
-  color:#0a0a0a;
-  border-color:#0a0a0a;
-  box-shadow:
-    8px 8px 0 0 #0a0a0a,
-    inset 1px 1px 0 rgba(255,255,255,.7),
-    inset -2px -2px 0 rgba(0,0,0,.25);
-}
-.glass-card.liquid-glass.guideline-card.important h2{color:#0a0a0a;border-bottom-color:rgba(0,0,0,.18)}
-.glass-card.liquid-glass.guideline-card.important h2::before,
-.glass-card.liquid-glass.guideline-card.important li::before{background:#0a0a0a;box-shadow:none}
-.glass-card.liquid-glass.guideline-card.important p,
-.glass-card.liquid-glass.guideline-card.important li{color:#161616}
 
 /* Skeuomorphic physical toggle for the confirm checkbox */
 .confirm-box .confirm-check{display:flex;gap:14px;align-items:flex-start;cursor:pointer}
@@ -1188,7 +1203,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       4px 4px 0 0 #000,
       -2px -2px 7px rgba(255,255,255,.03),
       4px 4px 14px rgba(0,0,0,.7),
-      inset 1px 1px 0 rgba(255,255,255,.07),
+      inset 1px 1px 0 rgba(255,255,255,.08),
       inset -2px -2px 0 rgba(0,0,0,.9);
   }
 }

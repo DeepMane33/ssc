@@ -125,7 +125,12 @@ function initGSAP(){
   heroTl.fromTo(".hero-eyebrow",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   heroTl.fromTo(".hero-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.2");
   heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-  heroTl.fromTo(".cta-btn",{opacity:0,y:15,scale:0.9},{opacity:1,y:0,scale:1,duration:0.5,ease:"back.out(1.4)"},"-=0.2");
+
+  /* Guideline cards — scroll-triggered stagger reveal */
+  if(typeof ScrollTrigger!=="undefined"){
+    gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+    gsap.fromTo(".guidelines-head",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out",scrollTrigger:{trigger:"#guidelinesSection",start:"top 80%",once:true}});
+  }
 }
 
 /* ============================================
@@ -134,6 +139,7 @@ function initGSAP(){
 function initSpecularTracking(){
   document.addEventListener("mousemove",function(e){
     document.querySelectorAll(".liquid-glass").forEach(function(card){
+      if(card.classList.contains("guideline-card")||card.classList.contains("confirm-box"))return;
       var rect=card.getBoundingClientRect();
       var x=e.clientX-rect.left,y=e.clientY-rect.top;
       if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
