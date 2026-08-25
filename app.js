@@ -359,6 +359,8 @@ function goToPage(num){
 function showForm(){
   if(heroSection)heroSection.classList.add("hidden");
   if(showcaseSection)showcaseSection.classList.add("hidden");
+  var guidelines=document.getElementById("guidelinesSection");
+  if(guidelines)guidelines.classList.add("hidden");
   formSection.classList.remove("hidden");
   goToPage(1);
   window.scrollTo({top:0,behavior:"smooth"});
@@ -460,12 +462,18 @@ function initDeviceParallax(){
   var stage=document.getElementById("devicesStage");
   if(!stage)return;
   var devices=stage.querySelectorAll(".device-float");
+  var rafPending=false,lastX=0,lastY=0;
 
   stage.addEventListener("mousemove",function(e){
     var rect=stage.getBoundingClientRect();
-    var x=(e.clientX-rect.left)/rect.width-0.5;
-    var y=(e.clientY-rect.top)/rect.height-0.5;
+    lastX=(e.clientX-rect.left)/rect.width-0.5;
+    lastY=(e.clientY-rect.top)/rect.height-0.5;
+    if(rafPending)return;
+    rafPending=true;
+    requestAnimationFrame(function(){applyParallax(lastX,lastY);rafPending=false;});
+  });
 
+  function applyParallax(x,y){
     devices.forEach(function(dev){
       var speed=parseFloat(dev.dataset.speed)||1;
       var rotateY=x*12*speed;
@@ -485,7 +493,7 @@ function initDeviceParallax(){
         dev.style.transform="translateY("+translateY+"px)";
       }
     });
-  });
+  }
 
   stage.addEventListener("mouseleave",function(){
     devices.forEach(function(dev){
