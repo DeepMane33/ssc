@@ -326,13 +326,8 @@ function showForm(){
   var guidelines=document.getElementById("guidelinesSection");
   if(guidelines)guidelines.classList.add("hidden");
   formSection.classList.remove("hidden");
-  /* Pause the heavy global WebGL plasma shader + orb canvases while the
-     form is open — backdrop-filter glass over an animated canvas is the
-     main source of mobile jank. They resume automatically on reload. */
-  window.SSC_FX_PAUSED=true;
-  var bg=document.getElementById("shaderBg");
-  if(bg)bg.style.display="none";
-  document.querySelectorAll(".swift-orb-decor").forEach(function(d){d.style.display="none";});
+  /* Form cards are liquid-glass, so the global plasma shader stays visible
+     behind them — same treatment as the hero/showcase sections. */
   goToPage(1);
   window.scrollTo({top:0,behavior:"smooth"});
 }
