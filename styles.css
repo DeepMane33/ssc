@@ -64,25 +64,25 @@ img{max-width:100%;display:block}
   width:120px; height:120px;
   will-change:transform;
   transform-origin:50% 50%;
-  animation: bounceRoll 2s cubic-bezier(.3,.75,.35,1) forwards;
+  animation: bounceRoll 1.5s cubic-bezier(.3,.75,.35,1) forwards;
 }
 .boot-text{
-  margin-top:1rem;
+  margin-top:.85rem;
   font-family:var(--font-display);
-  font-size:clamp(1.5rem,4vw,2.5rem);
+  font-size:clamp(1.2rem,3vw,1.8rem);
   font-weight:700;
   color:#fff;
   opacity:0;
-  animation: fadeIn 1s ease 1.2s forwards;
+  animation: fadeIn .7s ease .75s forwards;
 }
 .boot-sub{
-  margin-top:.35rem;
+  margin-top:.3rem;
   font-family:var(--font-body);
-  font-size:clamp(.9rem,2vw,1.2rem);
+  font-size:clamp(.78rem,1.6vw,.95rem);
   font-weight:400;
   color:rgba(255,255,255,.55);
   opacity:0;
-  animation: fadeIn 1s ease 1.7s forwards;
+  animation: fadeIn .7s ease 1.15s forwards;
 }
 .boot.hidden{
   opacity:0;
@@ -1243,21 +1243,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero-icon.swift-liquid-wrap{
   position:relative;
   display:block;
-  width:clamp(140px,20vw,220px);
+  width:clamp(112px,15vw,158px);
   aspect-ratio:1/1;
   height:auto;
-  margin:-3rem auto 1.75rem;
+  margin:-3.75rem auto 1.5rem;
   transform-style:preserve-3d;
   will-change:transform;
   filter:
+    drop-shadow(0 0 12px rgba(255,255,255,.5))
+    drop-shadow(0 0 30px rgba(255,255,255,.3))
+    drop-shadow(0 0 60px rgba(255,246,238,.18))
     drop-shadow(0 5px 0 rgba(70,16,6,.85))
     drop-shadow(0 0 36px rgba(240,81,56,.5))
     drop-shadow(0 16px 32px rgba(0,0,0,.55));
 }
-.swift-liquid-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-icon.swift-liquid-wrap{background:transparent}
 #swiftFluidSrc{visibility:hidden;pointer-events:none}
 @media(max-width:640px){
-  .hero-icon.swift-liquid-wrap{width:108px;margin:-1.25rem auto 1.25rem}
+  .hero-icon.swift-liquid-wrap{width:112px;margin:-2.5rem auto 1.25rem}
 }
 
 /* ============================================
@@ -1349,4 +1352,19 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 @media(max-width:640px){
   .form-section .form-page .glass-card.liquid-glass{box-shadow:5px 5px 0 0 #000, inset 1px 1px 0 rgba(255,255,255,.07), inset -2px -2px 0 rgba(0,0,0,.9)}
+}
+
+/* ============================================
+   BOOT → HERO HANDOFF — plain crossfade
+   ============================================ */
+html.boot-lock{overflow:hidden}
+.hero-icon.swift-liquid-wrap{
+  opacity:0;
+  transition:opacity .6s ease;
+}
+.hero-icon.swift-liquid-wrap.revealed{
+  opacity:1;
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-icon.swift-liquid-wrap{opacity:1;transition:none}
 }

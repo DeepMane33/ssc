@@ -482,6 +482,168 @@ function initSwiftTilt(){
 }
 
 /* ============================================
+   SWIFT LIQUID-METAL SHADER
+   Single visible WebGL canvas, molten orange/black
+   flow masked to the Swift silhouette (mask texture)
+   ============================================ */
+function initSwiftMetal(){
+  var cv=document.getElementById("swiftLiquidLogo");
+  if(!cv)return;
+  var D="M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function paintFallback(){
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    var w=cv.clientWidth||180;
+    cv.width=Math.round(w*dpr);cv.height=Math.round(w*dpr);
+    var g=cv.getContext("2d");if(!g)return;
+    var S=cv.width,p=new Path2D(D),K=(S*0.94)/19.9;
+    g.setTransform(K,0,0,K,S/2-11.55*K,S/2-10.05*K);
+    var grd=g.createLinearGradient(0,3,0,21);
+    grd.addColorStop(0,"#ff8a3a");grd.addColorStop(.5,"#ef4f22");grd.addColorStop(1,"#571507");
+    g.fillStyle=grd;g.fill(p);
+    g.globalCompositeOperation="source-atop";
+    g.fillStyle="rgba(10,3,2,.55)";
+    [[6,14,7],[15,8,6],[11,18,5]].forEach(function(b){
+      g.beginPath();g.arc(b[0],b[1],b[2],0,Math.PI*2);g.fill();
+    });
+  }
+
+  var gl=null;
+  try{
+    gl=cv.getContext("webgl",{alpha:true,antialias:true,premultipliedAlpha:true})
+     ||cv.getContext("experimental-webgl",{alpha:true});
+  }catch(e){gl=null}
+  if(!gl){paintFallback();return}
+
+  var VERT="attribute vec2 a_position;void main(){gl_Position=vec4(a_position,0.,1.);}";
+  var FRAG=[
+    "precision highp float;",
+    "uniform vec2 u_res;uniform float u_time;uniform sampler2D u_mask;",
+    "float h(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}",
+    "float n2(vec2 p){vec2 i=floor(p);vec2 f=fract(p);vec2 u=f*f*(3.-2.*f);",
+    " return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}",
+    "float fbm(vec2 p){float v=0.,a=.55;mat2 r=mat2(.8,.6,-.6,.8);",
+    " for(int i=0;i<5;i++){v+=a*n2(p);p=r*p*2.03;a*=.5;}return v;}",
+    "void main(){",
+    " vec2 uv=gl_FragCoord.xy/u_res;",
+    " float t=u_time*0.5;",
+    " float m=texture2D(u_mask,uv).a;",
+    " if(m<0.004){gl_FragColor=vec4(0.);return;}",
+    " float asp=u_res.x/u_res.y;",
+    " vec2 q=uv*vec2(asp,1.0)*2.6;",
+    " float w1=fbm(q+vec2(t*.20,-t*.12));",
+    " float w2=fbm(q*1.35+vec2(-t*.15,t*.17)+w1*.85);",
+    " vec2 wp=vec2(w1,w2)-.5;",
+    " float f=fbm(q*1.15+wp*2.3+vec2(0.,t*.28));",
+    " float g2=fbm(q*2.1-wp*1.6+vec2(t*.22,0.));",
+    " vec3 ink=vec3(0.045,0.016,0.010);",
+    " vec3 ember=vec3(0.40,0.065,0.018);",
+    " vec3 org=vec3(0.94,0.32,0.09);",
+    " vec3 glow=vec3(1.0,0.63,0.28);",
+    " float vein=smoothstep(0.50,0.30,f);",
+    " float body=smoothstep(0.28,0.78,f);",
+    " float heat=smoothstep(0.60,0.96,g2*w1+w2*.35);",
+    " vec3 col=mix(org,ember,body*.62);",
+    " col=mix(col,ink,vein*.88);",
+    " col=mix(col,glow,heat*.62);",
+    " float sh=sin((uv.x+uv.y)*3.2-t*.95+w2*2.2)*.5+.5;",
+    " col+=glow*pow(sh,6.)*.20;",
+    " vec2 px=1.0/u_res;",
+    " float aE=texture2D(u_mask,uv+vec2(px.x,0.)).a+texture2D(u_mask,uv-vec2(px.x,0.)).a",
+    "         +texture2D(u_mask,uv+vec2(0.,px.y)).a+texture2D(u_mask,uv-vec2(0.,px.y)).a;",
+    " col*=mix(1.,.34,smoothstep(3.6,1.2,aE)*.72);",
+    " col*=m;",
+    " gl_FragColor=vec4(col,m);",
+    "}"
+  ].join("\n");
+
+  function sh(type,src){
+    var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s)||"shader");
+    return s;
+  }
+
+  var prog,uTime,uRes;
+  try{
+    prog=gl.createProgram();
+    gl.attachShader(prog,sh(gl.VERTEX_SHADER,VERT));
+    gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FRAG));
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(prog)||"link");
+    gl.useProgram(prog);
+    var buf=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+    var loc=gl.getAttribLocation(prog,"a_position");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+    uTime=gl.getUniformLocation(prog,"u_time");
+    uRes=gl.getUniformLocation(prog,"u_res");
+  }catch(err){paintFallback();return}
+
+  /* Swift-silhouette mask texture — hardcoded bounds
+     (bbox cx,cy=11.55,10.05 maxDim≈19.9 in 24-unit viewBox) */
+  var maskTex=null;
+  try{
+    var MS=1024,mc=document.createElement("canvas");
+    mc.width=mc.height=MS;
+    var mg=mc.getContext("2d");
+    if(!mg)throw new Error("no 2d");
+    var p=new Path2D(D);
+    var K=(MS*0.94)/19.9;
+    mg.setTransform(K,0,0,K,MS/2-11.55*K,MS/2-10.05*K);
+    mg.fillStyle="#fff";mg.fill(p);
+    var probe=mg.getImageData(MS>>1,MS>>1,1,1).data;
+
+    maskTex=gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D,maskTex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,mc);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.uniform1i(gl.getUniformLocation(prog,"u_mask"),0);
+    gl.clearColor(0,0,0,0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+    console.log("swift-metal: mask ready, center alpha=",probe[3]);
+  }catch(err){console.error("swift-metal mask:",err);paintFallback();return}
+
+  var W=0;
+  function resize(){
+    if(!uRes)return;
+    var w=cv.clientWidth||180,dpr=Math.min(window.devicePixelRatio||1,2);
+    W=Math.max(2,Math.round(w*dpr));
+    if(cv.width!==W||cv.height!==W){cv.width=W;cv.height=W;}
+    gl.viewport(0,0,W,W);
+    gl.uniform2f(uRes,W,W);
+  }
+  try{
+    resize();
+  }catch(err){console.error("swift-metal resize:",err);paintFallback();return}
+  window.addEventListener("resize",function(){try{resize()}catch(e){}});
+
+  function draw(t){
+    if(!uTime)return;
+    gl.uniform1f(uTime,t);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+
+  cv.classList.add("revealed");
+  if(reduce){draw(7.3);return}
+  var t0=performance.now();
+  requestAnimationFrame(function loop(now){
+    if(cv.clientWidth===0){requestAnimationFrame(loop);return}
+    if(Math.abs((cv.clientWidth*(window.devicePixelRatio>2?2:window.devicePixelRatio||1))-W)>2)resize();
+    draw((now-t0)/1000);
+    requestAnimationFrame(loop);
+  });
+}
+
+/* ============================================
    SWIFT FLUID LOGO — molten orange/black shader
    WebGL noise-flow rendered offscreen, then
    masked to the Swift silhouette + black outline
@@ -511,6 +673,7 @@ document.addEventListener("DOMContentLoaded",function(){
   initTouchRipple();
   initToastContainer();
   initSwiftTilt();
+  initSwiftMetal();
   updateProgress();
 });
 })();
