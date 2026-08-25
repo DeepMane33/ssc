@@ -72,6 +72,7 @@ img{max-width:100%;display:block}
   font-weight:700;
   color:#fff;
   opacity:0;
+  text-align:center;
   animation: fadeIn 1s ease 6s forwards;
 }
 .boot-sub{
@@ -81,6 +82,7 @@ img{max-width:100%;display:block}
   font-weight:400;
   color:rgba(255,255,255,.55);
   opacity:0;
+  text-align:center;
   animation: fadeIn 1s ease 6.5s forwards;
 }
 .boot.hidden{
@@ -308,6 +310,45 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .hero-title .accent{color:var(--swift)}
 .hero-desc{font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);margin-bottom:40px;max-width:420px;margin-left:auto;margin-right:auto}
+
+/* ---- Hero enhancements ---- */
+.hero-icon{
+  filter: drop-shadow(0 0 24px rgba(240,81,35,0.6));
+  animation: floatIcon 6s ease-in-out infinite;
+}
+@keyframes floatIcon{
+  0%,100%{ transform: translateY(0) rotate(0deg); }
+  25%{ transform: translateY(-8px) rotate(2deg); }
+  50%{ transform: translateY(4px) rotate(-1deg); }
+  75%{ transform: translateY(-4px) rotate(1deg); }
+}
+.hero-title{
+  background: linear-gradient(135deg, #fff 0%, #ff8a65 50%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+@keyframes gradientShift{
+  0%,100%{ background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+}
+.hero-eyebrow,
+.hero-title,
+.hero-desc,
+.hero-cta-row{
+  opacity:0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s var(--ease) forwards;
+}
+.hero-eyebrow{ animation-delay: 0.2s; }
+.hero-title{ animation-delay: 0.35s; }
+.hero-desc{ animation-delay: 0.5s; }
+.hero-cta-row{ animation-delay: 0.65s; }
+@keyframes fadeUp{
+  to{ opacity:1; transform: translateY(0); }
+}
 
 /* ============================================
    MAGNETIC BUTTON
@@ -608,6 +649,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .success-note a:hover{color:#ff7a5c}
 .success-card.guideline-card{padding:64px 40px}
 .success-swift{display:block;margin:0 auto 1.5rem;width:72px;height:auto;background:none;border-radius:0}
+.success-card:hover{opacity:1;}
 
 .site-footer{
   position:relative;z-index:1;
