@@ -253,8 +253,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
-  width:min(820px,92vw);
-  padding:14px 32px;
+  width:min(860px,94vw);
+  padding:14px 36px;
   background:linear-gradient(155deg, rgba(20,24,34,0.42) 0%, rgba(15,18,27,0.32) 50%, rgba(11,13,20,0.24) 100%);
   backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
   -webkit-backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
@@ -270,14 +270,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .header-inner{display:flex;align-items:center;justify-content:space-between;width:100%}
 .brand{display:flex;align-items:center;gap:18px}
 .brand-logos{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.swift-logo{width:34px;height:34px;flex-shrink:0;object-fit:contain}
+.swift-logo{width:38px;height:38px;flex-shrink:0;object-fit:contain;margin-left:16px}
 .brand-text{display:flex;flex-direction:column;gap:2px}
 .brand-name{font-family:var(--font-body);font-size:16px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap}
 .brand-sub{font-size:10.5px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:.03em;white-space:nowrap}
 .parul-wordmark{height:20px;width:auto;display:block}
-.parul-logo{height:30px;width:auto;display:block;flex-shrink:0}
-.aatce-logo{height:24px;width:auto;display:block;opacity:.9}
-.vthub-logo{height:30px;width:auto;display:block;flex-shrink:0}
+.parul-logo{height:34px;width:auto;display:block;flex-shrink:0}
+.aatce-logo{height:42px;width:auto;display:block;opacity:.9}
+.vthub-logo{height:34px;width:auto;display:block;flex-shrink:0}
 
 .nav-swift-icon{width:22px;height:27px;flex-shrink:0;opacity:.35;transition:opacity .3s ease}
 .nav-swift-icon:hover{opacity:.7}
@@ -567,25 +567,43 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;gap:12px}
 .nav-btn{
   display:inline-flex;align-items:center;gap:8px;
-  padding:13px 28px;border:none;border-radius:50px;
+  padding:13px 30px;border-radius:50px;
   font-family:var(--font-body);font-size:14px;font-weight:600;
   cursor:pointer;transition:all .25s var(--ease);
   position:relative;overflow:hidden;
+  /* liquid glass */
+  color:#fff;
+  background:
+    linear-gradient(155deg, rgba(18,22,32,0.35) 0%, rgba(13,16,24,0.22) 50%, rgba(9,11,17,0.16) 100%);
+  backdrop-filter:blur(20px) saturate(1.7);
+  -webkit-backdrop-filter:blur(20px) saturate(1.7);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.32),
+    inset 0 1px 1px rgba(255,255,255,0.18),
+    inset 0 -8px 18px rgba(0,0,0,0.28);
 }
-.nav-btn::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
-  opacity:0;transition:opacity .25s ease;border-radius:inherit;
-}
-.nav-btn:hover::after{opacity:1}
-.prev-btn{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.12)}
-.prev-btn:hover:not(:disabled){background:rgba(255,255,255,0.12);transform:translateY(-1px)}
+.prev-btn:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(255,255,255,0.22)}
 .prev-btn:disabled{opacity:.3;cursor:not-allowed}
-.next-btn{background:var(--swift);color:#fff}
-.next-btn:hover{background:#d94420;transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,81,35,0.35)}
+.next-btn{
+  border-color:rgba(240,81,35,0.50);
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.32),
+    inset 0 1px 1px rgba(255,255,255,0.18),
+    inset 0 -8px 18px rgba(0,0,0,0.28),
+    0 0 18px rgba(240,81,35,0.28);
+}
+.next-btn:hover:not(:disabled){transform:translateY(-2px);border-color:rgba(240,81,35,0.75);box-shadow:0 10px 28px rgba(0,0,0,0.34), inset 0 1px 1px rgba(255,255,255,0.2), 0 0 26px rgba(240,81,35,0.45);}
 .next-btn:active{transform:scale(0.97)}
-.submit-btn{background:linear-gradient(135deg,var(--swift),#e04010);color:#fff}
-.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(240,81,35,0.35)}
+.submit-btn{
+  border-color:rgba(240,81,35,0.60);
+  background:linear-gradient(155deg, rgba(240,81,35,0.32) 0%, rgba(13,16,24,0.28) 55%, rgba(9,11,17,0.20) 100%);
+  box-shadow:
+    0 8px 28px rgba(0,0,0,0.34),
+    inset 0 1px 1px rgba(255,255,255,0.20),
+    0 0 22px rgba(240,81,35,0.35);
+}
+.submit-btn:hover{transform:translateY(-2px);border-color:rgba(240,81,35,0.85);box-shadow:0 10px 32px rgba(0,0,0,0.36), inset 0 1px 1px rgba(255,255,255,0.22), 0 0 32px rgba(240,81,35,0.5);}
 .submit-btn:active{transform:scale(0.97)}
 .hidden{display:none !important}
 
@@ -989,11 +1007,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .site-header{padding:8px 14px;top:12px}
   .brand-name{font-size:13px}
   .brand-sub{font-size:8.5px}
-  .swift-logo{width:28px;height:34px}
-  .parul-logo{height:24px}
-  .aatce-logo{height:18px}
-  .vthub-logo{height:24px}
-  .brand{gap:10px}
+  .swift-logo{width:32px;height:32px}
+  .parul-logo{height:28px}
+  .aatce-logo{height:30px}
+  .vthub-logo{height:28px}
+  .brand{gap:12px}
 
   /* Hero */
   .hero-section{min-height:calc(100vh - 60px);padding:24px 16px}
@@ -1132,7 +1150,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .guidelines-section{position:relative;z-index:1;padding:140px 24px 100px;max-width:840px;margin:0 auto}
 .guidelines-head{text-align:center;margin-bottom:52px}
 .guidelines-kicker{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:16px}
-.guidelines-title{font-family:var(--font-display);font-size:clamp(30px,6vw,48px);font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:14px;line-height:1.05}
+.guidelines-title{font-family:var(--font-display);font-size:clamp(30px,6vw,48px);font-weight:900;letter-spacing:-.03em;color:#fff3d8;margin-bottom:14px;line-height:1.05}
 .guidelines-title .accent{color:var(--swift)}
 .guidelines-sub{font-size:15px;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto;line-height:1.6}
 .guidelines-list{display:flex;flex-direction:column;gap:20px}
@@ -1140,13 +1158,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .guideline-card h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:16px;display:flex;align-items:center}
 .guideline-card h2::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--swift);transform:rotate(45deg);flex:none;margin-right:12px}
 .guideline-card.important h2{color:#fff}
-.guideline-card.important h2::before{background:var(--swift)}
+.guideline-card.important h2::before{background:var(--hot)}
 .guideline-card p{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.75;margin-bottom:14px}
 .guideline-card p:last-child{margin-bottom:0}
 .guideline-card ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin:4px 0 14px}
 .guideline-card li{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.6;padding-left:22px;position:relative}
 .guideline-card li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:var(--swift);transform:rotate(45deg)}
-.guideline-card.important li::before{background:var(--swift)}
+.guideline-card.important li::before{background:var(--hot)}
 
 .confirm-wrap{display:flex;justify-content:center;margin-top:40px}
 .confirm-box{max-width:600px;width:100%;padding:22px 26px}
@@ -1156,127 +1174,81 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .confirm-note{text-align:center;font-size:13px;color:rgba(255,255,255,0.5);margin-top:14px;transition:opacity .3s ease}
 .guideline-cta{text-align:center;margin-top:26px}
 
-/* GUIDELINES PANELS — heavy black brutalism + neomorphic rivets + skeuomorphic number plates */
+/* GUIDELINES PANELS — unified liquid glass (same as the form cards) */
 .guidelines-list{counter-reset:gcard}
-.glass-card.liquid-glass.guideline-card,
-.glass-card.liquid-glass.confirm-box{
-  position:relative;
-  background:
-    radial-gradient(circle 8px at 15px 15px, rgba(255,255,255,.13) 0 2.5px, transparent 3px),
-    radial-gradient(circle 8px at calc(100% - 15px) 15px, rgba(255,255,255,.13) 0 2.5px, transparent 3px),
-    radial-gradient(circle 8px at 15px calc(100% - 15px), rgba(255,255,255,.10) 0 2.5px, transparent 3px),
-    radial-gradient(circle 8px at calc(100% - 15px) calc(100% - 15px), rgba(255,255,255,.10) 0 2.5px, transparent 3px),
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 26%),
-    repeating-linear-gradient(135deg, rgba(255,255,255,.014) 0 2px, rgba(0,0,0,0) 2px 5px),
-    #0a0a0b;
-  border:2px solid #000;
-  border-radius:4px;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
-  box-shadow:
-    8px 8px 0 0 #000,
-    -3px -3px 9px rgba(255,255,255,.04),
-    6px 6px 18px rgba(0,0,0,.7),
-    inset 1px 1px 0 rgba(255,255,255,.08),
-    inset -2px -2px 0 rgba(0,0,0,.9);
-}
-.glass-card.liquid-glass.guideline-card::before,
-.glass-card.liquid-glass.confirm-box::before{display:none}
-
-/* Numbered plate — inline machine tag at the top of each panel */
-.guidelines-list .glass-card.liquid-glass.guideline-card::before{
-  display:inline-flex;
-  align-items:center;
-  content:counter(gcard,decimal-leading-zero);
-  counter-increment:gcard;
-  padding:4px 11px;
-  margin-bottom:18px;
-  background:#101012;
-  color:var(--swift);
-  font-family:var(--font-display);
-  font-size:10.5px;font-weight:800;letter-spacing:.12em;
-  border:2px solid #000;border-radius:3px;
-  box-shadow:3px 3px 0 #000, inset 0 1px 0 rgba(255,255,255,.14);
-}
-.guidelines-list .glass-card.liquid-glass.guideline-card.important::before{
-  background:#f5f4ee;
-  color:#0a0a0a;
-  box-shadow:3px 3px 0 #000, inset 0 1px 0 rgba(255,255,255,.7);
-}
 
 .guideline-card h2{
   text-transform:uppercase;
   letter-spacing:.02em;
-  border-bottom:2px solid rgba(255,255,255,.12);
+  border-bottom:1px solid rgba(255,255,255,0.10);
   padding-bottom:14px;
   margin-bottom:20px;
 }
 .guideline-card h2::before{
-  width:10px;height:10px;border-radius:0;margin-right:13px;
-  box-shadow:2px 2px 0 rgba(0,0,0,.6);
+  width:9px;height:9px;border-radius:2px;margin-right:13px;
+  box-shadow:1px 1px 0 rgba(0,0,0,0.4);
 }
-.guideline-card li::before{box-shadow:1px 1px 0 rgba(0,0,0,.5)}
+.guideline-card li::before{box-shadow:none}
 
-/* Skeuomorphic physical toggle for the confirm checkbox */
+/* Important — same glass, with a warm accent edge so it still reads as key */
+.glass-card.liquid-glass.guideline-card.important{
+  border-color:rgba(246,80,134,0.45);
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.42),
+    inset 0 1px 1px rgba(255,255,255,0.16),
+    inset 0 -10px 22px rgba(0,0,0,0.30),
+    0 0 0 1px rgba(246,80,134,0.25),
+    0 0 30px rgba(246,80,134,0.18);
+}
+
+/* Confirm toggle (guidelines page) — liquid glass pill */
 .confirm-box .confirm-check{display:flex;gap:14px;align-items:flex-start;cursor:pointer}
 .confirm-box .confirm-check .check-mark{
   flex:none;width:52px;height:28px;margin-top:2px;border-radius:999px;
-  background:linear-gradient(180deg,#161618,#0a0a0b);
-  border:2px solid #000;
-  box-shadow:inset 2px 2px 5px rgba(0,0,0,.9), inset -1px -1px 0 rgba(255,255,255,.06);
-  position:relative;transition:background .25s ease, box-shadow .25s ease;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.18);
+  position:relative;transition:background .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 .confirm-box .confirm-check .check-mark::after{
-  content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:999px;
-  background:linear-gradient(180deg,#2c2c30,#151517);
-  box-shadow:0 2px 4px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.14);
+  content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;
+  background:rgba(255,255,255,0.22);
+  box-shadow:0 2px 4px rgba(0,0,0,.5);
   transition:transform .25s cubic-bezier(.4,1.4,.6,1), background .25s ease;
 }
 .confirm-box .confirm-check input:checked + .check-mark{
-  background:linear-gradient(180deg,#ff6a3c,#c63a1e);
-  box-shadow:inset 2px 2px 6px rgba(0,0,0,.5), 0 0 12px rgba(240,81,56,.45);
+  background:linear-gradient(180deg,var(--swift),#c63a1e);
+  border-color:transparent;
+  box-shadow:0 0 14px rgba(240,81,56,.45);
 }
 .confirm-box .confirm-check input:checked + .check-mark::after{
   transform:translateX(24px);
-  background:linear-gradient(180deg,#ffd9c9,#ff7a4d);
+  background:rgba(255,255,255,0.92);
 }
 
-/* Brutalist call-to-action button on the guidelines page */
+/* Continue button (guidelines page) — glass */
 .guideline-cta .cta-btn{
   display:inline-block;
-  background:#0a0a0b;color:#fff;
-  border:2px solid #000;
-  border-radius:4px;
-  padding:16px 36px;
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:999px;
+  padding:16px 38px;
   font-weight:800;letter-spacing:.05em;text-transform:uppercase;
-  box-shadow:6px 6px 0 0 #000, inset 1px 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.18);
   transition:transform .12s ease, box-shadow .12s ease, background .2s ease;
 }
 .guideline-cta .cta-btn:hover{
-  transform:translate(-2px,-2px);
-  box-shadow:9px 9px 0 0 #000, inset 1px 1px 0 rgba(255,255,255,.09);
+  background:rgba(255,255,255,0.10);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.22), 0 8px 24px rgba(0,0,0,.35);
 }
-.guideline-cta .cta-btn:active{
-  transform:translate(4px,4px);
-  box-shadow:2px 2px 0 0 #000;
-}
-.guideline-cta .cta-btn.is-disabled{opacity:.4;box-shadow:4px 4px 0 0 #000}
+.guideline-cta .cta-btn.is-disabled{opacity:.4;box-shadow:inset 0 1px 1px rgba(255,255,255,0.18)}
 
 .cta-btn.is-disabled{opacity:.4;pointer-events:none;filter:grayscale(.25)}
 
 .hero-cta-row{display:flex;justify-content:center;margin-top:34px}
-
-@media(max-width:640px){
-  .glass-card.liquid-glass.guideline-card,
-  .glass-card.liquid-glass.confirm-box{
-    box-shadow:
-      4px 4px 0 0 #000,
-      -2px -2px 7px rgba(255,255,255,.03),
-      4px 4px 14px rgba(0,0,0,.7),
-      inset 1px 1px 0 rgba(255,255,255,.08),
-      inset -2px -2px 0 rgba(0,0,0,.9);
-  }
-}
 
 @media(max-width:640px){
   .guidelines-section{padding:120px 16px 80px}
