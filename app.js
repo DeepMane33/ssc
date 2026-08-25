@@ -430,6 +430,47 @@ function initDeviceParallax(){
   var devices=stage.querySelectorAll(".device-float");
   var rafPending=false,lastX=0,lastY=0;
 
+  /* If GSAP isn't available, leave the CSS transforms alone (centering still works). */
+  if(typeof gsap==="undefined")return;
+
+  var isMobile=function(){return window.matchMedia("(max-width:768px)").matches;};
+  var macScale=function(){return isMobile()?0.65:0.8;};
+
+  /* Let GSAP own the transforms so centering + intro + parallax never fight. */
+  gsap.set(".device-iphone",{xPercent:-50,yPercent:-50,rotationY:-6,rotationX:3});
+  gsap.set(".device-macbook",{xPercent:-50,yPercent:-50,rotationY:10,rotationX:-2,scale:macScale()});
+
+  var introDone=false;
+
+  /* Scroll-triggered reveal */
+  if(typeof ScrollTrigger!=="undefined"){
+    gsap.registerPlugin(ScrollTrigger);
+    var tl=gsap.timeline({scrollTrigger:{trigger:stage,start:"top 80%",once:true},onComplete:function(){introDone=true;}});
+    tl.fromTo(".showcase-eyebrow",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"});
+    tl.fromTo(".showcase-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.3");
+    tl.fromTo(".showcase-desc",{opacity:0,y:18},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+    tl.fromTo(".device-iphone",{opacity:0,y:60,rotationY:-15},{opacity:1,y:0,rotationY:-6,duration:0.8,ease:"power3.out"},"-=0.3");
+    tl.fromTo(".device-macbook",{opacity:0,y:50,rotationY:20},{opacity:1,y:0,rotationY:10,duration:0.8,ease:"power3.out"},"-=0.6");
+    tl.fromTo(".device-swift",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.5,ease:"back.out(1.7)"},"-=0.4");
+    tl.fromTo(".device-badge",{opacity:0,y:-20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  } else {
+    introDone=true;
+  }
+
+  function applyParallax(x,y){
+    if(!introDone)return; /* don't fight the reveal animation */
+    devices.forEach(function(dev){
+      var speed=parseFloat(dev.dataset.speed)||1;
+      var rY=x*12*speed, rX=-y*8*speed, tX=x*15*speed, tY=y*12*speed;
+      if(dev.classList.contains("device-iphone")){
+        gsap.to(dev,{rotationY:rY-6,rotationX:rX+3,x:tX,y:tY,duration:0.5,ease:"power2.out",overwrite:"auto"});
+      }else if(dev.classList.contains("device-macbook")){
+        gsap.to(dev,{rotationY:rY+10,rotationX:rX-2,x:tX,y:tY,duration:0.5,ease:"power2.out",overwrite:"auto"});
+      }
+      /* swift + badge keep their CSS float animation */
+    });
+  }
+
   stage.addEventListener("mousemove",function(e){
     var rect=stage.getBoundingClientRect();
     lastX=(e.clientX-rect.left)/rect.width-0.5;
@@ -439,58 +480,16 @@ function initDeviceParallax(){
     requestAnimationFrame(function(){applyParallax(lastX,lastY);rafPending=false;});
   });
 
-  function applyParallax(x,y){
-    devices.forEach(function(dev){
-      var speed=parseFloat(dev.dataset.speed)||1;
-      var rotateY=x*12*speed;
-      var rotateX=-y*8*speed;
-      var translateX=x*15*speed;
-      var translateY=y*12*speed;
-
-      if(dev.classList.contains("device-iphone")){
-        dev.style.transform="translate(-50%,-50%) rotateY("+(rotateY-6)+"deg) rotateX("+(rotateX+3)+"deg) translateX("+translateX+"px) translateY("+translateY+"px)";
-      }else if(dev.classList.contains("device-macbook")){
-        dev.style.transform="translate(-50%,-50%) rotateY("+(rotateY+10)+"deg) rotateX("+(rotateX-2)+"deg) scale(0.8) translateX("+translateX+"px) translateY("+translateY+"px)";
-      }else if(dev.classList.contains("device-swift")){
-        dev.style.animationPlayState="paused";
-        dev.style.transform="translateY("+translateY+"px) rotate("+(rotateY*0.3)+"deg)";
-      }else if(dev.classList.contains("device-badge")){
-        dev.style.animationPlayState="paused";
-        dev.style.transform="translateY("+translateY+"px)";
-      }
-    });
-  }
-
   stage.addEventListener("mouseleave",function(){
-    devices.forEach(function(dev){
-      dev.style.transition="transform .6s cubic-bezier(.22,1,.36,1)";
-      if(dev.classList.contains("device-iphone")){
-        dev.style.transform="translate(-50%,-50%) rotateY(-6deg) rotateX(3deg)";
-      }else if(dev.classList.contains("device-macbook")){
-        dev.style.transform="translate(-50%,-50%) rotateY(10deg) rotateX(-2deg) scale(0.8)";
-      }else if(dev.classList.contains("device-swift")){
-        dev.style.transform="none";
-        dev.style.animationPlayState="running";
-      }else if(dev.classList.contains("device-badge")){
-        dev.style.transform="none";
-        dev.style.animationPlayState="running";
-      }
-      setTimeout(function(){dev.style.transition=""},600);
-    });
+    if(!introDone)return;
+    gsap.to(".device-iphone",{rotationY:-6,rotationX:3,x:0,y:0,duration:0.6,ease:"power2.out",overwrite:"auto"});
+    gsap.to(".device-macbook",{rotationY:10,rotationX:-2,x:0,y:0,duration:0.6,ease:"power2.out",overwrite:"auto"});
   });
 
-  /* Scroll-triggered reveal */
-  if(typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined"){
-    gsap.registerPlugin(ScrollTrigger);
-    var tl=gsap.timeline({scrollTrigger:{trigger:stage,start:"top 80%",once:true}});
-    tl.fromTo(".showcase-eyebrow",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"});
-    tl.fromTo(".showcase-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.3");
-    tl.fromTo(".showcase-desc",{opacity:0,y:18},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-    tl.fromTo(".device-iphone",{opacity:0,y:60,rotateY:-15},{opacity:1,y:0,rotateY:-6,duration:0.8,ease:"power3.out"},"-=0.3");
-    tl.fromTo(".device-macbook",{opacity:0,y:50,rotateY:20},{opacity:1,y:0,rotateY:10,duration:0.8,ease:"power3.out"},"-=0.6");
-    tl.fromTo(".device-swift",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.5,ease:"back.out(1.7)"},"-=0.4");
-    tl.fromTo(".device-badge",{opacity:0,y:-20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-  }
+  /* Keep mac scale correct across breakpoints */
+  window.addEventListener("resize",function(){
+    gsap.set(".device-macbook",{scale:macScale()});
+  });
 }
 
 /* ============================================
@@ -505,13 +504,17 @@ if(showcaseBeginBtn){
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
-  initLenis();
+  /* Lenis smooth-scroll and the mouse-driven parallax are desktop-only.
+     On touch / low-end devices they either misbehave (Lenis) or just burn
+     frames for no benefit, so we fall back to native scroll + no parallax. */
+  var canHover = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(canHover) initLenis();
   initGSAP();
   initTilt();
   initMagneticButtons();
   initTouchRipple();
   initToastContainer();
-  initDeviceParallax();
+  if(canHover) initDeviceParallax();
   updateProgress();
 });
 })();
