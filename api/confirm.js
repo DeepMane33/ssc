@@ -10,13 +10,13 @@ function buildHtml(name) {
     <p style="margin:0 0 22px;color:#F05138;font-weight:700;letter-spacing:.6px;font-size:12px;text-transform:uppercase;">Swift Student Challenge 2027 · Parul University</p>
     <h1 style="margin:0 0 14px;color:#111418;font-size:22px;line-height:1.3;font-weight:700;">Your response has been recorded</h1>
     <p style="margin:0 0 16px;color:#3f4651;font-size:15px;line-height:1.65;">
-      Hi ${first}, thank you for registering for the Swift Student Challenge 2027, Parul University. Your response has been recorded and our team at <strong style="color:#111418;">AATC, Parul University</strong> is now reviewing it. You'll hear back from us soon with the next steps — no action is needed from your side right now.
+      Hi ${first}, thank you for registering for the Swift Student Challenge 2027, Parul University. Your response has been recorded and our team at <strong style="color:#111418;">AATCe, Parul University</strong> is now reviewing it. You'll hear back from us soon with the next steps — no action is needed from your side right now.
     </p>
     <p style="margin:0;color:#3f4651;font-size:15px;line-height:1.65;">
       If you have any questions, just reply to this email or write to us at <a href="mailto:aatce@paruluniversity.ac.in" style="color:#F05138;text-decoration:none;">aatce@paruluniversity.ac.in</a>.
     </p>
     <div style="margin-top:28px;padding-top:18px;border-top:1px solid #eceef1;color:#9aa1ab;font-size:12px;">
-      AATC · Parul University — Swift Student Challenge 2027
+      AATCe · Parul University — Swift Student Challenge 2027
     </div>
   </div>
 </body>
@@ -46,9 +46,9 @@ module.exports = async function handler(req, res) {
       method: "POST",
       headers: { Authorization: "Bearer " + apiKey, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: process.env.RESEND_FROM || "AATC Parul University <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM || "AATCe Parul University <onboarding@resend.dev>",
         to: [email],
-        subject: "Application Recorded — AATC Parul University · Swift Student Challenge 2027",
+        subject: "Application Recorded — AATCe Parul University · Swift Student Challenge 2027",
         html: html
       })
     });

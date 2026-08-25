@@ -125,24 +125,12 @@ function initGSAP(){
   heroTl.fromTo(".hero-eyebrow",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   heroTl.fromTo(".hero-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.2");
   heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-  heroTl.fromTo(".cta-btn",{opacity:0,y:15,scale:0.9},{opacity:1,y:0,scale:1,duration:0.5,ease:"back.out(1.4)"},"-=0.2");
-}
 
-/* ============================================
-   SPECULAR HIGHLIGHT TRACKING
-   ============================================ */
-function initSpecularTracking(){
-  document.addEventListener("mousemove",function(e){
-    document.querySelectorAll(".liquid-glass").forEach(function(card){
-      var rect=card.getBoundingClientRect();
-      var x=e.clientX-rect.left,y=e.clientY-rect.top;
-      if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
-        card.style.background="radial-gradient(circle 300px at "+x+"px "+y+"px,rgba(255,255,255,0.08),transparent 65%),linear-gradient(155deg,rgba(20,24,34,0.42) 0%,rgba(15,18,27,0.32) 50%,rgba(11,13,20,0.24) 100%)";
-      }else{
-        card.style.background="";
-      }
-    });
-  });
+  /* Guideline cards — scroll-triggered stagger reveal */
+  if(typeof ScrollTrigger!=="undefined"){
+    gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+    gsap.fromTo(".guidelines-head",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out",scrollTrigger:{trigger:"#guidelinesSection",start:"top 80%",once:true}});
+  }
 }
 
 /* ============================================
@@ -312,39 +300,21 @@ function goToPage(num){
   if(num<1||num>TOTAL_PAGES)return;
   clearValidation();
 
-  /* Animate out current page */
-  var currentCard=pages[currentPage-1].querySelector(".glass-card");
-  if(currentCard&&typeof gsap!=="undefined"){
-    gsap.to(currentCard,{opacity:0,y:-15,duration:0.2,ease:"power2.in"});
+  /* CSS .active handles a lightweight, GPU-cheap entrance — no per-field
+     JS animation, so navigation stays smooth on low-end mobile devices. */
+  pages.forEach(function(p){p.classList.remove("active")});
+  pages[num-1].classList.add("active");
+  currentPage=num;
+  updateProgress();
+  prevBtn.disabled=currentPage===1;
+  if(currentPage===TOTAL_PAGES){
+    nextBtn.classList.add("hidden");
+    submitBtn.classList.remove("hidden");
+  }else{
+    nextBtn.classList.remove("hidden");
+    submitBtn.classList.add("hidden");
   }
-
-  setTimeout(function(){
-    pages.forEach(function(p){p.classList.remove("active")});
-    pages[num-1].classList.add("active");
-    currentPage=num;
-    updateProgress();
-    prevBtn.disabled=currentPage===1;
-    if(currentPage===TOTAL_PAGES){
-      nextBtn.classList.add("hidden");
-      submitBtn.classList.remove("hidden");
-    }else{
-      nextBtn.classList.remove("hidden");
-      submitBtn.classList.add("hidden");
-    }
-
-    /* Stagger animate new page elements */
-    var card=pages[num-1].querySelector(".glass-card");
-    if(card&&typeof gsap!=="undefined"){
-      var tl=gsap.timeline();
-      tl.fromTo(card,{opacity:0,y:24,scale:0.98},{opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"});
-      /* Stagger field groups */
-      var fields=card.querySelectorAll(".field-group");
-      if(fields.length>0){
-        tl.fromTo(fields,{opacity:0,y:12},{opacity:1,y:0,duration:0.3,ease:"power2.out",stagger:0.04},"-=0.2");
-      }
-    }
-    window.scrollTo({top:0,behavior:"smooth"});
-  },200);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* ============================================
@@ -353,7 +323,16 @@ function goToPage(num){
 function showForm(){
   if(heroSection)heroSection.classList.add("hidden");
   if(showcaseSection)showcaseSection.classList.add("hidden");
+  var guidelines=document.getElementById("guidelinesSection");
+  if(guidelines)guidelines.classList.add("hidden");
   formSection.classList.remove("hidden");
+  /* Pause the heavy global WebGL plasma shader + orb canvases while the
+     form is open — backdrop-filter glass over an animated canvas is the
+     main source of mobile jank. They resume automatically on reload. */
+  window.SSC_FX_PAUSED=true;
+  var bg=document.getElementById("shaderBg");
+  if(bg)bg.style.display="none";
+  document.querySelectorAll(".swift-orb-decor").forEach(function(d){d.style.display="none";});
   goToPage(1);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -454,12 +433,18 @@ function initDeviceParallax(){
   var stage=document.getElementById("devicesStage");
   if(!stage)return;
   var devices=stage.querySelectorAll(".device-float");
+  var rafPending=false,lastX=0,lastY=0;
 
   stage.addEventListener("mousemove",function(e){
     var rect=stage.getBoundingClientRect();
-    var x=(e.clientX-rect.left)/rect.width-0.5;
-    var y=(e.clientY-rect.top)/rect.height-0.5;
+    lastX=(e.clientX-rect.left)/rect.width-0.5;
+    lastY=(e.clientY-rect.top)/rect.height-0.5;
+    if(rafPending)return;
+    rafPending=true;
+    requestAnimationFrame(function(){applyParallax(lastX,lastY);rafPending=false;});
+  });
 
+  function applyParallax(x,y){
     devices.forEach(function(dev){
       var speed=parseFloat(dev.dataset.speed)||1;
       var rotateY=x*12*speed;
@@ -479,7 +464,7 @@ function initDeviceParallax(){
         dev.style.transform="translateY("+translateY+"px)";
       }
     });
-  });
+  }
 
   stage.addEventListener("mouseleave",function(){
     devices.forEach(function(dev){
@@ -527,7 +512,6 @@ if(showcaseBeginBtn){
 document.addEventListener("DOMContentLoaded",function(){
   initLenis();
   initGSAP();
-  initSpecularTracking();
   initTilt();
   initMagneticButtons();
   initTouchRipple();
