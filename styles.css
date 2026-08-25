@@ -344,9 +344,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 
 .hero-title{
-  font-family:'Instrument Serif', serif;font-size:clamp(40px,7vw,64px);
-  font-weight:400;letter-spacing:.005em;line-height:1.05;
-  margin-bottom:16px;
+  margin-bottom:16px;line-height:1.05;text-align:center;
+}
+.hero-title-inner{
+  display:inline-block;
+  font-family:'Instrument Serif', serif;
+  font-size:clamp(40px,7vw,64px);
+  font-weight:400;letter-spacing:.005em;
+  transform:scaleX(1.14);transform-origin:center;
   background:linear-gradient(135deg,#fff3d8 0%,#f2bf73 32%,#e8741f 62%,#fff3d8 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;color:transparent;
