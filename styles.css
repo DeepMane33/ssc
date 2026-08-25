@@ -50,20 +50,21 @@ body{
 img{max-width:100%;display:block}
 
 /* ---- Boot Animation ---- */
-.boot{
-  position:fixed; inset:0; z-index:9999;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  background:#0a0a0a;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(240,81,35,.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(240,81,35,.06) 0%, transparent 50%),
-    linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.02) 50%, transparent 52%);
-  background-size: 200% 200%, 200% 200%, 20px 20px;
-  animation: bgShift 6s ease-in-out infinite;
-}
+ .boot{
+   position:fixed; inset:0; z-index:9999;
+   display:flex; flex-direction:column; align-items:center; justify-content:center;
+   background:#0a0a0a;
+   background-image:
+     radial-gradient(circle at 20% 30%, rgba(240,81,35,.08) 0%, transparent 50%),
+     radial-gradient(circle at 80% 70%, rgba(240,81,35,.06) 0%, transparent 50%),
+     linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.02) 50%, transparent 52%);
+   background-size: 200% 200%, 200% 200%, 20px 20px;
+ }
  .boot-logo{
    width:120px; height:120px;
-   animation: bounceRoll 1.8s cubic-bezier(.22,1,.36,1) forwards;
+   will-change:transform, opacity;
+   backface-visibility:hidden;
+   animation: bounceRoll 1.8s cubic-bezier(.22,1,.36,1) forwards, logoGlow 2.6s ease-in-out 1.8s infinite;
  }
  .boot-text{
    margin-top:1rem;
@@ -89,11 +90,15 @@ img{max-width:100%;display:block}
   transition:opacity 0.8s ease;
 }
 @keyframes bounceRoll{
-  0%{transform:translateY(-45vh) rotate(-200deg); opacity:0;}
+  0%{transform:translate3d(0,-45vh,0) rotate(-200deg); opacity:0;}
   25%{opacity:1;}
-  55%{transform:translateY(4vh) rotate(-90deg);}
-  75%{transform:translateY(-2vh) rotate(-40deg);}
-  100%{transform:translateY(0) rotate(0deg); opacity:1;}
+  55%{transform:translate3d(0,4vh,0) rotate(-90deg);}
+  75%{transform:translate3d(0,-2vh,0) rotate(-40deg);}
+  100%{transform:translate3d(0,0,0) rotate(0deg); opacity:1;}
+}
+@keyframes logoGlow{
+  0%,100%{filter:drop-shadow(0 0 18px rgba(240,81,35,.35))}
+  50%{filter:drop-shadow(0 0 36px rgba(240,81,35,.65))}
 }
 @keyframes fadeIn{
   to{opacity:1;}
@@ -245,7 +250,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
-  padding:16px 32px;
+  width:min(820px,92vw);
+  padding:14px 32px;
   background:linear-gradient(155deg, rgba(20,24,34,0.42) 0%, rgba(15,18,27,0.32) 50%, rgba(11,13,20,0.24) 100%);
   backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
   -webkit-backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
@@ -258,14 +264,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     inset 1px 0 1px rgba(255,255,255,0.12),
     inset -1px 0 1px rgba(255,255,255,0.12);
 }
-.header-inner{display:flex;align-items:center;justify-content:center}
-.brand{display:flex;align-items:center;gap:14px}
+.header-inner{display:flex;align-items:center;justify-content:space-between;width:100%}
+.brand{display:flex;align-items:center;gap:18px}
 .brand-logos{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .swift-logo{width:34px;height:34px;flex-shrink:0;object-fit:contain}
 .brand-text{display:flex;flex-direction:column;gap:2px}
 .brand-name{font-family:var(--font-body);font-size:16px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap}
 .brand-sub{font-size:10.5px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:.03em;white-space:nowrap}
 .parul-wordmark{height:20px;width:auto;display:block}
+.parul-logo{height:30px;width:auto;display:block;flex-shrink:0}
+.aatce-logo{height:24px;width:auto;display:block;opacity:.9}
+.vthub-logo{height:30px;width:auto;display:block;flex-shrink:0}
 
 .nav-swift-icon{width:22px;height:27px;flex-shrink:0;opacity:.35;transition:opacity .3s ease}
 .nav-swift-icon:hover{opacity:.7}
@@ -282,7 +291,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .hero-eyebrow{
   font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(255,255,255,0.55);margin-bottom:20px;
+  color:rgba(242,191,115,0.85);margin-bottom:20px;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .hero-eyebrow .tick{
@@ -294,7 +303,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Liquid-Metal Apple — inline SVG clipPath + animated gradient (no CSS mask) */
 .hero-apple{
   display:block;
-  width:140px;height:140px;
+  width:180px;height:180px;
   margin:0 auto 2rem;
   overflow:visible;
   filter:drop-shadow(0 12px 26px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(240,120,40,.32)) drop-shadow(0 2px 3px rgba(255,220,180,.25));
@@ -303,10 +312,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero-title{
   font-family:var(--font-display);font-size:clamp(32px,6vw,52px);
   font-weight:900;letter-spacing:-.03em;line-height:1.1;
-  color:#fff;margin-bottom:16px;
+  margin-bottom:16px;
+  background:linear-gradient(135deg,#fff3d8 0%,#f2bf73 32%,#e8741f 62%,#fff3d8 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  text-shadow:0 2px 30px rgba(232,116,31,0.25);
 }
-.hero-title .accent{color:var(--swift)}
-.hero-desc{font-size:15px;line-height:1.6;color:rgba(255,255,255,0.6);margin-bottom:40px;max-width:420px;margin-left:auto;margin-right:auto}
+.hero-title .accent{color:var(--swift);-webkit-text-fill-color:initial}
+.hero-desc{font-size:15px;line-height:1.6;color:rgba(255,224,190,0.72);margin-bottom:40px;max-width:420px;margin-left:auto;margin-right:auto}
 
 /* ============================================
    MAGNETIC BUTTON
@@ -361,8 +374,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---- Form Pages ---- */
 .form-page{display:none}
-.form-page.active{display:block;animation:pageIn .5s var(--ease)}
-@keyframes pageIn{from{opacity:0;transform:translateY(24px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.form-page.active{display:block;animation:pageIn .35s var(--ease)}
+/* Opacity-only entrance: no transform/scale, so the backdrop-filter glass
+   doesn't get re-sampled every frame while animating (keeps mobile smooth). */
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+
+/* Form panels: static liquid-glass. Freeze the drifting sheen so it isn't
+   repainting continuously behind the backdrop blur on every device. */
+.form-page .liquid-glass::after{animation:none!important}
 
 /* ---- Glass Card ---- */
 .glass-card{padding:44px 40px}
@@ -928,6 +947,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .brand-name{font-size:13px}
   .brand-sub{font-size:8.5px}
   .swift-logo{width:28px;height:34px}
+  .parul-logo{height:24px}
+  .aatce-logo{height:18px}
+  .vthub-logo{height:24px}
+  .brand{gap:10px}
 
   /* Hero */
   .hero-section{min-height:calc(100vh - 60px);padding:24px 16px}
