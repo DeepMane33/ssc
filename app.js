@@ -134,24 +134,6 @@ function initGSAP(){
 }
 
 /* ============================================
-   SPECULAR HIGHLIGHT TRACKING
-   ============================================ */
-function initSpecularTracking(){
-  document.addEventListener("mousemove",function(e){
-    document.querySelectorAll(".liquid-glass").forEach(function(card){
-      if(card.classList.contains("guideline-card")||card.classList.contains("confirm-box"))return;
-      var rect=card.getBoundingClientRect();
-      var x=e.clientX-rect.left,y=e.clientY-rect.top;
-      if(x>=-80&&x<=rect.width+80&&y>=-80&&y<=rect.height+80){
-        card.style.background="radial-gradient(circle 300px at "+x+"px "+y+"px,rgba(255,255,255,0.08),transparent 65%),linear-gradient(155deg,rgba(20,24,34,0.42) 0%,rgba(15,18,27,0.32) 50%,rgba(11,13,20,0.24) 100%)";
-      }else{
-        card.style.background="";
-      }
-    });
-  });
-}
-
-/* ============================================
    TILT EFFECT
    ============================================ */
 function initTilt(){
@@ -318,39 +300,21 @@ function goToPage(num){
   if(num<1||num>TOTAL_PAGES)return;
   clearValidation();
 
-  /* Animate out current page */
-  var currentCard=pages[currentPage-1].querySelector(".glass-card");
-  if(currentCard&&typeof gsap!=="undefined"){
-    gsap.to(currentCard,{opacity:0,y:-15,duration:0.2,ease:"power2.in"});
+  /* CSS .active handles a lightweight, GPU-cheap entrance — no per-field
+     JS animation, so navigation stays smooth on low-end mobile devices. */
+  pages.forEach(function(p){p.classList.remove("active")});
+  pages[num-1].classList.add("active");
+  currentPage=num;
+  updateProgress();
+  prevBtn.disabled=currentPage===1;
+  if(currentPage===TOTAL_PAGES){
+    nextBtn.classList.add("hidden");
+    submitBtn.classList.remove("hidden");
+  }else{
+    nextBtn.classList.remove("hidden");
+    submitBtn.classList.add("hidden");
   }
-
-  setTimeout(function(){
-    pages.forEach(function(p){p.classList.remove("active")});
-    pages[num-1].classList.add("active");
-    currentPage=num;
-    updateProgress();
-    prevBtn.disabled=currentPage===1;
-    if(currentPage===TOTAL_PAGES){
-      nextBtn.classList.add("hidden");
-      submitBtn.classList.remove("hidden");
-    }else{
-      nextBtn.classList.remove("hidden");
-      submitBtn.classList.add("hidden");
-    }
-
-    /* Stagger animate new page elements */
-    var card=pages[num-1].querySelector(".glass-card");
-    if(card&&typeof gsap!=="undefined"){
-      var tl=gsap.timeline();
-      tl.fromTo(card,{opacity:0,y:24,scale:0.98},{opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"});
-      /* Stagger field groups */
-      var fields=card.querySelectorAll(".field-group");
-      if(fields.length>0){
-        tl.fromTo(fields,{opacity:0,y:12},{opacity:1,y:0,duration:0.3,ease:"power2.out",stagger:0.04},"-=0.2");
-      }
-    }
-    window.scrollTo({top:0,behavior:"smooth"});
-  },200);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* ============================================
@@ -362,6 +326,13 @@ function showForm(){
   var guidelines=document.getElementById("guidelinesSection");
   if(guidelines)guidelines.classList.add("hidden");
   formSection.classList.remove("hidden");
+  /* Pause the heavy global WebGL plasma shader + orb canvases while the
+     form is open — backdrop-filter glass over an animated canvas is the
+     main source of mobile jank. They resume automatically on reload. */
+  window.SSC_FX_PAUSED=true;
+  var bg=document.getElementById("shaderBg");
+  if(bg)bg.style.display="none";
+  document.querySelectorAll(".swift-orb-decor").forEach(function(d){d.style.display="none";});
   goToPage(1);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -541,7 +512,6 @@ if(showcaseBeginBtn){
 document.addEventListener("DOMContentLoaded",function(){
   initLenis();
   initGSAP();
-  initSpecularTracking();
   initTilt();
   initMagneticButtons();
   initTouchRipple();

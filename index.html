@@ -13,8 +13,8 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Swift Student Challenge 2027 | Parul University">
   <meta name="twitter:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
-  <link rel="icon" href="assets/swift-nav.png">
-  <link rel="apple-touch-icon" href="assets/swift-nav.png">
+  <link rel="icon" href="assets/swift-logo.svg">
+  <link rel="apple-touch-icon" href="assets/swift-logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
 <body>
 
   <div id="boot" class="boot" aria-hidden="true">
-    <img src="assets/swift-nav.png" alt="Swift" class="boot-logo">
+    <img src="assets/swift-logo.svg" alt="Swift" class="boot-logo">
     <p class="boot-text">Swift Student Challenge</p>
     <p class="boot-sub">AATCe Parul University</p>
   </div>
@@ -56,9 +56,9 @@
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
-        <img src="assets/swift-nav.png" alt="Swift" class="swift-logo">
-        <div class="parul-logo-badge">
-          <img src="assets/parul-logo.png" alt="Parul University" class="parul-logo-img">
+        <div class="brand-logos">
+          <img src="assets/swift-logo.svg" alt="Swift" class="swift-logo">
+          <img src="assets/parul-logo.svg" alt="Parul University" class="parul-wordmark">
         </div>
         <div class="brand-text">
           <span class="brand-name">Swift Student Challenge</span>
@@ -70,35 +70,56 @@
 
   <section id="heroSection" class="hero-section">
     <div class="hero-inner" data-tilt>
-      <svg class="hero-apple" viewBox="0 0 814 1000" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <svg class="hero-apple" viewBox="0 0 128 128" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="appleGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#140201"/>
-            <stop offset="22%" stop-color="#5a1605"/>
-            <stop offset="40%" stop-color="#a6300c"/>
-            <stop offset="54%" stop-color="#e8741f"/>
-            <stop offset="68%" stop-color="#f2bf73"/>
-            <stop offset="76%" stop-color="#fff3d8"/>
-            <stop offset="84%" stop-color="#f2bf73"/>
-            <stop offset="95%" stop-color="#a6300c"/>
-            <stop offset="100%" stop-color="#140201"/>
-            <animateTransform attributeName="gradientTransform" type="translate" values="-0.28 -0.28; 0.28 0.28; -0.28 -0.28" dur="7s" repeatCount="indefinite"/>
+          <!-- Polished chrome base — ember/gold banding for a liquid-metal read -->
+          <linearGradient id="swiftGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2a0603"/>
+            <stop offset="12%" stop-color="#7a1c06"/>
+            <stop offset="26%" stop-color="#e8741f"/>
+            <stop offset="37%" stop-color="#fff3d8"/>
+            <stop offset="47%" stop-color="#f2bf73"/>
+            <stop offset="60%" stop-color="#8f2809"/>
+            <stop offset="73%" stop-color="#e8741f"/>
+            <stop offset="85%" stop-color="#fff3d8"/>
+            <stop offset="100%" stop-color="#2a0603"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-0.3 -0.3; 0.3 0.3; -0.3 -0.3" dur="8s" repeatCount="indefinite"/>
           </linearGradient>
-          <radialGradient id="appleGlint" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
+          <!-- 3D curvature: light from upper-left, dark falloff at edges -->
+          <radialGradient id="swiftDepth" cx="0.42" cy="0.36" r="0.78">
+            <stop offset="50%" stop-color="rgba(0,0,0,0)"/>
+            <stop offset="100%" stop-color="rgba(18,1,0,0.6)"/>
+          </radialGradient>
+          <!-- Sweeping specular reflection (liquid-metal highlight) -->
+          <linearGradient id="swiftSweep" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="44%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="50%" stop-color="rgba(255,255,255,0.9)"/>
+            <stop offset="56%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-0.7 -0.7; 0.7 0.7; -0.7 -0.7" dur="8s" repeatCount="indefinite"/>
+          </linearGradient>
+          <!-- Soft drifting glint -->
+          <radialGradient id="swiftGlint" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
             <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
           </radialGradient>
-          <clipPath id="appleClip">
-            <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.3-81-105.4-207.3-105.4-328 0-192.8 125.3-294.9 248.5-294.9 65.2 0 119.9 42.8 161 42.8 39.2 0 100.4-45.3 175.3-45.3 28.3 0 130 2.6 197.2 99.4zM554.1 159.4c31.1-36.9 53.4-88.1 53.4-139.3 0-7.1-.6-14.3-1.9-20.1-50.9 1.9-110.7 33.9-147.1 76.5-28.3 31.8-55.9 83.1-55.9 135 0 7.8.6 15.6 1.3 18.2 2.6.6 6.5 1.3 10.4 1.3 45.3 0 102.8-30.5 139.8-71.6z"/>
+          <clipPath id="swiftClip">
+            <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z"/>
           </clipPath>
         </defs>
-        <g clip-path="url(#appleClip)">
-          <rect x="0" y="0" width="814" height="1000" fill="url(#appleGrad)"/>
-          <rect x="-160" y="-200" width="814" height="1000" fill="url(#appleGlint)">
-            <animate attributeName="x" values="-160;200;-160" dur="7s" repeatCount="indefinite"/>
-            <animate attributeName="y" values="-200;220;-200" dur="7s" repeatCount="indefinite"/>
+        <g clip-path="url(#swiftClip)">
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftGrad)"/>
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftDepth)"/>
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftSweep)"/>
+          <rect x="-30" y="-40" width="128" height="128" fill="url(#swiftGlint)">
+            <animate attributeName="x" values="-30;40;-30" dur="8s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="-40;44;-40" dur="8s" repeatCount="indefinite"/>
           </rect>
         </g>
+        <!-- Beveled rim: dark outer edge + warm inner highlight for 3D pop -->
+        <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="3"/>
+        <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z" fill="none" stroke="rgba(255,225,180,0.4)" stroke-width="1"/>
       </svg>
       <p class="hero-eyebrow">Apple Authorized Training Center · Parul University</p>
       <h1 class="hero-title">Swift Student Challenge 2027</h1>
@@ -256,7 +277,7 @@
 
         <!-- Swift Logo Float -->
         <div class="device-float device-swift" data-speed="1.2">
-          <img src="assets/swift-icon.svg" alt="Swift" class="swift-float-icon" loading="lazy">
+          <img src="assets/swift-logo.svg" alt="Swift" class="swift-float-icon" loading="lazy">
         </div>
 
         <!-- App Store Badge Float -->
@@ -1017,7 +1038,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="assets/mew.jpg" alt="AATCe Parul University" class="footer-img">
+      <img src="assets/swift-logo.svg" alt="Swift" class="footer-img">
       <p class="footer-title">Swift Student Challenge 2027</p>
       <p class="footer-sub">AATCe Parul University</p>
     </div>
@@ -1072,9 +1093,10 @@
       const phase = Math.random() * Math.PI * 2;
       const pts = pathDots("swift", SWIFT_PATH, S > 80 ? 22 : 16);
 
-      function frame() {
-        const t = performance.now() / 1000;
-        ctx.clearRect(0, 0, cW, cH);
+        function frame() {
+          if (window.SSC_FX_PAUSED) { requestAnimationFrame(frame); return; }
+          const t = performance.now() / 1000;
+          ctx.clearRect(0, 0, cW, cH);
 
         // soft glow
         const glow = ctx.createRadialGradient(cW/2, cH/2, 0, cW/2, cH/2, cW/2);
@@ -1254,6 +1276,7 @@ void main(){
 
     const start = performance.now();
     function render(now) {
+      if (window.SSC_FX_PAUSED) { requestAnimationFrame(render); return; }
       const t = ((now - start) / 1000) * U.timeScale;
       gl.uniform4f(uni.scene, W, H, t, U.colorCount);
       gl.uniform4f(uni.space, U.offsetX, U.offsetY, 0, 0);
@@ -1272,10 +1295,10 @@ void main(){
       if (!boot || !logo) return;
       logo.addEventListener('animationend', () => {
         // text visible ~1.2s in; hold a moment, then fade the boot screen
-        setTimeout(() => {
-          boot.classList.add('hidden');
-          setTimeout(() => boot.remove(), 900);
-        }, 1800);
+          setTimeout(() => {
+            boot.classList.add('hidden');
+            setTimeout(() => boot.remove(), 900);
+          }, 1000);
       });
     })();
   </script>
