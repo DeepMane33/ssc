@@ -1290,21 +1290,12 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 .guideline-card li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:var(--swift);transform:rotate(45deg)}
 .guideline-card.important li::before{background:var(--hot)}
 
-/* guidelines panel — emphasize key words only, no panel glow */
+/* guidelines panel — emphasize specific key words inline, no panel glow */
 .guideline-card.looking-for h2{color:#fff}
 .guideline-card.looking-for h2::before{background:var(--hot)}
-.guideline-card.looking-for .key-line{
+.guideline-card.looking-for strong{
   font-weight:700;
   color:#fff;
-}
-.guideline-card.looking-for .key-line::before{
-  content:"";
-  display:inline-block;
-  width:7px;height:7px;border-radius:2px;
-  background:var(--hot);
-  transform:rotate(45deg);
-  margin-right:10px;
-  vertical-align:middle;
 }
 
 .confirm-wrap{display:flex;justify-content:center;margin-top:40px}
