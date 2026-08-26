@@ -1043,6 +1043,11 @@
   (() => {
     window.SSC_FX_PAUSED = true; // pause heavy WebGL FX until the boot overlay finishes (~4s of saved rendering)
     const TAU = Math.PI * 2;
+    const _mq = (q) => window.matchMedia(q).matches;
+    const SSC_REDUCED = _mq('(prefers-reduced-motion: reduce)');
+    const SSC_MOBILE = _mq('(max-width: 768px)');
+    const SSC_LOW = SSC_REDUCED || SSC_MOBILE || ((navigator.deviceMemory && navigator.deviceMemory <= 4) && (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+    let _orbLast = 0;
     const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
     const maskCache = new Map();
     function pathDots(key, d, N) {
@@ -1082,10 +1087,19 @@
       const R = S / 2 * .88;
       const rs = Math.pow(S / 300, .6);
       const phase = Math.random() * Math.PI * 2;
-      const pts = pathDots("swift", SWIFT_PATH, S > 80 ? 22 : 16);
+      const pts = pathDots("swift", SWIFT_PATH, SSC_LOW ? (S > 80 ? 14 : 10) : (S > 80 ? 22 : 16));
 
+        let _drawn = false;
         function frame() {
           if (window.SSC_FX_PAUSED) { requestAnimationFrame(frame); return; }
+          if (SSC_REDUCED) {
+            if (_drawn) { return; }
+            _drawn = true;
+          } else {
+            const _now = performance.now();
+            if (SSC_LOW && _now - _orbLast < 33) { requestAnimationFrame(frame); return; }
+            _orbLast = _now;
+          }
           const t = performance.now() / 1000;
           ctx.clearRect(0, 0, cW, cH);
 
@@ -1149,12 +1163,15 @@
     const gl = canvas.getContext("webgl", { antialias: false });
     if (!gl) return;
 
+    const _mq = (q) => window.matchMedia(q).matches;
+    const SSC_REDUCED = _mq('(prefers-reduced-motion: reduce)');
+    const SSC_MOBILE = _mq('(max-width: 768px)');
+    const SSC_LOW = SSC_REDUCED || SSC_MOBILE || ((navigator.deviceMemory && navigator.deviceMemory <= 4) && (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+
     const VERT = "attribute vec2 a_position;void main(){gl_Position=vec4(a_position,0.0,1.0);}";
-    const FRAG = `#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
+    const FRAG = (SSC_LOW
+      ? "precision mediump float;"
+      : "#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif") + `
 uniform vec3 u_colors[8];
 uniform vec4 u_scene;
 uniform vec4 u_shape;
@@ -1257,9 +1274,14 @@ void main(){
 
     let W, H;
     const isMobileFX = window.matchMedia('(max-width:768px)').matches;
+    if (isMobileFX) {
+      U.blur = 0.0;
+      gl.uniform4f(uni.finish, U.hue, U.vignette, U.blur, U.grain);
+    }
     const resize = () => {
       let dpr = Math.min(window.devicePixelRatio || 1, isMobileFX ? 1.5 : 2);
       if (isMobileFX) dpr *= 0.75; // lower internal resolution on phones (~44% fewer fragments, imperceptible on a 6" screen)
+      if (SSC_LOW) dpr *= 0.8; // extra reduction for low-power devices
       W = canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr));
       H = canvas.height = Math.max(1, Math.round(canvas.clientHeight * dpr));
       gl.viewport(0, 0, W, H);
@@ -1268,8 +1290,25 @@ void main(){
     window.addEventListener("resize", resize);
 
     const start = performance.now();
+    let _lastFrame = 0;
+    const _targetDt = SSC_LOW ? (1000 / 30) : 0;
     function render(now) {
       if (window.SSC_FX_PAUSED) { requestAnimationFrame(render); return; }
+      const formEl = document.getElementById("formSection");
+      if (formEl && !formEl.classList.contains("hidden")) { requestAnimationFrame(render); return; }
+      if (SSC_REDUCED) {
+        if (!render._drawn) {
+          render._drawn = true;
+          const t = ((now - start) / 1000) * U.timeScale;
+          gl.uniform4f(uni.scene, W, H, t, U.colorCount);
+          gl.uniform4f(uni.space, U.offsetX, U.offsetY, 0, 0);
+          gl.uniform4f(uni.cursor, 0, U.cursorEffect, U.cursorStrength, U.cursorRadius);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+        return;
+      }
+      if (_targetDt && now - _lastFrame < _targetDt) { requestAnimationFrame(render); return; }
+      _lastFrame = now;
       const t = ((now - start) / 1000) * U.timeScale;
       gl.uniform4f(uni.scene, W, H, t, U.colorCount);
       gl.uniform4f(uni.space, U.offsetX, U.offsetY, 0, 0);
