@@ -13,8 +13,8 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Swift Student Challenge 2027 | Parul University">
   <meta name="twitter:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
-  <link rel="icon" href="assets/swift-nav.png">
-  <link rel="apple-touch-icon" href="assets/swift-nav.png">
+  <link rel="icon" href="assets/swift-logo.svg">
+  <link rel="apple-touch-icon" href="assets/swift-logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,9 +23,11 @@
 <body>
 
   <div id="boot" class="boot" aria-hidden="true">
-    <img src="assets/swift-nav.png" alt="Swift" class="boot-logo">
-    <p class="boot-text">Swift Student Challenge</p>
-    <p class="boot-sub">AATCe Parul University</p>
+    <div class="boot-logo-wrap">
+      <img src="assets/swift-logo.svg" alt="Swift" class="boot-logo">
+    </div>
+    <p class="boot-text"><span>Swift</span> <span>Student</span> <span>Challenge</span></p>
+    <p class="boot-sub">AATCe · Parul University</p>
   </div>
 
   <div class="grain"></div>
@@ -55,25 +57,71 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <div class="brand">
-        <img src="assets/swift-nav.png" alt="Swift" class="swift-logo">
-        <div class="parul-logo-badge">
-          <img src="assets/parul-logo.png" alt="Parul University" class="parul-logo-img">
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">Swift Student Challenge</span>
-          <span class="brand-sub">Apple Authorized Training Center · Parul University</span>
-        </div>
-      </div>
+      <img src="assets/parul-logo.svg" alt="Parul University" class="parul-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="assets/swift-logo.svg" alt="Swift" class="swift-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="https://appledge.vercel.app/images/aatce_logo.svg" alt="AATCe" class="aatce-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="assets/vthub_logo.svg" alt="VT Hub" class="vthub-logo">
     </div>
   </header>
 
   <section id="heroSection" class="hero-section">
     <div class="hero-inner" data-tilt>
-<canvas id="swiftLiquidLogo" class="hero-icon swift-liquid-wrap" role="img" aria-label="Swift"></canvas>
-
+      <svg class="hero-apple" viewBox="0 0 128 128" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Polished chrome base — ember/gold banding for a liquid-metal read -->
+          <linearGradient id="swiftGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2a0603"/>
+            <stop offset="12%" stop-color="#7a1c06"/>
+            <stop offset="26%" stop-color="#e8741f"/>
+            <stop offset="37%" stop-color="#fff3d8"/>
+            <stop offset="47%" stop-color="#f2bf73"/>
+            <stop offset="60%" stop-color="#8f2809"/>
+            <stop offset="73%" stop-color="#e8741f"/>
+            <stop offset="85%" stop-color="#fff3d8"/>
+            <stop offset="100%" stop-color="#2a0603"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-0.3 -0.3; 0.3 0.3; -0.3 -0.3" dur="8s" repeatCount="indefinite"/>
+          </linearGradient>
+          <!-- 3D curvature: light from upper-left, dark falloff at edges -->
+          <radialGradient id="swiftDepth" cx="0.42" cy="0.36" r="0.78">
+            <stop offset="50%" stop-color="rgba(0,0,0,0)"/>
+            <stop offset="100%" stop-color="rgba(18,1,0,0.6)"/>
+          </radialGradient>
+          <!-- Sweeping specular reflection (liquid-metal highlight) -->
+          <linearGradient id="swiftSweep" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="44%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="50%" stop-color="rgba(255,255,255,0.9)"/>
+            <stop offset="56%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-0.7 -0.7; 0.7 0.7; -0.7 -0.7" dur="8s" repeatCount="indefinite"/>
+          </linearGradient>
+          <!-- Soft drifting glint -->
+          <radialGradient id="swiftGlint" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+          <clipPath id="swiftClip">
+            <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z"/>
+          </clipPath>
+        </defs>
+        <g clip-path="url(#swiftClip)">
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftGrad)"/>
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftDepth)"/>
+          <rect x="0" y="0" width="128" height="128" fill="url(#swiftSweep)"/>
+          <rect x="-30" y="-40" width="128" height="128" fill="url(#swiftGlint)">
+            <animate attributeName="x" values="-30;40;-30" dur="8s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="-40;44;-40" dur="8s" repeatCount="indefinite"/>
+          </rect>
+        </g>
+        <!-- Beveled rim: dark outer edge + warm inner highlight for 3D pop -->
+        <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="3"/>
+        <path d="M85 96.5c-11.11 6.13-26.38 6.76-41.75.47A64.53 64.53 0 0113.84 73a50 50 0 0010.85 6.32c15.87 7.1 31.73 6.61 42.9 0-15.9-11.66-29.4-26.82-39.46-39.2a43.47 43.47 0 01-5.29-6.82c12.16 10.61 31.5 24 38.38 27.79a271.77 271.77 0 01-27-32.34 266.8 266.8 0 0044.47 34.87c.71.38 1.26.7 1.7 1a32.7 32.7 0 001.21-3.51c3.71-12.89-.53-27.54-9.79-39.67C93.25 33.81 106 57.05 100.66 76.51c-.14.53-.29 1-.45 1.55l.19.22c10.59 12.63 7.68 26 6.35 23.5C101 91 90.37 94.33 85 96.5z" fill="none" stroke="rgba(255,225,180,0.4)" stroke-width="1"/>
+      </svg>
       <p class="hero-eyebrow">Apple Authorized Training Center · Parul University</p>
-      <h1 class="hero-title">Swift Student Challenge 2027</h1>
+      <h1 class="hero-title"><span class="hero-title-inner">Swift Student Challenge 2027</span></h1>
       <p class="hero-desc">Build something extraordinary with Swift. Apply now and represent Parul University at the global stage.</p>
     </div>
   </section>
@@ -156,17 +204,13 @@
         <p>If you already know some Swift, have explored Apple's ecosystem, and have an idea you would genuinely love to build — you're exactly the kind of student we're looking for.</p>
       </div>
 
-    </div>
+      <div class="guideline-cta">
+        <button id="guidelineApplyBtn" class="nav-btn next-btn liquid-glass">Apply Now</button>
+      </div>
 
-    <div class="terms-agree">
-      <label class="custom-checkbox" for="agreeTerms">
-        <input type="checkbox" id="agreeTerms">
-        <span class="checkmark"></span>
-        <span>I have read and agree to the terms above</span>
-      </label>
-      <button id="guidelinesApplyBtn" class="cta-btn" disabled>Apply Now</button>
     </div>
   </section>
+
 
 
   <section id="formSection" class="form-section hidden">
@@ -708,35 +752,7 @@
         </div>
       </div>
       <!-- Page 8: Idea & Motivation -->
-
-      <!-- Page 8: Terms Agreement -->
       <div class="form-page" data-page="8">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Terms &amp; Conditions</h2>
-          <p class="step-desc">Please read and confirm before proceeding.</p>
-
-          <div class="field-group">
-            <div class="terms-box">
-              <p>By submitting this application, you agree to the following:</p>
-              <ul>
-                <li>Your submission must be your own individual work.</li>
-                <li>You should have existing familiarity with Swift and/or Apple's development ecosystem.</li>
-                <li>You are willing to learn, experiment, and build independently.</li>
-                <li>Your submission should follow Apple's official eligibility and submission requirements.</li>
-                <li>Apple's official dates and requirements for the 2027 Swift Student Challenge will be followed once announced.</li>
-                <li>There is no guarantee of selection.</li>
-              </ul>
-            </div>
-            <label class="custom-checkbox" for="agreeTermsForm">
-              <input type="checkbox" id="agreeTermsForm" name="agreeTerms" required>
-              <span class="check-mark"></span>
-              I have read and agree to the terms and conditions *
-            </label>
-            <span class="field-error"></span>
-          </div>
-        </div>
-      </div>
-      <div class="form-page" data-page="9">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">Idea &amp; Motivation</h2>
           <p class="step-desc">Share your vision and what drives you.</p>
@@ -848,7 +864,7 @@
         </div>
       </div>
       <!-- Page 9: Consent -->
-      <div class="form-page" data-page="10">
+      <div class="form-page" data-page="9">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">Consent</h2>
           <p class="step-desc">Please review and confirm the following.</p>
@@ -912,9 +928,9 @@
       </div>
 
     <div class="form-nav">
-      <button type="button" id="prevBtn" class="nav-btn prev-btn" disabled>Previous</button>
-      <button type="button" id="nextBtn" class="nav-btn next-btn">Next</button>
-      <button type="submit" id="submitBtn" class="nav-btn submit-btn hidden">Submit Application</button>
+      <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
+      <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
+      <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
     </div>
 
     </form>
@@ -945,7 +961,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="assets/mew.jpg" alt="AATCe Parul University" class="footer-img">
+      <img src="assets/swift-logo.svg" alt="Swift" class="footer-img">
       <p class="footer-title">Swift Student Challenge 2027</p>
       <p class="footer-sub">AATCe Parul University</p>
     </div>
@@ -1000,9 +1016,10 @@
       const phase = Math.random() * Math.PI * 2;
       const pts = pathDots("swift", SWIFT_PATH, S > 80 ? 22 : 16);
 
-      function frame() {
-        const t = performance.now() / 1000;
-        ctx.clearRect(0, 0, cW, cH);
+        function frame() {
+          if (window.SSC_FX_PAUSED) { requestAnimationFrame(frame); return; }
+          const t = performance.now() / 1000;
+          ctx.clearRect(0, 0, cW, cH);
 
         // soft glow
         const glow = ctx.createRadialGradient(cW/2, cH/2, 0, cW/2, cH/2, cW/2);
@@ -1182,6 +1199,7 @@ void main(){
 
     const start = performance.now();
     function render(now) {
+      if (window.SSC_FX_PAUSED) { requestAnimationFrame(render); return; }
       const t = ((now - start) / 1000) * U.timeScale;
       gl.uniform4f(uni.scene, W, H, t, U.colorCount);
       gl.uniform4f(uni.space, U.offsetX, U.offsetY, 0, 0);
@@ -1197,21 +1215,23 @@ void main(){
     (() => {
       const boot = document.getElementById('boot');
       const logo = boot?.querySelector('.boot-logo');
-      if (!boot || !logo) return;
-      document.documentElement.classList.add('boot-lock');
-
-      const reveal = () => {
-        document.getElementById('swiftLiquidLogo')?.classList.add('revealed');
+      if (!boot) return;
+      let hidden = false;
+      const hide = () => {
+        if (hidden) return;
+        hidden = true;
         boot.classList.add('hidden');
-        document.documentElement.classList.remove('boot-lock');
-        setTimeout(() => boot.remove(), 900);
+        document.body.classList.add('boot-done');
+        setTimeout(() => boot.remove(), 850);
       };
-
-      logo.addEventListener('animationend', () => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { reveal(); return; }
-        setTimeout(reveal, 700);   // brief hold so the text reads
-      }, { once:true });
+      if (logo) logo.addEventListener('animationend', () => setTimeout(hide, 900));
+      setTimeout(hide, 4200);
     })();
+  </script>
+  <script>
+    document.addEventListener("visibilitychange",function(){
+      window.SSC_FX_PAUSED=document.hidden;
+    });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1219,5 +1239,5 @@ void main(){
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
-  </body>
+</body>
 </html>
