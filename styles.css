@@ -278,7 +278,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ---- Header ---- */
 .site-header{
   position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
-  width:min(860px,94vw);
+  width:max-content;max-width:94vw;
   padding:14px 36px;
   background:linear-gradient(155deg, rgba(20,24,34,0.42) 0%, rgba(15,18,27,0.32) 50%, rgba(11,13,20,0.24) 100%);
   backdrop-filter:blur(28px) saturate(1.9) brightness(1.05);
