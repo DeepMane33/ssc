@@ -107,6 +107,8 @@ var pageValidation={
 function initLenis(){
   if(typeof Lenis==="undefined")return;
   lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},smoothWheel:true});
+  /* keep ScrollTrigger perfectly in sync with Lenis' smoothed scroll */
+  if(typeof ScrollTrigger!=="undefined")lenis.on("scroll",ScrollTrigger.update);
   function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
   requestAnimationFrame(raf);
 }
@@ -128,11 +130,276 @@ function initGSAP(){
     heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   }
 
-  /* Guideline cards — scroll-triggered stagger reveal */
+  /* Guideline cards — scroll-triggered stagger reveal.
+     On large fine-pointer displays the cards get the full scattered
+     collage treatment instead (see initGuidelinesScatter). */
   if(typeof ScrollTrigger!=="undefined"){
-    gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
     gsap.fromTo(".guidelines-head",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out",scrollTrigger:{trigger:"#guidelinesSection",start:"top 80%",once:true}});
+    if(scatterGuidesOK()){
+      initGuidelinesScatter();
+    }else{
+      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+    }
   }
+}
+
+/* Desktop-only gate for the scattered panels — strictly no touch/mobile,
+   no reduced-motion, and only on genuinely wide viewports. */
+function scatterGuidesOK(){
+  return !!(window.matchMedia
+    && window.matchMedia("(min-width:1100px) and (hover:hover) and (pointer:fine)").matches
+    && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+}
+
+/* ============================================
+   GUIDELINES SCATTER — desktop / Mac / PC only.
+   The panels keep their order and content, but each one
+   gets a resting pose (lateral offset + tilt), settles in
+   with a scroll-triggered entrance, drifts at its own speed
+   while the section scrolls through the viewport (scrubbed
+   parallax à la Codrops' scattered galleries), and wobbles
+   gently at idle. Transform/opacity only — GPU-cheap.
+   gsap.matchMedia() reverts everything below 1100px.
+   ============================================ */
+function initGuidelinesScatter(){
+  var mm=gsap.matchMedia();
+  mm.add({
+    desktop:"(min-width:1100px)",
+    wide:"(min-width:1900px)",
+    motion:"(prefers-reduced-motion: no-preference)"
+  },function(ctx){
+    /* only run on the big fine-pointer layout */
+    if(!ctx.conditions.desktop||!ctx.conditions.motion)return;
+
+    /* ultra-wide displays get a proportionally wider scatter;
+       normal laptops keep the composed look */
+    var k=ctx.conditions.wide?1.7:1;
+
+    var list=document.querySelector(".guidelines-list");
+    var cards=gsap.utils.toArray(".guideline-card");
+    if(!list||!cards.length)return;
+
+    /* [xOffset px, tilt deg, drift px] — hand-tuned per card so the
+       collage feels composed, not random */
+    var poses=[
+      {x:-26,r:-1.3,p: 70},
+      {x: 30,r: 1.6,p:-55},
+      {x:-18,r: 1.0,p:-80},
+      {x: 22,r:-1.8,p: 60},
+      {x:-30,r:-0.9,p:-65},
+      {x: 16,r: 1.3,p: 85},
+      {x:-12,r:-1.5,p:-50}
+    ];
+
+    var baseX=cards.map(function(c,i){return poses[i%poses.length].x*k});
+    var maxAbsX=Math.max.apply(null,baseX.map(Math.abs));
+
+    /* never let the scatter clip a panel against the viewport edge:
+       measure the free space beside the grid and shrink the offsets
+       proportionally if the display is tight (iMac scaling etc.) */
+    function fitScatterX(){
+      var lr=list.getBoundingClientRect();
+      var slack=Math.max(0,Math.min(lr.left,window.innerWidth-lr.right));
+      var f=slack+maxAbsX>0?Math.min(1,slack/(maxAbsX+12)):0;
+      cards.forEach(function(c,i){gsap.set(c,{x:baseX[i]*f})});
+    }
+
+    cards.forEach(function(card,i){
+      var p=poses[i%poses.length];
+
+      /* resting scatter pose */
+      gsap.set(card,{x:p.x*k,rotation:p.r});
+      /* entrance — rises in while settling from a stronger tilt */
+      gsap.from(card,{autoAlpha:0,rotation:p.r*2.2,scale:0.96,duration:0.9,ease:"power3.out",
+        scrollTrigger:{trigger:card,start:"top 88%",once:true}});
+
+      /* scrubbed drift — each panel floats at its own speed & direction */
+      gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
+        scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
+
+      /* idle liquid wobble — rotation composes with the drift */
+      gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
+    });
+
+    /* ---- the thread: an ember line that joins the panels,
+            drawn by scroll, with a pulse running along it ---- */
+    var applyBtn=document.getElementById("showcaseBeginBtn");
+    var SVG_NS="http://www.w3.org/2000/svg";
+    var svg=document.createElementNS(SVG_NS,"svg");
+    svg.setAttribute("class","guide-thread");
+    svg.setAttribute("aria-hidden","true");
+    svg.innerHTML=
+      '<defs><linearGradient id="threadGrad" x1="0" y1="0" x2="1" y2="1">'+
+        '<stop offset="0%" stop-color="rgba(240,81,35,0)"/>'+
+        '<stop offset="12%" stop-color="rgba(240,81,35,0.55)"/>'+
+        '<stop offset="50%" stop-color="rgba(255,243,216,0.75)"/>'+
+        '<stop offset="88%" stop-color="rgba(240,81,35,0.55)"/>'+
+        '<stop offset="100%" stop-color="rgba(240,81,35,0)"/>'+
+      '</linearGradient></defs>'+
+      '<path id="threadBase" fill="none" stroke="url(#threadGrad)" stroke-width="1.5" stroke-linecap="round"/>'+
+      '<path id="threadPulse" fill="none" stroke="#ffb36b" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(240,81,35,0.9))" opacity="0"/>';
+    list.insertBefore(svg,list.firstChild);
+    var basePath=svg.querySelector("#threadBase");
+    var pulsePath=svg.querySelector("#threadPulse");
+
+    var drawTween=null,pulseTween=null,tailTip=null;
+
+    function threadD(){
+      var lr=list.getBoundingClientRect();
+      var pts=cards.map(function(c){
+        var r=c.getBoundingClientRect();
+        return{
+          /* subtract the live parallax drift so the path anchors to the
+             panel's resting pose, not wherever it currently floated */
+          x:r.left+r.width/2-lr.left,
+          y:r.top+r.height/2-lr.top-gsap.getProperty(c,"y")
+        };
+      });
+      /* smooth S-weave through every panel centre */
+      var d="M "+pts[0].x+" "+pts[0].y;
+      for(var i=1;i<pts.length;i++){
+        var my=(pts[i-1].y+pts[i].y)/2;
+        d+=" C "+pts[i-1].x+" "+my+", "+pts[i].x+" "+my+", "+pts[i].x+" "+pts[i].y;
+      }
+      /* signature tail — waves down from the last panel, drifts across to
+         the Apply button's column, then drops vertically and stops just
+         above its top edge. The droplet launches from that tip. */
+      var last=pts[pts.length-1];
+      var lr=list.getBoundingClientRect();
+      var br=applyBtn?applyBtn.getBoundingClientRect():null;
+      var tX=br?br.left+br.width/2-lr.left:last.x+60*k;
+      var tY=br?br.top-lr.top-14:(lr.bottom-lr.top)+220;
+      var space=tY-last.y;
+      if(space<60)return{d:d,tail:{x:last.x,y:last.y}};
+      space=Math.min(space,560);
+      var amp=Math.min(64*k,Math.max(34,Math.abs(tX-last.x)*0.45));
+      var dir=tX>=last.x?1:-1;
+      /* two lazy S-waves drifting toward the button's column… */
+      var w1x=last.x+(tX-last.x)*0.3-dir*amp;
+      var w1y=last.y+space*0.32;
+      var w2x=last.x+(tX-last.x)*0.7+dir*amp*0.7;
+      var w2y=last.y+space*0.62;
+      d+=" C "+last.x+" "+(last.y+space*0.14)+", "+w1x+" "+(w1y-space*0.12)+", "+w1x+" "+w1y;
+      d+=" C "+w1x+" "+(w1y+space*0.14)+", "+w2x+" "+(w2y-space*0.13)+", "+w2x+" "+w2y;
+      /* …then a clean vertical drop, dead-centre above the button */
+      d+=" C "+w2x+" "+(w2y+space*0.16)+", "+tX+" "+(tY-space*0.14)+", "+tX+" "+tY;
+      return{d:d,tail:{x:tX,y:tY}};
+    }
+
+    function buildThread(){
+      fitScatterX();
+      svg.setAttribute("viewBox","0 0 "+list.offsetWidth+" "+list.offsetHeight);
+      svg.setAttribute("preserveAspectRatio","none");
+      var td=threadD();
+      basePath.setAttribute("d",td.d);
+      pulsePath.setAttribute("d",td.d);
+      tailTip=td.tail;
+
+      /* measure once attached, then prep for the draw-on-scroll */
+      var len=basePath.getTotalLength();
+      gsap.set(basePath,{strokeDasharray:len+" "+len,strokeDashoffset:len});
+      gsap.set(pulsePath,{strokeDasharray:"42 "+len});
+
+      if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
+      if(pulseTween)pulseTween.kill();
+
+      drawTween=gsap.to(basePath,{strokeDashoffset:0,ease:"none",
+        scrollTrigger:{
+          /* completes while the last panel is still on screen */
+          trigger:list,start:"top 78%",end:"bottom 88%",scrub:true,
+          onUpdate:function(self){pulsePath.setAttribute("opacity",(self.progress*0.95).toFixed(3))}
+        }});
+
+      /* energy pulse endlessly travelling down the thread;
+         each time it reaches the end it leaps into the Apply button */
+      pulseTween=gsap.fromTo(pulsePath,{strokeDashoffset:len},{strokeDashoffset:-len,duration:5,ease:"none",repeat:-1,onRepeat:launchSpark});
+    }
+
+    /* ---- pulse hand-off: fly a spark from the thread's tail into the
+          Apply button; the button ignites liquid-gold for 1.5s ---- */
+    var emberCore=null,litT=null,sparkTween=null;
+
+    if(applyBtn){
+      emberCore=document.createElement("span");
+      emberCore.className="btn-ember-core";
+      applyBtn.appendChild(emberCore);
+      var ripple=document.createElement("span");
+      ripple.className="btn-ripple";
+      applyBtn.appendChild(ripple);
+      var sheen=document.createElement("span");
+      sheen.className="btn-sheen";
+      applyBtn.appendChild(sheen);
+    }
+
+    function igniteButton(){
+      if(!applyBtn)return;
+      applyBtn.classList.remove("apply-lit");
+      void applyBtn.offsetWidth; /* restart CSS animation */
+      applyBtn.classList.add("apply-lit");
+      clearTimeout(litT);
+      litT=setTimeout(function(){applyBtn.classList.remove("apply-lit")},1500);
+    }
+
+    function launchSpark(){
+      if(!tailTip||!applyBtn||document.hidden)return;
+      var lr=list.getBoundingClientRect();
+      var br=applyBtn.getBoundingClientRect();
+      var sx=lr.left+tailTip.x,sy=lr.top+tailTip.y;
+      var tx=br.left+br.width/2,ty=br.top+br.height/2;
+      /* off-screen hand-off looks broken — skip this lap */
+      if(sy<-200||sy>window.innerHeight+300||ty<0||ty>window.innerHeight)return;
+
+      var orb=document.createElement("div");
+      orb.className="spark-orb";
+      document.body.appendChild(orb);
+      gsap.set(orb,{x:sx,y:sy});
+
+      /* fluid droplet: sways out of the thread tip, stretches as it
+         accelerates, wobbles like liquid metal, lands soft */
+      var cx=sx+(Math.random()*46-23);
+      var cy=(sy+ty)/2;
+      var dist=Math.max(30,Math.abs(ty-sy));
+      var dur=Math.min(0.95,0.5+dist/900);
+      var o={t:0};
+      if(sparkTween)sparkTween.kill();
+      sparkTween=gsap.timeline({onComplete:function(){
+        orb.remove();
+        igniteButton();
+      }});
+      sparkTween.to(o,{t:1,duration:dur,ease:"power1.in",
+        onUpdate:function(){
+          var t=o.t,mt=1-t;
+          gsap.set(orb,{
+            x:mt*mt*sx+2*mt*t*cx+t*t*tx,
+            y:mt*mt*sy+2*mt*t*cy+t*t*ty
+          });
+        }},0);
+      /* elongates with velocity, then the button's jelly takes over */
+      sparkTween.to(orb,{scaleY:1.55,scaleX:0.8,duration:dur*0.75,ease:"power1.in"},0);
+      sparkTween.to(orb,{rotation:9,duration:dur*0.55,yoyo:true,repeat:1,ease:"sine.inOut"},0);
+    }
+
+    buildThread();
+    window.addEventListener("load",buildThread);
+    var rsz;
+    function onResize(){clearTimeout(rsz);rsz=setTimeout(buildThread,200)}
+    window.addEventListener("resize",onResize);
+
+    return function(){ /* revert when the media query stops matching */
+      cards.forEach(function(c){gsap.killTweensOf(c)});
+      if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
+      if(pulseTween)pulseTween.kill();
+      if(sparkTween)sparkTween.kill();
+      clearTimeout(litT);
+      if(applyBtn)applyBtn.classList.remove("apply-lit");
+      if(emberCore)emberCore.remove();
+      document.querySelectorAll(".btn-ripple,.btn-sheen,.spark-orb").forEach(function(o){o.remove()});
+      window.removeEventListener("resize",onResize);
+      clearTimeout(rsz);
+      svg.remove();
+      gsap.set(cards,{clearProps:"transform,opacity,visibility"});
+    };
+  });
 }
 
 /* ============================================
@@ -391,16 +658,17 @@ function restoreProgress(){
 /* ============================================
    FORM SUBMISSION
    ============================================ */
-/* ---- Event Listeners ---- */
-prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
-nextBtn.addEventListener("click",function(){
+/* ---- Event Listeners ----
+   (guarded: app.js is shared by the landing page, where the form doesn't exist) */
+if(prevBtn)prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
+if(nextBtn)nextBtn.addEventListener("click",function(){
   if(validatePage(currentPage)){
     showToast("Progress saved","success");
     goToPage(currentPage+1);
   }
 });
 
-form.addEventListener("submit",function(e){
+if(form)form.addEventListener("submit",function(e){
   e.preventDefault();
   if(!validatePage(currentPage))return;
   if(!supabase){
@@ -453,7 +721,7 @@ function sendConfirmation(email,name){
 }
 
 /* live validation on change */
-form.querySelectorAll("input,textarea").forEach(function(el){
+if(form)form.querySelectorAll("input,textarea").forEach(function(el){
   el.addEventListener("change",function(){
     if(el.closest(".field-group")&&el.closest(".field-group").classList.contains("has-error")){
       validateField(el.name);
@@ -465,7 +733,7 @@ form.querySelectorAll("input,textarea").forEach(function(el){
 });
 
 /* "Other" write-in: reveal when Other is selected, sync typed value into the radio */
-form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(radio){
+if(form)form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(radio){
   var group=radio.closest(".radio-group");
   var writein=group?group.querySelector(".other-writein"):null;
   if(!writein)return;
@@ -576,7 +844,7 @@ document.addEventListener("DOMContentLoaded",function(){
   if(formSection&&!formSection.classList.contains("hidden")){
     var savedPage=restoreProgress();
     goToPage(savedPage&&savedPage>=1&&savedPage<=TOTAL_PAGES?savedPage:1);
-  }else{
+  }else if(progressFill){
     updateProgress();
   }
 });
