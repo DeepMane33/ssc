@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply · Swift Student Challenge 2027 | Parul University</title>
+  <meta name="description" content="Application form for the Swift Student Challenge 2027 at Parul University. Your progress is saved automatically as you go.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Apply · Swift Student Challenge 2027 | Parul University">
+  <meta property="og:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <meta property="og:url" content="https://ssc-pu.vercel.app">
+  <meta property="og:site_name" content="Swift Student Challenge 2027">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Swift Student Challenge 2027 | Parul University">
+  <meta name="twitter:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <link rel="icon" href="assets/swift-logo.svg">
+  <link rel="apple-touch-icon" href="assets/swift-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+  <!-- SVG Filters for Liquid Glass Refraction -->
+  <svg class="svg-filters" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="container-glass" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="contrast"/>
+        <feComposite in="contrast" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <filter id="displacement" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="blobs">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <canvas id="shaderBg" class="shader-bg"></canvas>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <img src="assets/parul-logo.svg" alt="Parul University" class="parul-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="assets/swift-logo.svg" alt="Swift" class="swift-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="https://appledge.vercel.app/images/aatce_logo.svg" alt="AATCe" class="aatce-logo">
+      <span class="nav-divider" aria-hidden="true"></span>
+      <img src="assets/vthub_logo.svg" alt="VT Hub" class="vthub-logo">
+    </div>
+  </header>
+
+  <div class="apply-topbar">
+    <a href="/" class="nav-btn prev-btn liquid-glass">&larr; Back to Site</a>
+  </div>
+
+  <section id="formSection" class="form-section">
+
+
+    <div class="progress-wrapper">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill" style="width: 11.11%"></div>
+      </div>
+      <div class="progress-info">
+        <span id="progressStep">Step 1 of 9</span>
+        <span id="progressPercent">11%</span>
+      </div>
+    </div>
+
+    <form id="registrationForm" novalidate>
+
+      <!-- Page 1: Before You Apply -->
+      <div class="form-page active" data-page="1">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Before You Apply</h2>
+          <p class="step-desc">Let's start with your email so we can track your application.</p>
+
+          <div class="field-group">
+            <label class="field-label" for="email">Email Address *</label>
+            <input class="field-input" type="email" id="email" name="email" placeholder="you@example.com" required>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page 2: About You -->
+      <div class="form-page" data-page="2">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">About You</h2>
+          <p class="step-desc">Tell us about yourself and your academic background.</p>
+
+          <div class="field-group">
+            <label class="field-label" for="fullName">Full Name *</label>
+            <input class="field-input" type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="contact">Contact / WhatsApp Number *</label>
+            <input class="field-input" type="tel" id="contact" name="contact" placeholder="+91 XXXXX XXXXX" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Faculty *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="faculty" value="PIET" required>
+                <span class="radio-mark"></span>
+                PIET
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="faculty" value="PIT">
+                <span class="radio-mark"></span>
+                PIT
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="faculty" value="Other">
+                <span class="radio-mark"></span>
+                Other
+              </label>
+              <input class="field-input other-writein hidden" type="text" placeholder="Please specify your faculty">
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="programme">Programme *</label>
+            <input class="field-input" type="text" id="programme" name="programme" placeholder="e.g. B.Tech CSE" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="semester">Semester *</label>
+            <input class="field-input" type="text" id="semester" name="semester" placeholder="e.g. 4th" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="division">Division</label>
+            <input class="field-input" type="text" id="division" name="division" placeholder="e.g. A">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="github">GitHub Profile</label>
+            <input class="field-input" type="url" id="github" name="github" placeholder="https://github.com/username">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="linkedin">LinkedIn Profile</label>
+            <input class="field-input" type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="portfolio">Portfolio Website</label>
+            <input class="field-input" type="url" id="portfolio" name="portfolio" placeholder="https://yoursite.com">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Do you have a university email? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="hasUniEmail" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="hasUniEmail" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Page 3: University Verification -->
+      <div class="form-page" data-page="3">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">University Verification</h2>
+          <p class="step-desc">Help us verify your enrollment at Parul University.</p>
+
+          <div class="field-group">
+            <label class="field-label" for="uniEmail">University Email <span class="optional-tag">(optional)</span></label>
+            <span class="field-hint">Only if you have one — leave blank otherwise.</span>
+            <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="enrollmentId">Enrollment ID *</label>
+            <input class="field-input" type="text" id="enrollmentId" name="enrollmentId" placeholder="Your enrollment ID" required>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page 4: Student Verification -->
+      <div class="form-page" data-page="4">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Student Verification</h2>
+          <p class="step-desc">Verify your student identity and status.</p>
+
+          <div class="field-group">
+            <label class="field-label" for="personalEmail">Personal Email *</label>
+            <input class="field-input" type="email" id="personalEmail" name="personalEmail" placeholder="your.email@gmail.com" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Student Status *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="studentStatus" value="Fresher" required>
+                <span class="radio-mark"></span>
+                Fresher
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="studentStatus" value="D2D">
+                <span class="radio-mark"></span>
+                D2D
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="studentStatus" value="Other">
+                <span class="radio-mark"></span>
+                Other
+              </label>
+              <input class="field-input other-writein hidden" type="text" placeholder="Please specify your status">
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="enrollmentNumber">Enrollment Number *</label>
+            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Your enrollment number" required>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page 5: Device & Access -->
+      <div class="form-page" data-page="5">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Device &amp; Access</h2>
+          <p class="step-desc">Tell us about the hardware you have access to for development.</p>
+
+          <div class="field-group">
+            <label class="field-label">Mac Access *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="macAccess" value="Mac" required>
+                <span class="radio-mark"></span>
+                Mac
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="macAccess" value="iPad">
+                <span class="radio-mark"></span>
+                iPad
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="macAccess" value="Both">
+                <span class="radio-mark"></span>
+                Both
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="macAccess" value="Neither">
+                <span class="radio-mark"></span>
+                Neither
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">How often do you use the device? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="deviceFrequency" value="Daily" required>
+                <span class="radio-mark"></span>
+                Daily
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="deviceFrequency" value="A few times a week">
+                <span class="radio-mark"></span>
+                A few times a week
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="deviceFrequency" value="Once a week">
+                <span class="radio-mark"></span>
+                Once a week
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="deviceFrequency" value="Rarely">
+                <span class="radio-mark"></span>
+                Rarely
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Need access to Mac Lab? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="needMacLab" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="needMacLab" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="needMacLab" value="Maybe">
+                <span class="radio-mark"></span>
+                Maybe
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Prep hours per week *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="prepHours" value="1-3" required>
+                <span class="radio-mark"></span>
+                1-3 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="prepHours" value="4-7">
+                <span class="radio-mark"></span>
+                4-7 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="prepHours" value="8-14">
+                <span class="radio-mark"></span>
+                8-14 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="prepHours" value="15+">
+                <span class="radio-mark"></span>
+                15+ hrs
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Page 6: Starting Point -->
+      <div class="form-page" data-page="6">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Starting Point</h2>
+          <p class="step-desc">Help us understand your experience level and interests.</p>
+
+          <div class="field-group">
+            <label class="field-label">App Development Experience *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="appExperience" value="None" required>
+                <span class="radio-mark"></span>
+                None
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appExperience" value="Beginner">
+                <span class="radio-mark"></span>
+                Beginner
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appExperience" value="Intermediate">
+                <span class="radio-mark"></span>
+                Intermediate
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appExperience" value="Advanced">
+                <span class="radio-mark"></span>
+                Advanced
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Apple Platform Experience *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="appleExperience" value="None" required>
+                <span class="radio-mark"></span>
+                None
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appleExperience" value="Swift basics">
+                <span class="radio-mark"></span>
+                Swift basics
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appleExperience" value="Built apps">
+                <span class="radio-mark"></span>
+                Built apps
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="appleExperience" value="Published apps">
+                <span class="radio-mark"></span>
+                Published apps
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Independence Level *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="independence" value="Low" required>
+                <span class="radio-mark"></span>
+                Low
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="independence" value="Medium">
+                <span class="radio-mark"></span>
+                Medium
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="independence" value="High">
+                <span class="radio-mark"></span>
+                High
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Interests</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="iOS">
+                <span class="check-mark"></span>
+                iOS
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="macOS">
+                <span class="check-mark"></span>
+                macOS
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="AR">
+                <span class="check-mark"></span>
+                AR
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="ML">
+                <span class="check-mark"></span>
+                Machine Learning
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="Games">
+                <span class="check-mark"></span>
+                Games
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="interests" value="SwiftUI">
+                <span class="check-mark"></span>
+                SwiftUI
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Participated in previous competitions? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="prevCompetitions" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="prevCompetitions" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="competitionDetails">Competition Details</label>
+            <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- Page 7: Commitment -->
+      <div class="form-page" data-page="7">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Commitment</h2>
+          <p class="step-desc">How committed are you to this challenge?</p>
+
+          <div class="field-group">
+            <label class="field-label">Commitment Level *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="commitmentLevel" value="Casual" required>
+                <span class="radio-mark"></span>
+                Casual
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="commitmentLevel" value="Moderate">
+                <span class="radio-mark"></span>
+                Moderate
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="commitmentLevel" value="High">
+                <span class="radio-mark"></span>
+                High
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Program hours per week *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="programHours" value="2-5" required>
+                <span class="radio-mark"></span>
+                2-5 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="programHours" value="5-10">
+                <span class="radio-mark"></span>
+                5-10 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="programHours" value="10-15">
+                <span class="radio-mark"></span>
+                10-15 hrs
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="programHours" value="15+">
+                <span class="radio-mark"></span>
+                15+ hrs
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Preferred Work Schedule</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="workSchedule" value="Weekday mornings">
+                <span class="check-mark"></span>
+                Weekday mornings
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="workSchedule" value="Weekday evenings">
+                <span class="check-mark"></span>
+                Weekday evenings
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="workSchedule" value="Weekends">
+                <span class="check-mark"></span>
+                Weekends
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="workSchedule" value="Flexible">
+                <span class="check-mark"></span>
+                Flexible
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Can you attend regular sessions? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="attendSessions" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="attendSessions" value="Maybe">
+                <span class="radio-mark"></span>
+                Maybe
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="attendSessions" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Page 8: Idea & Motivation -->
+      <div class="form-page" data-page="8">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Idea &amp; Motivation</h2>
+          <p class="step-desc">Share your vision and what drives you.</p>
+
+          <div class="field-group">
+            <label class="field-label" for="whyInterested">Why are you interested in this challenge? *</label>
+            <textarea class="field-textarea" id="whyInterested" name="whyInterested" rows="4" placeholder="Tell us what motivates you to participate..." required></textarea>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Do you have an idea? *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="Rough concept">
+                <span class="radio-mark"></span>
+                Rough concept
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="ideaDescription">Describe your idea</label>
+            <textarea class="field-textarea" id="ideaDescription" name="ideaDescription" rows="4" placeholder="Describe your app idea, the problem it solves, and who it helps..."></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">What excites you about this?</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Learning Swift">
+                <span class="check-mark"></span>
+                Learning Swift
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Building an app">
+                <span class="check-mark"></span>
+                Building an app
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Apple ecosystem">
+                <span class="check-mark"></span>
+                Apple ecosystem
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Competition">
+                <span class="check-mark"></span>
+                Competition
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Networking">
+                <span class="check-mark"></span>
+                Networking
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Portfolio">
+                <span class="check-mark"></span>
+                Portfolio
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Build interest areas</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Health">
+                <span class="check-mark"></span>
+                Health
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Education">
+                <span class="check-mark"></span>
+                Education
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Environment">
+                <span class="check-mark"></span>
+                Environment
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Accessibility">
+                <span class="check-mark"></span>
+                Accessibility
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Entertainment">
+                <span class="check-mark"></span>
+                Entertainment
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Social Impact">
+                <span class="check-mark"></span>
+                Social Impact
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Page 9: Consent -->
+      <div class="form-page" data-page="9">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Consent</h2>
+          <p class="step-desc">Please review and confirm the following.</p>
+
+          <div class="field-group">
+            <label class="field-label">I confirm all information provided is accurate *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="confirmAccuracy" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes, I confirm
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="confirmAccuracy" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">I understand there is no guarantee of selection *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="noGuarantee" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes, I understand
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="noGuarantee" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">I agree to be contacted regarding this application *</label>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="agreeContact" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="agreeContact" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="anythingElse">Anything else you'd like us to know?</label>
+            <textarea class="field-textarea" id="anythingElse" name="anythingElse" rows="4" placeholder="Any additional information, questions, or comments..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    <div class="form-nav">
+      <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
+      <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
+      <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
+    </div>
+
+    </form>
+
+
+  <section id="successMessage" class="success-message hidden" data-nosnippet>
+<div class="success-card glass-card liquid-glass guideline-card">
+      <img src="assets/swift-nav.png" alt="Swift" class="success-swift" style="display:block;margin:0 auto 1.5rem;width:72px;height:auto;">
+      <div class="success-title">Application Recorded!</div>
+      <div class="success-desc">Your response has been recorded and is now with our team at AATCe, Parul University for review.</div>
+      <div class="success-email-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></svg>
+        <span>Confirmation email sent to <strong id="successEmail" class="success-email"></strong></span>
+      </div>
+      <p class="success-note">Please check your inbox (and spam). If you don't see it within a few minutes, contact <a href="mailto:me@subhansh.dev">me@subhansh.dev</a>. The email is sent only after your response is safely stored — so if the entry wasn't saved, no email goes out.</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img src="assets/swift-logo.svg" alt="Swift" class="footer-img">
+      <p class="footer-title">Swift Student Challenge 2027</p>
+      <p class="footer-sub">AATCe Parul University</p>
+    </div>
+  </footer>
+
+  <div class="swift-orb-decor" style="top:12%;left:3%"><canvas class="swift-orb-canvas" data-size="180"></canvas></div>
+  <div class="swift-orb-decor" style="top:40%;right:1%"><canvas class="swift-orb-canvas" data-size="150"></canvas></div>
+  <div class="swift-orb-decor" style="bottom:15%;left:5%"><canvas class="swift-orb-canvas" data-size="160"></canvas></div>
+  <div class="swift-orb-decor" style="top:65%;right:8%"><canvas class="swift-orb-canvas" data-size="130"></canvas></div>
+
+  <script>window.SSC_FX_PAUSED = false;</script>
+  <script src="background.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+</body>
+</html>

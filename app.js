@@ -118,13 +118,15 @@ function initGSAP(){
   if(typeof gsap==="undefined")return;
   if(typeof ScrollTrigger!=="undefined")gsap.registerPlugin(ScrollTrigger);
 
-  /* Hero entrance — staggered reveal */
-  var heroTl=gsap.timeline({delay:0.3});
-  heroTl.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out"});
-  heroTl.fromTo(heroSection.querySelector(".swift-logo"),{opacity:0,scale:0.5,rotation:-10},{opacity:1,scale:1,rotation:0,duration:0.7,ease:"back.out(1.7)"},"-=0.3");
-  heroTl.fromTo(".hero-eyebrow",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
-  heroTl.fromTo(".hero-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.2");
-  heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  /* Hero entrance — staggered reveal (landing page only) */
+  if(heroSection){
+    var heroTl=gsap.timeline({delay:0.3});
+    heroTl.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out"});
+    heroTl.fromTo(heroSection.querySelector(".swift-logo"),{opacity:0,scale:0.5,rotation:-10},{opacity:1,scale:1,rotation:0,duration:0.7,ease:"back.out(1.7)"},"-=0.3");
+    heroTl.fromTo(".hero-eyebrow",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+    heroTl.fromTo(".hero-title",{opacity:0,y:25},{opacity:1,y:0,duration:0.6,ease:"power3.out"},"-=0.2");
+    heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
+  }
 
   /* Guideline cards — scroll-triggered stagger reveal */
   if(typeof ScrollTrigger!=="undefined"){
@@ -306,6 +308,7 @@ function goToPage(num){
   pages[num-1].classList.add("active");
   currentPage=num;
   updateProgress();
+  saveProgress();
   prevBtn.disabled=currentPage===1;
   if(currentPage===TOTAL_PAGES){
     nextBtn.classList.add("hidden");
@@ -318,24 +321,83 @@ function goToPage(num){
 }
 
 /* ============================================
-   FORM SUBMISSION
+   PROGRESS AUTOSAVE — Google-Forms-style resume.
+   Persists every answer + current step to
+   localStorage (wrapped in try/catch so Safari
+   private mode and blocked storage never crash).
    ============================================ */
-function showForm(){
-  if(heroSection)heroSection.classList.add("hidden");
-  if(showcaseSection)showcaseSection.classList.add("hidden");
-  var guidelines=document.getElementById("guidelinesSection");
-  if(guidelines)guidelines.classList.add("hidden");
-  formSection.classList.remove("hidden");
-  /* Form cards are liquid-glass, so the global plasma shader stays visible
-     behind them — same treatment as the hero/showcase sections. */
-  goToPage(1);
-  window.scrollTo({top:0,behavior:"smooth"});
+var STORAGE_KEY="ssc2027_form_progress";
+
+function storageAvailable(){
+  try{
+    var t="__ssc_probe__";
+    localStorage.setItem(t,t);
+    localStorage.removeItem(t);
+    return true;
+  }catch(e){return false}
 }
 
+function saveProgress(){
+  if(!storageAvailable())return;
+  try{
+    var fd=new FormData(form),data={};
+    fd.forEach(function(v,k){
+      if(data[k]!==undefined){
+        if(Array.isArray(data[k]))data[k].push(v);
+        else data[k]=[data[k],v];
+      }else data[k]=v;
+    });
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({page:currentPage,data:data}));
+  }catch(e){}
+}
+
+function clearProgress(){
+  try{localStorage.removeItem(STORAGE_KEY)}catch(e){}
+}
+
+function restoreProgress(){
+  var saved=null;
+  try{saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch(e){}
+  if(!saved||!saved.data)return null;
+  Object.keys(saved.data).forEach(function(k){
+    var vals=[];
+    (Array.isArray(saved.data[k])?saved.data[k]:[saved.data[k]]).forEach(function(v){vals.push(String(v))});
+    var fields=form.querySelectorAll('[name="'+k+'"]');
+    if(!fields.length)return;
+    if(fields[0].type==="radio"){
+      var val=vals[0];
+      var match=form.querySelector('[name="'+k+'"][value="'+val.replace(/"/g,"&quot;")+'"]');
+      if(match){
+        match.checked=true;
+      }else{
+        /* value was a custom "Other" write-in */
+        var other=form.querySelector('[name="'+k+'"][value="Other"]');
+        if(other){
+          other.checked=true;
+          var writein=other.closest(".radio-group").querySelector(".other-writein");
+          if(writein){writein.classList.remove("hidden");writein.value=val}
+          other.value=val;
+        }
+      }
+    }else if(fields[0].type==="checkbox"){
+      fields.forEach(function(c){c.checked=vals.indexOf(c.value)>=0});
+    }else{
+      fields[0].value=vals[0];
+    }
+  });
+  return saved.page;
+}
+
+/* ============================================
+   FORM SUBMISSION
+   ============================================ */
 /* ---- Event Listeners ---- */
 prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
 nextBtn.addEventListener("click",function(){
-  if(validatePage(currentPage))goToPage(currentPage+1);
+  if(validatePage(currentPage)){
+    showToast("Progress saved","success");
+    goToPage(currentPage+1);
+  }
 });
 
 form.addEventListener("submit",function(e){
@@ -362,6 +424,7 @@ form.addEventListener("submit",function(e){
 });
 
 function showSuccess(email){
+  clearProgress();
   var emailEl=document.getElementById("successEmail");
   if(emailEl)emailEl.textContent=email||"";
   form.classList.add("hidden");
@@ -493,14 +556,6 @@ function initDeviceParallax(){
 }
 
 /* ============================================
-   SHOWCASE BEGIN BUTTON
-   ============================================ */
-var showcaseBeginBtn=document.getElementById("showcaseBeginBtn");
-if(showcaseBeginBtn){
-  showcaseBeginBtn.addEventListener("click",showForm);
-}
-
-/* ============================================
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
@@ -515,6 +570,14 @@ document.addEventListener("DOMContentLoaded",function(){
   initTouchRipple();
   initToastContainer();
   if(canHover) initDeviceParallax();
-  updateProgress();
+  /* On the apply page the form is visible immediately — restore any
+     previously saved progress (Google-Forms-style resume) and jump to
+     the step the user left off at. */
+  if(formSection&&!formSection.classList.contains("hidden")){
+    var savedPage=restoreProgress();
+    goToPage(savedPage&&savedPage>=1&&savedPage<=TOTAL_PAGES?savedPage:1);
+  }else{
+    updateProgress();
+  }
 });
 })();
