@@ -407,6 +407,27 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 .cta-btn:active{transform:scale(0.97)}
 .cta-btn.magnetic-active{transition:transform .15s var(--spring)}
 
+/* ---- Liquid Glass CTA (Apply Now) ---- */
+.apply-cta-section{display:flex;justify-content:center;padding:48px 24px 130px}
+.cta-btn.liquid-glass{
+  border-radius:50px;
+  color:#fff;
+  text-decoration:none;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 22%),
+    linear-gradient(155deg, rgba(240,81,35,0.16) 0%, rgba(18,22,32,0.30) 55%, rgba(9,11,17,0.22) 100%);
+}
+.cta-btn.liquid-glass:hover{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.09) 0%, transparent 22%),
+    linear-gradient(155deg, rgba(240,81,35,0.30) 0%, rgba(18,22,32,0.34) 55%, rgba(9,11,17,0.26) 100%);
+  box-shadow:
+    0 20px 56px rgba(0,0,0,0.46),
+    0 8px 40px rgba(240,81,35,0.18),
+    inset 0 1px 1px rgba(255,255,255,0.22),
+    inset 0 -12px 24px rgba(0,0,0,0.34);
+}
+
 /* ============================================
    FORM SECTION
    ============================================ */
@@ -1242,6 +1263,27 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 .guideline-card li{font-size:15px;color:rgba(255,255,255,0.74);line-height:1.6;padding-left:22px;position:relative}
 .guideline-card li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:var(--swift);transform:rotate(45deg)}
 .guideline-card.important li::before{background:var(--hot)}
+
+/* "What are we looking for?" panel — subtle warm highlight so it stands out */
+.guideline-card.looking-for{
+  border:1px solid rgba(246,80,134,0.38);
+  box-shadow:0 0 0 1px rgba(246,80,134,0.10), 0 22px 60px -22px rgba(246,80,134,0.40);
+}
+.guideline-card.looking-for h2{color:#fff}
+.guideline-card.looking-for h2::before{background:var(--hot)}
+.guideline-card.looking-for .key-line{
+  font-weight:700;
+  color:#fff;
+}
+.guideline-card.looking-for .key-line::before{
+  content:"";
+  display:inline-block;
+  width:7px;height:7px;border-radius:2px;
+  background:var(--hot);
+  transform:rotate(45deg);
+  margin-right:10px;
+  vertical-align:middle;
+}
 
 .confirm-wrap{display:flex;justify-content:center;margin-top:40px}
 .confirm-box{max-width:600px;width:100%;padding:22px 26px}
