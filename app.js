@@ -261,28 +261,18 @@ function initGuidelinesScatter(){
         var my=(pts[i-1].y+pts[i].y)/2;
         d+=" C "+pts[i-1].x+" "+my+", "+pts[i].x+" "+my+", "+pts[i].x+" "+pts[i].y;
       }
-      /* signature tail — waves down from the last panel, drifts across to
-         the Apply button's column, then drops vertically and stops just
-         above its top edge. The droplet launches from that tip. */
+      /* signature tail — ONE sweeping curve off the last panel, rising
+         over to hover above the Apply button. The droplet falls from
+         the tip onto the button. */
       var last=pts[pts.length-1];
       var lr=list.getBoundingClientRect();
       var br=applyBtn?applyBtn.getBoundingClientRect():null;
       var tX=br?br.left+br.width/2-lr.left:last.x+60*k;
-      var tY=br?br.top-lr.top-14:(lr.bottom-lr.top)+220;
-      var space=tY-last.y;
-      if(space<60)return{d:d,tail:{x:last.x,y:last.y}};
-      space=Math.min(space,560);
-      var amp=Math.min(64*k,Math.max(34,Math.abs(tX-last.x)*0.45));
-      var dir=tX>=last.x?1:-1;
-      /* two lazy S-waves drifting toward the button's column… */
-      var w1x=last.x+(tX-last.x)*0.3-dir*amp;
-      var w1y=last.y+space*0.32;
-      var w2x=last.x+(tX-last.x)*0.7+dir*amp*0.7;
-      var w2y=last.y+space*0.62;
-      d+=" C "+last.x+" "+(last.y+space*0.14)+", "+w1x+" "+(w1y-space*0.12)+", "+w1x+" "+w1y;
-      d+=" C "+w1x+" "+(w1y+space*0.14)+", "+w2x+" "+(w2y-space*0.13)+", "+w2x+" "+w2y;
-      /* …then a clean vertical drop, dead-centre above the button */
-      d+=" C "+w2x+" "+(w2y+space*0.16)+", "+tX+" "+(tY-space*0.14)+", "+tX+" "+tY;
+      var tY=br?br.top-lr.top-80:(lr.bottom-lr.top)+160;
+      if(tY<last.y+50)tY=last.y+50;
+      /* dip down out of the panel, sweep across, settle pointing down
+         just above the button */
+      d+=" C "+(last.x)+" "+(last.y+150*k)+", "+tX+" "+(tY-130*k)+", "+tX+" "+tY;
       return{d:d,tail:{x:tX,y:tY}};
     }
 
@@ -374,9 +364,12 @@ function initGuidelinesScatter(){
             y:mt*mt*sy+2*mt*t*cy+t*t*ty
           });
         }},0);
-      /* elongates with velocity, then the button's jelly takes over */
-      sparkTween.to(orb,{scaleY:1.55,scaleX:0.8,duration:dur*0.75,ease:"power1.in"},0);
+      /* elongates with velocity… */
+      sparkTween.to(orb,{scaleY:1.45,scaleX:.82,duration:dur*0.45,ease:"power1.in"},0);
       sparkTween.to(orb,{rotation:9,duration:dur*0.55,yoyo:true,repeat:1,ease:"sine.inOut"},0);
+      /* …then gets absorbed into the button: shrinks & fades to nothing
+         right as it touches the surface */
+      sparkTween.to(orb,{scaleX:.1,scaleY:.26,opacity:0,duration:dur*0.32,ease:"power2.in"},dur*0.68);
     }
 
     buildThread();
